@@ -32,24 +32,39 @@ const InformacionPuesto = {
 
 function App() {
   
-  const [caja , setMoneyCaja] = React.useState( { value: 0 } );
+  const [caja , setMoneyCaja] = React.useState(0);
 
-  const [money, setMoney] = React.useState( { value: 0 } );
 
 
   const handleChange = (event) => {
     
     let money = event.target.value;
-    setMoney({ value: money });
+    setMoneyCaja( money );
   
   }
 
   const sendingMoneyDay = () => {
     
-    setMoneyCaja({ value : money.value});
-
     console.log(caja);
   }
+
+   // Capturar la dirección IP del dispositivo
+   useEffect(() => {
+    async function fetchIP() {
+      // Utilizar un servicio web que devuelva la dirección IP del dispositivo
+      const response = await fetch('http://api.ipify.org?format=json');
+      const data = await response.json();
+      // Actualizar la propiedad 'puesto' del objeto 'InformacionPuesto' con la dirección IP obtenida
+      setInformacionPuesto({
+        ...InformacionPuesto,
+        puesto: data.ip
+      });
+    }
+    fetchIP();
+  }, []);
+
+  // Destructuring del objeto 'InformacionPuesto'
+  const { fecha, puesto } = InformacionPuesto;
 
 
 
