@@ -10,8 +10,9 @@ import { useLocalStorage } from '../useLocalStorage';
 import img1 from '../img/Humaaans - Wireframe.png';
 import { Main } from '../../ui/main';
 import { MainUser } from '../../ui/main-user';
-import { AuthProvider, useAuth } from '../../auth/auth';
+import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router-dom';
+import { NavBar } from '../../ui/NavBar';
 
 
 var Usuario = {
@@ -183,35 +184,20 @@ function HomePage() {
 
         console.log("se ejecuto el llamado una vez owo ");
 
+
+
     }, []);
+
+
+
 
     InformacionPuesto.puesto = ip;
 
     /**
-     * Colacorle dentro de index para eviatra problemas
+     * Colacorlo dentro de home o istanciar un nuevo componente
+     *  para evitar problemas al autenticar se estan usando  tres estados diferentes por eso las funciones no existen
+     * 
      */
-
-    if (auth.user) {
-
-
-        const main = ReactDOM.createRoot(document.getElementById('main'));
-        main.render(
-            <React.StrictMode>
-
-                <Main user={Usuario} />
-
-            </React.StrictMode>
-        );
-
-        const navbar = ReactDOM.createRoot(document.getElementById('informacionUsuario'));
-        navbar.render(
-            <React.StrictMode>
-                <MainUser user={Usuario}   />
-            </React.StrictMode>
-        );
-
-
-    }
 
 
 
@@ -219,81 +205,102 @@ function HomePage() {
         <React.Fragment>
 
 
+            <NavBar>
+                <MainUser user={Usuario} logout={auth.logout} />
+            </NavBar>
 
-            {!!open.status && <PanelControl />}
+            <div className='page-content'>
 
+                <Main user={Usuario} />
 
-            {!open.status &&
+                <div className='content-wrapper'>
 
-
-                <div>
-
-                    <div className='card mb-1'>
-                        <h3
-                            className='
-                             text-xl
-                             my-3 
-                             ml-3 
-                             w-40 
-                             font-bold
-                             font-sans
-                        '>
-
-                            Apertura Caja
+                    <div className='content-inner'>
 
 
-                        </h3>
+                        {!!open.status && <PanelControl />}
 
-                    </div>
 
-                    <div
-                        className='
-                            card  
-                            mx-9 
-                            mt-2 
-                            h-full 
-                            flex-row-reverse
-                        '
-                    >
+                        {!open.status &&
+                            <>
 
-                        <div className='w-1/2 mx-10 mt-20 my-20'>
-                            <img src={img1} className="img-fluid rounded-top " alt="logo farmacia" />
-                        </div>
+                                <div className='card mb-1'>
+                                    <h3
+                                        className='
+                                        text-xl
+                                        my-3 
+                                        ml-3 
+                                        w-40 
+                                        font-bold
+                                        font-sans
+                                    '
+                                    >
 
-                        <form className='w-1/2 mx-8 mt-10 mb-10  flex-col'>
+                                        Apertura Caja
 
-                            <fieldset>
-
-                                <LabelGroup value={Usuario.dni} text={"DNI"} />
-
-                                <LabelGroup value={Usuario.nombre} text={"Usuario"} />
-
-                                <LabelGroup value={InformacionPuesto.puesto} text={"IP Maquina"} />
-
-                                <LabelGroup value={InformacionPuesto.fecha} text={"Fecha"} />
-
-                                <div className='flex flex-row gap-2 max-w-xs'>
-
-                                    <label className='text-sm font-semibold font-sans w-1/2 mb-0 p-2'>Efectivo</label>
-
-                                    <input className='w-1/2 h-10' onChange={e => handleChange(e)} />
+                                    </h3>
 
                                 </div>
 
-                            </fieldset>
+                                <div
+                                    className='
+                                    card  
+                                    mx-9 
+                                    mt-2 
+                                    h-full 
+                                    flex-row-reverse
+                                '
+                                >
 
-                            <div className='mt-2 p-8'>
+                                    <div className='w-1/2 mx-10 mt-20 my-20'>
+                                        <img src={img1} className="img-fluid rounded-top " alt="logo farmacia" />
+                                    </div>
 
-                                <Button text="Aperturar Caja" onClick={sendingMoneyDay} />
+                                    <form className='w-1/2 mx-8 mt-10 mb-10  flex-col'>
 
-                            </div>
+                                        <fieldset>
 
-                        </form>
+                                            <LabelGroup value={Usuario.dni} text={"DNI"} />
+
+                                            <LabelGroup value={Usuario.nombre} text={"Usuario"} />
+
+                                            <LabelGroup value={InformacionPuesto.puesto} text={"IP Maquina"} />
+
+                                            <LabelGroup value={InformacionPuesto.fecha} text={"Fecha"} />
+
+                                            <div className='flex flex-row gap-2 max-w-xs'>
+
+                                                <label className='text-sm font-semibold font-sans w-1/2 mb-0 p-2'>Efectivo</label>
+
+                                                <input className='w-1/2 h-10' onChange={e => handleChange(e)} />
+
+                                            </div>
+
+                                        </fieldset>
+
+                                        <div className='mt-2 p-8'>
+
+                                            <Button text="Aperturar Caja" onClick={sendingMoneyDay} />
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+
+
+                            </>
+
+                        }
 
                     </div>
+
+
                 </div>
 
-            }
+            </div>
+
 
         </React.Fragment>
     );

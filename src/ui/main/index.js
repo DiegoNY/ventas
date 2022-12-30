@@ -1,4 +1,6 @@
 import React from 'react';
+import { ItemMenu } from './ItemMenu';
+import { SubMenuItem } from './SubMenuItem';
 
 
 function Main(props) {
@@ -8,7 +10,7 @@ function Main(props) {
 
             <div className='sidebar sidebar-dark sidebar-main sidebar-expand-lg h-100'>
 
-                <div className="sidebar-content">
+                <div className="sidebar-content h-auto">
 
                     <div className="sidebar-section sidebar-user my-1">
                         <div className="sidebar-section-body">
@@ -38,22 +40,23 @@ function Main(props) {
                         </div>
                     </div>
 
-
                     <div className="sidebar-section">
 
-                        <ul className="nav nav-sidebar" data-nav-type="accordion" id="navigationMenu">
+                        <ItemMenu name="Prueba" icono="aca ira una img de un icono xd" />
 
-                            <li className="nav-item" id="detalleContacto">
-                                
-                                <a href="vista-empresa.html" className="nav-link">
-                                    <i className="icon-home4"></i>
-                                    <span>Listado de Empresa</span>
-                                </a>
+                        <ItemMenu name="Mantenimiento" icono="">
+                            <SubMenuItem>
+                                <ItemMenu name="Tipo de documento" icono="icono" />
+                                <ItemMenu name="Cliente" icono="icono" />
+                                <ItemMenu name="Producto" icono="icono" />
+                                <ItemMenu name="Usuario" icono="icono" />
+                                <ItemMenu name="Laboratorio" icono="icono" />
+                                <ItemMenu name="Moneda" icono="icono" />
+                                <ItemMenu name="Proveedor" icono="icono" />
+                            </SubMenuItem>
+                        </ItemMenu >
 
-                            </li>
-                        </ul>
                     </div>
-
 
                 </div>
 

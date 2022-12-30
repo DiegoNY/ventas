@@ -17,7 +17,10 @@ function MainUser(props) {
                 <div className="dropdown-menu dropdown-menu-right menu-user">
                     <a href="#" className="dropdown-item"><i className="icon-user-plus"></i> Mi perfil</a>
                     <div className="dropdown-divider"></div>
-                    <a href="#" id="btnSalir" className="dropdown-item">
+                    <a 
+                        href="#" 
+                        onClick={ () => props.logout() }  
+                        className="dropdown-item">
                         <i
                             className="icon-switch2"
                         >
