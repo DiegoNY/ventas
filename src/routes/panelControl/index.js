@@ -1,15 +1,29 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/auth';
 
-function PanelControl () {
+function PanelControl() {
+    
+    /**
+     * Obteniendo los datos del usuario
+     * 
+     * @navigate funcion que cambia las rutas  
+     */
+
+    const navigate = useNavigate();
+    const auth = useAuth();
+
+    if (!auth.user) navigate('/');
+
 
     return (
         <div className='card'>
 
-            comienzo de panel de control
-        
+            Panel de control
+
         </div>
     );
 
 }
 
-export {PanelControl}
+export { PanelControl }

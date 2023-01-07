@@ -1,8 +1,5 @@
-.sub-menu-item-active {
+.sub-menu-item-inactive{
     display: block;
 }
 
-.sub-menu-item-inactive {
-    display: none;
-}
 

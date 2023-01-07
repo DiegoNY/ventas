@@ -1,1 +1,0 @@
-// colocar le page content del homePage que se ve desordenado 

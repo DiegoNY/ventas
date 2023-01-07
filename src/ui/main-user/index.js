@@ -1,41 +1,55 @@
 import React from 'react';
+import { useAuth } from '../../auth/auth';
 import './index.css';
 
-function MainUser(props) {
+function MainUser() {
+    const [mostrar, setMostrar] = React.useState(false);
+    const auth = useAuth();
 
-    return (
-        <div>
+    if (auth.user) {
+        return (
+            <div>
 
-            <li className="nav-item nav-item-dropdown-lg dropdown dropdown-user h-100">
-                <a href="#"
-                    className="navbar-nav-link navbar-nav-link-toggler dropdown-toggle d-inline-flex align-items-center h-100"
-                    data-toggle="dropdown">
-                    <img src="../img/hombre-de-negocios.png" className="rounded-pill mr-lg-2" height="34" alt="" />
-                    <span className="d-none d-lg-inline-block container-nombre-usuario" id="nombreUsuario">{props.user.nombre}</span>
-                </a>
+                <li
+                    className="nav-item nav-item-dropdown-lg dropdown dropdown-user h-100"
+                    onClick={() => setMostrar(!mostrar)}
+                >
 
-                <div className="dropdown-menu dropdown-menu-right menu-user">
-                    <a href="#" className="dropdown-item"><i className="icon-user-plus"></i> Mi perfil</a>
-                    <div className="dropdown-divider"></div>
-                    <a 
-                        href="#" 
-                        onClick={ () => props.logout() }  
-                        className="dropdown-item">
-                        <i
-                            className="icon-switch2"
-                        >
-                        </i>
+                    <a href="#"
+                        className="navbar-nav-link navbar-nav-link-toggler dropdown-toggle d-inline-flex align-items-center h-100"
+                        data-toggle="dropdown">
+                        <img src="../img/hombre-de-negocios.png" className="rounded-pill mr-lg-2" height="34" alt="" />
 
-                        Salir
+                        {!auth.loading && <span className="d-none d-lg-inline-block container-nombre-usuario" id="nombreUsuario">{auth.user.nombre} s </span>}
 
                     </a>
-                </div>
-            </li>
+                    {!!mostrar &&
+                        <div className="dropdown-menu dropdown-menu-right menu-user">
+                            <a href="#" className="dropdown-item"><i className="icon-user-plus"></i> Mi perfil</a>
+                            <div className="dropdown-divider"></div>
+                            <a
+                                href="#"
+                                onClick={() => auth.logout()}
+                                className="dropdown-item">
+                                <i
+                                    className="icon-switch2"
+                                >
+                                </i>
 
-        </div>
+                                Salir
+
+                            </a>
+                        </div>}
+
+                </li>
+
+            </div>
 
 
-    );
+        );
+
+    }
+
 
 }
 

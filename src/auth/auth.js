@@ -13,12 +13,12 @@ function AuthProvider({ children }) {
     const navigate = useNavigate();
 
     const {
-      
-        item : user,
-        saveItem : setUser,
+
+        item: user,
+        saveItem: setUser,
         loading,
         error
-    
+
     } = useLocalStorage('USER_V2');
 
 
@@ -27,8 +27,9 @@ function AuthProvider({ children }) {
         console.log(username, password);
         console.log("validando");
 
-        setUser({ nombre : username , cargo : "" })
-        navigate('/home');
+        setUser({ nombre: username, cargo: "cargo", dni: 75447008 })
+        
+        navigate('/caja');
 
     }
 
@@ -38,7 +39,7 @@ function AuthProvider({ children }) {
     }
 
 
-    const auth = { user, login, logout ,loading}
+    const auth = { user, login, logout, loading }
 
     return (
         <AuthContext.Provider
