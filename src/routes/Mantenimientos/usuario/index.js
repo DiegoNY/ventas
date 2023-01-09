@@ -185,6 +185,7 @@ function MantenimientoUsuario() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={'Fecha Ingreso'}
+                                    date={true}
                                     onChange={e => {
                                         setUsuario(
                                             {
@@ -223,6 +224,7 @@ function MantenimientoUsuario() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Estado"}
+                                    select={true}
                                     onChange={e => {
                                         setUsuario(
                                             {
@@ -231,11 +233,15 @@ function MantenimientoUsuario() {
                                             }
                                         )
                                     }}
-                                />
+                                >
+                                    <option>ACTIVO</option>
+                                    <option>INACTIVO</option>
+                                </Label>
 
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Tipo Impresion"}
+                                    select={true}
                                     onChange={e => {
                                         setUsuario(
                                             {
@@ -245,11 +251,15 @@ function MantenimientoUsuario() {
                                         )
                                     }}
 
-                                />
+                                >
+                                    <option>PDF (A4)</option>
+                                    <option>TICKET</option>
+                                </Label>
 
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Tipo"}
+                                    select={true}
                                     onChange={e => {
                                         setUsuario(
                                             {
@@ -258,7 +268,10 @@ function MantenimientoUsuario() {
                                             }
                                         )
                                     }}
-                                />
+                                >
+                                    <option value={'ADMINISTRADOR'} >ADMINISTRADOR</option>
+                                    <option value={'USUARIO'} >USUARIO</option>
+                                </Label>
 
                                 <Label
                                     icon={'fi fi-rr-user'}

@@ -3,8 +3,6 @@ import { hostAPI, ModeloClientes, urlAPI } from '../../../config';
 import { Table } from '../../../ui/Tabla';
 import img_registro from '../../img/mantenimiento-img/img-registro-cliente.png'
 import img_editar from '../../img/mantenimiento-img/img-editar.png'
-import { postData } from '../../useFetch';
-import { Save } from '../../useAlert';
 import { _ } from "gridjs-react";
 import { Modal } from '../../../ui/modal';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
@@ -195,7 +193,7 @@ function MantenimientoCliente() {
 
         console.log(cliente);
 
-        UpdateData(`${urlAPI.Cliente.url}/${cliente._id}`,cliente)
+        UpdateData(`${urlAPI.Cliente.url}/${cliente._id}`, cliente)
 
     }
 
@@ -252,14 +250,7 @@ function MantenimientoCliente() {
                                                 <input
 
                                                     value={cliente?.dni}
-                                                    onChange={e => {
-
-                                                        setCliente({
-                                                            ...cliente,
-                                                            dni_ruc: e.target.value
-                                                        })
-
-                                                    }}
+                                                    type={'number'}
                                                     placeholder='DNI / RUC'
                                                     className='
                                                         input-form
@@ -267,7 +258,7 @@ function MantenimientoCliente() {
                                                         form-control-sm
                                                         shadow-sm p-2  
                                                         rounded
-                            '
+                                                    '
                                                 />
 
                                                 <i
@@ -277,7 +268,8 @@ function MantenimientoCliente() {
                                                         w-14    
                                                         text-center
                                                         mt-2
-                            "
+                                                    "
+
                                                     onClick={() => {
                                                         setLoading(true);
                                                     }}
@@ -339,6 +331,7 @@ function MantenimientoCliente() {
 
                                             <input
                                                 placeholder='Telefono'
+                                                type={'number'}
                                                 className='
                                                     input-form
                                                     form-control 
@@ -518,6 +511,7 @@ function MantenimientoCliente() {
                                                         })
 
                                                     }}
+                                                    type='number'
                                                     placeholder='DNI / RUC'
                                                     className='
                                                         input-form
@@ -604,6 +598,7 @@ function MantenimientoCliente() {
                                                     shadow-sm p-2  
                                                     rounded
                                                 '
+                                                type={'number'}
                                                 onChange={e => {
 
                                                     setCliente(
@@ -733,14 +728,14 @@ function MantenimientoCliente() {
 
                 </Modal>
 
-                
+
 
 
                 <div className='mx-3 mt-20'>
 
 
                     <Table
-                        modelo={ ModeloCliente }
+                        modelo={ModeloCliente}
                         columns={columns}
                         url={`${urlAPI.Cliente.url}`}
 

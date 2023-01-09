@@ -30,6 +30,11 @@ function MantenimientoProducto() {
         e.preventDefault();
 
         SaveData(`${urlAPI.Producto.url}`, producto);
+        SaveData(`${urlAPI.CodigoBarras.url}`, { numero: producto.numero });
+
+        //Obtiene codigo de barra  / se limpian los labels
+        codigo();
+        limpiarData();
 
 
     }
@@ -57,25 +62,45 @@ function MantenimientoProducto() {
 
     }
     /**
-     * Recibe los codigos de barra existentes obtiene 
+     * Obtiene 
      * el ultimo codigo de barras y aumenta el codigo en 1
-     * @param {*} codigoBarras debe ser un array de objetos y debe contener propiedad numero
-     * ejemplo [ {id:"ejemplo_id", numero:"1234" } ]
+     * los codigos de barras deben ser un array de objetos y debe contener propiedad numero
+     * ejemplo [ {id:"ejemplo_id", numero:"0001" } ]
+     * 
      */
-    const obtenerCodigosBarras = (codigoBarra) => {
+    const obtenerCodigosBarras = () => {
 
-        console.log(codigoBarra);
 
-        let ultimoCodigoBarra = codigosBarras[codigoBarra.length - 1];
+        let ultimoCodigoBarra = codigosBarras[codigosBarras.length - 1];
         console.log(ultimoCodigoBarra);
 
         const codigo = GeneradorCodigoBarras(ultimoCodigoBarra.numero);
 
         setCodigoBarra(codigo);
+        setProducto({
+            ...producto,
+            numero: codigo,
+        })
 
     }
 
-    // Informacion adicional para el formulario
+    /**
+     * Funcion para obtener todos los codigos de barras registrados 📶
+     * actualiza el estado de los codigos de barras haciendo que se 
+     * ejecute nuevamente la obtención de codigos de barras actualizando el
+     * valor del codigo de barra 😩
+     */
+    const codigo = () => {
+        const dataCodigosBarra = async () => {
+            const data = await getData(`${urlAPI.CodigoBarras.url}`);
+            setCodigosBarras(data);
+
+
+        }
+        dataCodigosBarra();
+    }
+
+    // Informacion adicional para el formulario se ejecutan al primer render solo una vez 
 
     useEffect(() => {
 
@@ -89,31 +114,15 @@ function MantenimientoProducto() {
 
     }, [])
 
-    const codigo = () => {
-        const dataCodigosBarra = async () => {
-            const data = await getData(`${urlAPI.CodigoBarras.url}`)
-            setCodigosBarras(data);
-
-        }
-
-        dataCodigosBarra();
-    }
-
+    /**
+     * Esta ligada al estado de codigosBarras si este cambia se ejecuta
+     * 🙉 
+     */
     useEffect(() => {
-        
-        obtenerCodigosBarras(codigosBarras);
-        console.log(codigosBarras);
+
+        obtenerCodigosBarras();
 
     }, [codigosBarras])
-
-    console.log(codigosBarras);
-
-
-
-
-
-
-
 
 
     /**
@@ -139,7 +148,7 @@ function MantenimientoProducto() {
                 data-bs-toggle="modal"
                 data-bs-target="#modalEditar"
                 onClick={() => {
-
+                    console.log(data);
                     obtenerData(data);
                 }}>
 

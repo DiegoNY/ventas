@@ -134,6 +134,7 @@ function MantenimientoLaboratorio() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Ruc"}
+                                    type={'number'}
                                     onChange={e => {
                                         setLaboratorio(
                                             {
@@ -188,6 +189,7 @@ function MantenimientoLaboratorio() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Telefono"}
+                                    type={'number'}
                                     onChange={e => {
                                         setLaboratorio(
                                             {
@@ -267,6 +269,8 @@ function MantenimientoLaboratorio() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Ruc"}
+                                    type={'number'}
+
                                     value={laboratorio?.ruc}
                                     onChange={e => {
                                         setLaboratorio(
@@ -298,7 +302,6 @@ function MantenimientoLaboratorio() {
                                     icon={'fi fi-rr-user'}
                                     text={"Abreviatura"}
                                     value={laboratorio?.abreviatura}
-
                                     onChange={e => {
                                         setLaboratorio(
                                             {
@@ -328,8 +331,8 @@ function MantenimientoLaboratorio() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Telefono"}
+                                    type={'number'}
                                     value={laboratorio?.telefono}
-
                                     onChange={e => {
                                         setLaboratorio(
                                             {

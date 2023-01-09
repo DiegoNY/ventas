@@ -32,7 +32,7 @@ function Label(props) {
                             onChange={props.onChange}
                         />
                     }
-                    {!props.type && !props.select &&
+                    {!props.type && !props.select && !props.date &&
 
                         <input
                             placeholder={props.text}
@@ -67,6 +67,24 @@ function Label(props) {
                         >
                             {props.children}
                         </select>
+
+                    }
+
+                    {props.date &&
+
+                        <input
+                            type={'date'}
+                            className='
+                            input-form
+                            form-control 
+                            form-control-sm
+                            shadow-sm p-2  
+                            rounded
+                            '
+
+                            value={props.value}
+                            onChange={props.onChange}
+                        />
 
                     }
 

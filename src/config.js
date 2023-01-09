@@ -2,6 +2,8 @@
 
 const hostAPI = 'http://192.168.1.43:8000';
 
+const hostAPIV2 = 'http://192.168.1.43:8080';
+
 const urlAPI = {
 
     Cliente: {
@@ -48,7 +50,7 @@ const urlAPI = {
     },
     CodigoBarras : 
     {
-        url: `http://localhost:8080/api/v2/codigo_barras`
+        url: `${hostAPIV2}/api/v2/codigo_barras`
     }
 
 }

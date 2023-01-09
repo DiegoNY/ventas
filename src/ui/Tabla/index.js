@@ -40,9 +40,9 @@ function Table(props) {
                 'placeholder': '🔍 Buscar por ...',
             },
             'pagination': {
-                'previous': '⬅️',
-                'next': '➡️',
-                'showing': '😃 Mostrando',
+                'previous': '⬅',
+                'next': '⬅',
+                'showing': 'Mostrando',
                 'results': () => 'Records'
             }
         }

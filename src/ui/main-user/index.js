@@ -19,8 +19,15 @@ function MainUser() {
                         className="navbar-nav-link navbar-nav-link-toggler dropdown-toggle d-inline-flex align-items-center h-100"
                         data-toggle="dropdown">
                         <img src="../img/hombre-de-negocios.png" className="rounded-pill mr-lg-2" height="34" alt="" />
+                        
+                        {!auth.loading &&
+                            <span
+                                className="d-none d-lg-inline-block  container-nombre-usuario"
+                                id="nombreUsuario">
+                                {auth.user.nombre}
+                            </span>
 
-                        {!auth.loading && <span className="d-none d-lg-inline-block container-nombre-usuario" id="nombreUsuario">{auth.user.nombre} s </span>}
+                        }
 
                     </a>
                     {!!mostrar &&

@@ -141,6 +141,7 @@ function MantenimientoProveedor() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Ruc"}
+                                    type={'number'}
                                     onChange={e => {
                                         setProveedor(
                                             {
@@ -195,6 +196,7 @@ function MantenimientoProveedor() {
                                 <Label
                                     icon={'fi fi-rr-user'}
                                     text={"Telefono"}
+                                    type={'number'}
                                     onChange={e => {
                                         setProveedor(
                                             {
@@ -275,6 +277,7 @@ function MantenimientoProveedor() {
                                     icon={'fi fi-rr-user'}
                                     text={"Ruc"}
                                     value={proveedor?.ruc}
+                                    type={'number'}
                                     onChange={e => {
                                         setProveedor(
                                             {
@@ -289,7 +292,6 @@ function MantenimientoProveedor() {
                                     icon={'fi fi-rr-user'}
                                     text={"Nombre"}
                                     value={proveedor?.nombre}
-
                                     onChange={e => {
                                         setProveedor(
                                             {
@@ -336,7 +338,7 @@ function MantenimientoProveedor() {
                                     icon={'fi fi-rr-user'}
                                     text={"Telefono"}
                                     value={proveedor?.telefono}
-
+                                    type={'number'}
                                     onChange={e => {
                                         setProveedor(
                                             {
