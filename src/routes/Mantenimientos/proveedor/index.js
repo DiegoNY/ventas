@@ -1,10 +1,12 @@
-import { _ } from 'gridjs-react';
-import React from 'react';
+import { _, Grid } from 'gridjs-react';
+import React, { useEffect } from 'react';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
 import { Table } from '../../../ui/Tabla';
+import { Titulo } from '../../../ui/titulos-vistas';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
+import { getData } from '../../useFetch';
 
 
 function MantenimientoProveedor() {
@@ -14,9 +16,8 @@ function MantenimientoProveedor() {
    */
 
     const [proveedor, setProveedor] = React.useState(null);
-
     const [loading, setLoading] = React.useState(false);
-
+    const [dataProveedores, setDataProveedores] = React.useState([]);
 
     const saveProveedor = (e) => {
 
@@ -24,31 +25,41 @@ function MantenimientoProveedor() {
 
         SaveData(`${urlAPI.Proveedor.url}`, proveedor);
 
+        setTimeout(() => {
+            obtenerDataProveedores();
+        }, 800)
+
+
 
     }
 
     const updateProveedor = (e) => {
         e.preventDefault();
         console.log(proveedor);
-        UpdateData(`${urlAPI.Proveedor.url}/${proveedor._id}`, proveedor)
+        UpdateData(`${urlAPI.Proveedor.url}/${proveedor._id}`, proveedor);
 
-
-    }
-
-    const obtenerData = (data) => {
-        console.log(data);
-        setProveedor(data);
+        setTimeout(() => {
+            obtenerDataProveedores();
+        }, 800)
 
     }
 
-    const eliminar = (data) => {
-        console.log(data)
-        DeleteData(`${urlAPI.Proveedor.url}/${data._id}`);
+    const obtenerData = (id) => {
+        dataProveedores.map(proveedor => {
+            if (proveedor._id == id) {
+                setProveedor(proveedor);
+            }
+        })
 
     }
 
+    const eliminar = (id) => {
+        DeleteData(`${urlAPI.Proveedor.url}/${id}`);
 
-
+        setTimeout(() => {
+            obtenerDataProveedores();
+        }, 800)
+    }
 
     const limpiarData = () => {
 
@@ -59,59 +70,18 @@ function MantenimientoProveedor() {
     /**
     * Informacion para la tabla
     * 
-    * @const columns son las columnas que contendra tu tabla
-    * @ModeloProducto Modelo de la data que se mostrara
-    * 
     */
-    let Proveedor = data => data.map(data => [
-        data.abreviatura,
-        data.nombre,
-        data.direccion,
-        data.telefono,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
-
-                    obtenerData(data);
-                }}>
-
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
-
-        </td>)
 
 
-    ]);
+    const obtenerDataProveedores = async () => {
+        const data = await getData(`${urlAPI.Proveedor.url}`);
+        console.log(data);
+        setDataProveedores(data);
+    }
 
-
-    const columns = [
-        {
-            name: '#'
-        },
-        {
-            name: 'Abreviatura'
-        },
-        {
-            name: 'Direccion'
-        },
-        {
-            name: 'Telefono'
-        },
-        {
-            name: 'Acciones',
-
-
-        }
-    ]
+    useEffect(() => {
+        obtenerDataProveedores();
+    }, [])
 
     return (
         <>
@@ -252,6 +222,7 @@ function MantenimientoProveedor() {
                 </form>
 
             </Modal>
+
             <Modal
                 id={'modalEditar'}
                 title={'EDITAR EL PRODUCTO ' + proveedor?.nombre}
@@ -397,19 +368,23 @@ function MantenimientoProveedor() {
 
             <div className='card'>
 
-                <div className='mx-3 mt-20'>
+                <Titulo title={'Proveedor '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings '} />
+
+                <div className='mx-3 mt-4'>
 
 
-                    <Table
-                        modelo={Proveedor}
-                        columns={columns}
-                        url={`${urlAPI.Proveedor.url}`}
 
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
+
+                    <Grid
+                        data={dataProveedores}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
+
                                         bg-indigo-500 
                                         h-10 
                                         rounded-md
@@ -419,21 +394,76 @@ function MantenimientoProveedor() {
                                         text-sm
                                         w-px-15
                                         w-48
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalRegistro"
-                                    onClick={
-                                        limpiarData
-                                    }
+
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistro"
+                                        onClick={() => limpiarData()}
 
 
-                                >
-                                    Proveedor +
-                                </button>
+                                    >
+                                        Proveedor  +
+                                    </button>
 
 
-                            </div>
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'abreviatura', name: 'Abreviatura' },
+                                    { id: 'direccion', name: 'Direccion' },
+                                    { id: 'telefono', name: 'Telefono' },
+                                    {
+                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                            <td>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
 
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
+
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+                        className={
+                            {
+                                th: 'bg-orange-500',
+                                table: 'w-100',
+                            }
+                        }
+
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }
                         }
                     />
 

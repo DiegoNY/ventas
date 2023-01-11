@@ -1,0 +1,16 @@
+.scroll-box {
+    overflow-y: scroll;
+}
+
+.scroll-box-table {
+    overflow-y: scroll;
+}
+
+.box-productos {
+    height: 150px;
+}
+
+.box-lista-producto {
+
+    height: 200px;
+}

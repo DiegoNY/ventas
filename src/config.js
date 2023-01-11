@@ -1,14 +1,12 @@
 // Archivo de Configuracion 🔩🔩🔩
-
 const hostAPI = 'http://192.168.1.43:8000';
-
 const hostAPIV2 = 'http://192.168.1.43:8080';
 
 const urlAPI = {
 
     Cliente: {
 
-        url: `${hostAPI}/api/v1/cliente`,
+        url: `${hostAPIV2}/api/v2/cliente`,
 
     },
 
@@ -20,33 +18,33 @@ const urlAPI = {
 
     Proveedor: {
 
-        url: `${hostAPI}/api/v1/proveedor`,
+        url: `${hostAPIV2}/api/v2/proveedor`,
 
     },
 
     Producto: {
 
-        url: `${hostAPI}/api/v1/producto`,
+        url: `${hostAPIV2}/api/v2/producto`,
 
     },
 
     Usuario: {
 
-        url: `${hostAPI}/api/v1/usuario`,   
+        url: `${hostAPIV2}/api/v2/usuario`,   
 
     },
 
     Moneda: {
 
-        url: `${hostAPI}/api/v1/moneda`,
+        url: `${hostAPIV2}/api/v2/moneda`,
 
     },
     Laboratorio: {
 
-        url: `${hostAPI}/api/v1/laboratorio`
+        url: `${hostAPIV2}/api/v2/laboratorio`
     },
     TipoDocumento :{
-        url: `${hostAPI}/api/v1/tipo_documento`
+        url: `${hostAPIV2}/api/v2/tipo_documento`
     },
     CodigoBarras : 
     {

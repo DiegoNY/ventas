@@ -5,11 +5,14 @@ import { _ } from "gridjs-react";
 import "gridjs/dist/theme/mermaid.css";
 
 
+let gridExpor = "";
 
 function Table(props) {
 
 
     const wrapperRef = useRef(null);
+
+    const [reload, setReload] = React.useState(false);
 
 
     const grid = new Grid({
@@ -22,10 +25,10 @@ function Table(props) {
         ],
         search: true,
         server: {
-            method:'GET',
+            method: 'GET',
             url: props.url,
             then: props.modelo,
-            
+
         },
 
         pagination: {
@@ -49,7 +52,7 @@ function Table(props) {
     });
 
 
-
+    gridExpor = grid;
     // Crea el botón y agrégalo como un nodo secundario del elemento de búsqueda
 
 
@@ -59,10 +62,9 @@ function Table(props) {
         grid.render(wrapperRef.current);
 
 
-    });
+    }); 
 
-
-
+ 
 
     return (
         <>
@@ -74,5 +76,6 @@ function Table(props) {
 }
 export {
     Table,
+    gridExpor,
 
 }

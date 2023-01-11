@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { hostAPI, ModeloClientes, urlAPI } from '../../../config';
-import { Table } from '../../../ui/Tabla';
+import React, { useEffect } from 'react';
+import { hostAPI, urlAPI } from '../../../config';
 import img_registro from '../../img/mantenimiento-img/img-registro-cliente.png'
 import img_editar from '../../img/mantenimiento-img/img-editar.png'
-import { _ } from "gridjs-react";
+import { _, Grid } from "gridjs-react";
 import { Modal } from '../../../ui/modal';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
+import { Titulo } from '../../../ui/titulos-vistas';
+import { getData } from '../../useFetch';
 
 
 function MantenimientoCliente() {
@@ -18,89 +19,44 @@ function MantenimientoCliente() {
 
     const [loading, setLoading] = React.useState(false);
 
+    const [dataCliente, setDataCliente] = React.useState([{}])
 
 
-    const obtenerData = (data) => {
-        console.log(data);
-        setCliente(data)
+    const obtenerData = (id) => {
+        dataCliente.map(cliente => {
+            if (cliente._id == id) {
+                setCliente(cliente)
+            }
+        })
     }
 
-    const eliminar = (data) => {
+    const eliminar = (id) => {
 
-        console.log(data);
-
-        DeleteData(`${urlAPI.Cliente.url}/${data._id}`);
-
+        DeleteData(`${urlAPI.Cliente.url}/${id}`);
+        dataClientes();
 
     }
 
     /**
-   * Informacion para la tabla
-   */
-    let ModeloCliente = data => data.map(data => [
-        data.tipo_documento,
-        data.dni,
-        data.descripcion,
-        data.telefono,
-        data.direccion,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
+    * Obtiene todos los clientes que esten almacenados en bd 
+    * y actualiza el estado de Clientes con los valores que 
+    * obtenga 
+    */
+    const dataClientes = async () => {
 
-                    obtenerData(data);
-                }}>
+        const data = await getData(`${urlAPI.Cliente.url}`);
+        console.log(data);
+        setDataCliente(data);
 
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
+    }
 
-        </td>)
+    useEffect(() => {
 
+        dataClientes();
 
-    ]);
-
-
-    const columns = [
-        {
-            name: 'Tipo. Documento'
-        },
-        {
-            name: 'Numero Identificacion'
-        },
-        {
-            name: 'Nombre'
-        },
-        {
-            name: 'Telefono'
-        },
-        {
-            name: 'Direccion'
-        },
-        {
-            name: 'Acciones',
-
-
-        }
-    ]
-
+    }, [])
 
     // Informacion y registro de cliente
-
-    /**
-     * Peticiones validar para hacer la data dinamica
-     */
-    const CargarDatosUsuario = (res) => {
-        console.log(res);
-    }
-
 
     if (loading) {
 
@@ -173,30 +129,25 @@ function MantenimientoCliente() {
 
     }
 
-
     /**
      * 
      * @param {*} e  recive el evento submit para hacer que no se refresque la pagina
      */
 
-
     const saveClient = async (e) => {
 
         e.preventDefault();
-
         SaveData(`${urlAPI.Cliente.url}`, cliente)
+        dataClientes();
 
     }
 
     const updateCliente = (e) => {
         e.preventDefault();
 
-        console.log(cliente);
-
         UpdateData(`${urlAPI.Cliente.url}/${cliente._id}`, cliente)
-
+        dataClientes();
     }
-
     /**
      * Vacia la informacion almacenada en el estado 🗑
      */
@@ -207,7 +158,7 @@ function MantenimientoCliente() {
             direccion: "",
             correo: "",
             dni_ruc: "",
-            telefono: "",
+            telefono: "-",
 
         })
     }
@@ -215,7 +166,7 @@ function MantenimientoCliente() {
 
     return (
         <>
-            <div className='card'>
+            <div className=''>
 
                 <Modal
                     id={'modalEditar'}
@@ -504,6 +455,7 @@ function MantenimientoCliente() {
                                             <div className='flex p-0'>
 
                                                 <input
+                                                    value={cliente?.dni_ruc}
                                                     onChange={e => {
 
                                                         setCliente({
@@ -599,6 +551,7 @@ function MantenimientoCliente() {
                                                     rounded
                                                 '
                                                 type={'number'}
+                                                value={cliente?.telefono}
                                                 onChange={e => {
 
                                                     setCliente(
@@ -669,6 +622,7 @@ function MantenimientoCliente() {
                                                 shadow-sm p-2  
                                                 rounded
                                                 '
+                                                value={cliente?.correo}
                                                 onChange={e => {
                                                     setCliente(
                                                         {
@@ -728,22 +682,21 @@ function MantenimientoCliente() {
 
                 </Modal>
 
+                <Titulo title={'Clientes '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'}/>
 
 
 
-                <div className='mx-3 mt-20'>
+                <div className='mx-3 mt-6 card border-none'>
 
-
-                    <Table
-                        modelo={ModeloCliente}
-                        columns={columns}
-                        url={`${urlAPI.Cliente.url}`}
-
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
+                    <Grid
+                        data={dataCliente}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
 
                                         bg-indigo-500 
                                         h-10 
@@ -755,31 +708,84 @@ function MantenimientoCliente() {
                                         w-px-15
                                         w-48
 
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop"
-                                    onClick={
-                                        limpiarData
-                                    }
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop"
+                                        onClick={() => limpiarData()}
 
 
-                                >
-                                    Cliente +
-                                </button>
+                                    >
+                                        Cliente +
+                                    </button>
 
 
-                            </div>
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'tipo', name: 'Tipo.Documento' },
+                                    { id: 'dni', name: 'Numero Identificacion' },
+                                    { id: 'descripcion', name: 'Nombre' },
+                                    { id: 'telefono', name: 'Telefono' },
+                                    { id: 'direccion', name: 'Direccion' },
+                                    {
+                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                            <td>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
 
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
+
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+                        className={
+                            {
+                                th: 'bg-orange-500',
+                                table: 'w-100',
+                            }
+                        }
+
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }
                         }
                     />
 
+
                 </div>
 
-
-
             </div>
-
-
 
         </>
     );

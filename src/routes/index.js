@@ -16,6 +16,11 @@ import { MantenimientoProveedor } from './Mantenimientos/proveedor';
 import { MantenimientoUsuario } from './Mantenimientos/usuario';
 import { MantenimientoProducto } from './Mantenimientos/producto';
 import { MantenimientoTipoDocumento } from './Mantenimientos/tipo-documento';
+import { PuntoVenta } from './ventas/punto_venta';
+import { ListaVenta } from './ventas/lista_ventas';
+import { ProductosMasVendidos } from './ventas/productos_mas_vendidos';
+import { NotaSalida } from './ventas/nota_salida';
+import { ListadoSalida } from './ventas/listado_salida';
 function App() {
 
   // Rutas °° 🍅
@@ -36,7 +41,7 @@ function App() {
 
             <div className='content-wrapper'>
 
-              <div className='content-inner h-100' id='scroll'>
+              <div className='content-inner h-100 bg-white' id='scroll' >
 
                 <Routes>
 
@@ -80,6 +85,27 @@ function App() {
                   <Route
                     path='/mantenimiento-proveedor'
                     element={<MantenimientoProveedor />}
+                  />
+
+                  <Route
+                    path='/venta-punto_venta'
+                    element={<PuntoVenta />}
+                  />
+                  <Route
+                    path='/venta-lista_venta'
+                    element={<ListaVenta />}
+                  />
+                  <Route
+                    path='/venta-productos_mas_vendidos'
+                    element={<ProductosMasVendidos />}
+                  />
+                  <Route
+                    path='/venta-nota_salida'
+                    element={<NotaSalida />}
+                  />
+                  <Route
+                    path='/venta-listado_salida'
+                    element={<ListadoSalida />}
                   />
 
                   <Route

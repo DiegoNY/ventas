@@ -1,12 +1,13 @@
-import { _ } from 'gridjs-react';
-import React from 'react';
+import { _, Grid } from 'gridjs-react';
+import React, { useEffect } from 'react';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
-import { Table } from '../../../ui/Tabla';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import img1_1 from '../../img/mantenimiento-img/editarLaboratorio2.png'
 import img1_2 from '../../img/mantenimiento-img/editarLaboratorio3.png'
+import { getData } from '../../useFetch';
+import { Titulo } from '../../../ui/titulos-vistas';
 
 function MantenimientoLaboratorio() {
 
@@ -16,96 +17,69 @@ function MantenimientoLaboratorio() {
 
     const [laboratorio, setLaboratorio] = React.useState(null);
 
+    const [dataLaboratoriosEstado, setDataLaboratiosEstado] = React.useState([]);
+
     const [loading, setLoading] = React.useState(false);
 
 
     const saveLaboratorio = (e) => {
 
         e.preventDefault();
-
         SaveData(`${urlAPI.Laboratorio.url}`, laboratorio);
-
+        dataLaboratorios();
 
     }
 
     const updateLaboratorio = (e) => {
         e.preventDefault();
-        console.log(laboratorio);
         UpdateData(`${urlAPI.Laboratorio.url}/${laboratorio._id}`, laboratorio)
-
-
+        dataLaboratorios();
     }
 
     const obtenerData = (data) => {
-        console.log(data);
-        setLaboratorio(data);
+        dataLaboratoriosEstado.map(laboratorio => {
+            if (laboratorio._id == data) {
 
+                setLaboratorio(laboratorio);
+            }
+        })
     }
 
     const eliminar = (data) => {
-        console.log(data)
-        DeleteData(`${urlAPI.Laboratorio.url}/${data._id}`);
-
+        DeleteData(`${urlAPI.Laboratorio.url}/${data}`);
+        dataLaboratorios();
     }
-
-
 
 
     const limpiarData = () => {
-
+        setLaboratorio({
+            abreviatura: "",
+            correo: "",
+            created_at: "",
+            direccion: "",
+            estado: "",
+            nombre: "",
+            ruc: "",
+            telefono: "",
+            updated_at: "",
+            _id: "",
+        })
     }
 
     /**
- * Informacion para la tabla
- */
-    let ModeloLaboratorio = data => data.map(data => [
-        data.abreviatura,
-        data.nombre,
-        data.direccion,
-        data.telefono,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
+     * Informacion para la tabla
+    */
 
-                    obtenerData(data);
-                }}>
+    const dataLaboratorios = async () => {
+        const data = await getData(`${urlAPI.Laboratorio.url}`);
+        console.log(data);
+        setDataLaboratiosEstado(data);
 
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
+    }
 
-        </td>)
-
-
-    ]);
-
-
-
-    const columns = [
-        {
-            name: '#'
-        },
-        {
-            name: 'Abreviatura'
-        },
-        {
-            name: 'Direccion'
-        },
-        {
-            name: 'Telefono'
-        },
-        {
-            name: 'Acciones',
-        }
-    ]
+    useEffect(() => {
+        dataLaboratorios();
+    }, [])
 
     return (
         <>
@@ -245,6 +219,7 @@ function MantenimientoLaboratorio() {
                 </form>
 
             </Modal>
+
             <Modal
                 id={'modalEditar'}
                 title={'EDITAR EL LABORATORIO ' + laboratorio?.nombre}
@@ -391,19 +366,21 @@ function MantenimientoLaboratorio() {
 
             <div className='card'>
 
-                <div className='mx-3 mt-20'>
+                <Titulo title={'Laboratorio '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+
+                <div className='mx-3 mt-4'>
 
 
-                    <Table
-                        modelo={ModeloLaboratorio}
-                        columns={columns}
-                        url={`${urlAPI.Laboratorio.url}`}
+                    <Grid
+                        data={dataLaboratoriosEstado}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
 
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
                                         bg-indigo-500 
                                         h-10 
                                         rounded-md
@@ -413,23 +390,79 @@ function MantenimientoLaboratorio() {
                                         text-sm
                                         w-px-15
                                         w-48
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalRegistro"
-                                    onClick={
-                                        limpiarData
-                                    }
+
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistro"
+                                        onClick={() => limpiarData()}
 
 
-                                >
-                                    Laboratorio Proveedor  +
-                                </button>
+                                    >
+                                        Laboratorio Proveedor  +
+                                    </button>
 
 
-                            </div>
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'abreviatura', name: 'Abreviatura' },
+                                    { id: 'direccion', name: 'Direccion' },
+                                    { id: 'telefono', name: 'Telefono' },
+                                    {
+                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                            <td>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
 
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
+
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+                        className={
+                            {
+                                th: 'bg-orange-500',
+                                table: 'w-100',
+                            }
+                        }
+
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }
                         }
                     />
+
 
                 </div>
 

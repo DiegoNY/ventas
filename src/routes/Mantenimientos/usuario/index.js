@@ -1,10 +1,11 @@
-import { _ } from 'gridjs-react';
-import React from 'react';
+import { _, Grid } from 'gridjs-react';
+import React, { useEffect } from 'react';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
-import { Table } from '../../../ui/Tabla';
+import { Titulo } from '../../../ui/titulos-vistas';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
+import { getData } from '../../useFetch';
 
 
 function MantenimientoUsuario() {
@@ -14,104 +15,81 @@ function MantenimientoUsuario() {
   */
 
     const [usuario, setUsuario] = React.useState(null);
-
     const [loading, setLoading] = React.useState(false);
-
+    const [usuarios, setUsuarios] = React.useState([]);
 
     const saveUsuario = (e) => {
 
         e.preventDefault();
-
-        console.log(usuario);
-
         SaveData(`${urlAPI.Usuario.url}`, usuario);
 
-
+        setTimeout(() => {
+            ObtenerDataUsuarios();
+        }, 800)
     }
 
     const updateUsuario = (e) => {
         e.preventDefault();
         console.log(usuario);
-        UpdateData(`${urlAPI.Usuario.url}/${usuario._id}`, usuario)
+        UpdateData(`${urlAPI.Usuario.url}/${usuario._id}`, usuario);
 
-
-    }
-
-    const obtenerData = (data) => {
-
-        setUsuario(data);
+        setTimeout(() => {
+            ObtenerDataUsuarios();
+        }, 800);
 
     }
 
-    const eliminar = (data) => {
-        console.log(data)
-        DeleteData(`${urlAPI.Usuario.url}/${data._id}`);
+    const obtenerData = (id) => {
+        usuarios.map(usuario => {
+            if (usuario._id == id) {
+                setUsuario(usuario);
+            }
+        })
 
     }
 
+    const eliminar = (id) => {
+        DeleteData(`${urlAPI.Usuario.url}/${id}`);
 
-
+        setTimeout(() => {
+            ObtenerDataUsuarios();
+        }, 800);
+    }
 
     const limpiarData = () => {
-
+        setUsuario({
+            cargo: "",
+            clave: "",
+            created_at: "",
+            dni: "",
+            email: "",
+            estado: 1,
+            fecha_ingreso: "",
+            nombre: "",
+            telefono: "",
+            tipo: "",
+            tipo_impresion: " ",
+            updated_at: "",
+            usuario: "",
+            _id: "",
+        })
     }
-
 
     /**
     * Informacion para la tabla
     * 
-    * @const columns son las columnas que contendra tu tabla
-    * @ModeloProducto Modelo de la data que se mostrara
-    * 
     */
-    let ModeloUsuario = data => data.map(data => [
-        data.dni,
-        data.nombre,
-        data.telefono,
-        data.cargo,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
-                    console.log(data);
-                    obtenerData(data);
-                }}>
-
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
-
-        </td>)
 
 
-    ]);
+    const ObtenerDataUsuarios = async () => {
+        const data = await getData(`${urlAPI.Usuario.url}`);
+        console.log(data);
+        setUsuarios(data);
+    }
 
-
-    const columns = [
-        {
-            name: 'DNI'
-        },
-        {
-            name: 'Nombre'
-        },
-        {
-            name: 'Fecha Registro'
-        },
-        {
-            name: 'Acceso'
-        },
-        {
-            name: 'Acciones',
-
-        }
-    ]
+    useEffect(() => {
+        ObtenerDataUsuarios();
+    }, [])
 
     return (
         <>
@@ -345,6 +323,7 @@ function MantenimientoUsuario() {
                 </form>
 
             </Modal>
+
             <Modal
                 id={'modalEditar'}
                 title={'EDITAR EL USUARIO ' + usuario?.nombre}
@@ -579,19 +558,21 @@ function MantenimientoUsuario() {
 
             <div className='card'>
 
-                <div className='mx-3 mt-20'>
+                <Titulo title={'Usuario '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+
+                <div className='mx-3 mt-4'>
 
 
-                    <Table
-                        modelo={ModeloUsuario}
-                        columns={columns}
-                        url={`${urlAPI.Usuario.url}`}
+                    <Grid
+                        data={usuarios}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
 
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
                                         bg-indigo-500 
                                         h-10 
                                         rounded-md
@@ -601,21 +582,80 @@ function MantenimientoUsuario() {
                                         text-sm
                                         w-px-15
                                         w-48
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalRegistro"
-                                    onClick={
-                                        limpiarData
-                                    }
+
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistro"
+                                        onClick={() => limpiarData()}
 
 
-                                >
-                                    Usuario +
-                                </button>
+                                    >
+                                        Usuario  +
+                                    </button>
 
 
-                            </div>
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'dni', name: 'DNI' },
+                                    { id: 'nombre', name: 'NOMBRE' },
+                                    { id: 'fecha_ingreso', name: 'FECHA REGISTRO' },
+                                    { id: 'tipo', name: 'ACCESOS' },
+                                    {
+                                        id: 'acciones', name: 'ACCIONES', formatter: (cells, row) => _(
+                                            <td className='flex justify-center'>
 
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
+
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
+
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+                        className={
+                            {
+                                thead: 'bg-red',
+                                th: 'bg-orange-500 text-center mx-0 ',
+                                table: 'w-100',
+                                td: 'text-center',
+                            }
+                        }
+
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }
                         }
                     />
 

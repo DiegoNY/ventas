@@ -33,10 +33,7 @@ function PanelControl() {
             Panel de control
             <div className='w-50 h-60'>
                 <BarChart chartData={userData} />
-
             </div>
-
-
 
         </div>
     );

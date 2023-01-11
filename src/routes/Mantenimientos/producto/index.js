@@ -1,4 +1,4 @@
-import { _ } from 'gridjs-react';
+import { _, Grid } from 'gridjs-react';
 import React, { useEffect } from 'react';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
@@ -9,6 +9,7 @@ import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import { getData } from '../../useFetch';
 import { GeneradorCodigoBarras } from './useCodigoBarras';
 import io from 'socket.io-client';
+import { Titulo } from '../../../ui/titulos-vistas';
 const socket = io('http://localhost:8080/');
 
 
@@ -21,7 +22,7 @@ function MantenimientoProducto() {
     const [producto, setProducto] = React.useState(null);
     const [laboratorios, setLaboratorios] = React.useState([]);
     const [codigoBarra, setCodigoBarra] = React.useState('');
-
+    const [productos, setProductos] = React.useState([]);
     const [codigosBarras, setCodigosBarras] = React.useState([{ id: "", numero: '00008' }]);
     const [loading, setLoading] = React.useState(false);
 
@@ -36,25 +37,38 @@ function MantenimientoProducto() {
         codigo();
         limpiarData();
 
+        setTimeout(() => {
+            obtenerDataProductos();
+        }, 800)
 
     }
 
     const updateProducto = (e) => {
         e.preventDefault();
         console.log(producto);
-        UpdateData(`${urlAPI.Producto.url}/${producto._id}`, producto)
+        UpdateData(`${urlAPI.Producto.url}/${producto._id}`, producto);
+
+        setTimeout(() => {
+            obtenerDataProductos();
+        }, 800)
 
     }
 
-    const obtenerData = (data) => {
-
-        setProducto(data);
+    const obtenerData = (id) => {
+        productos.map(producto => {
+            if (producto._id == id) {
+                setProducto(producto);
+            }
+        })
 
     }
 
-    const eliminar = (data) => {
-        console.log(data)
-        DeleteData(`${urlAPI.Producto.url}/${data._id}`);
+    const eliminar = (id) => {
+        DeleteData(`${urlAPI.Producto.url}/${id}`);
+
+        setTimeout(() => {
+            obtenerDataProductos();
+        }, 800)
 
     }
 
@@ -128,71 +142,18 @@ function MantenimientoProducto() {
     /**
     * Informacion para la tabla
     * 
-    * @const columns son las columnas que contendra tu tabla
-    * @ModeloProducto Modelo de la data que se mostrara
-    * 
     */
 
-    let ModeloProducto = data => data.map(data => [
-        data._id,
-        data.codigo_barras,
-        data.descripcion,
-        data.fecha_registro,
-        data.stock,
-        data.precio_venta,
-        data.tipo,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
-                    console.log(data);
-                    obtenerData(data);
-                }}>
 
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
+    const obtenerDataProductos = async () => {
+        const data = await getData(`${urlAPI.Producto.url}`);
+        console.log(data);
+        setProductos(data);
+    }
 
-        </td>)
-
-
-    ]);
-
-    const columns = [
-        {
-            id: '_id',
-            name: '#'
-        },
-        {
-            id: 'descripcion',
-            name: 'Cod. Barras'
-        },
-        {
-            name: 'descripcion'
-        },
-        {
-            name: 'Fec. Registro'
-        },
-        {
-            name: 'Stock'
-        },
-        {
-            name: 'P.Venta'
-        },
-        {
-            name: 'Tipo'
-        },
-        {
-            name: 'Estado'
-        }
-    ]
+    useEffect(() => {
+        obtenerDataProductos();
+    }, [])
 
     return (
         <>
@@ -213,35 +174,37 @@ function MantenimientoProducto() {
                             <div className='col-sm-5 mt-3 ml-4 shadow-sm p-3 mb-3  rounded'>
                                 {/* <img src={img_registro} /> */}
                                 <table className='table mt-3 table-borderless  table-responsive-sm'>
-                                    {loading && <p>OBteniendo codigo</p> || <tr>
-                                        <td className='font-sans'>
+                                    {loading && <p>OBteniendo codigo</p> ||
 
-                                            <span>
-                                                <i class="fi fi-rr-user"></i>
-                                            </span>
+                                        <tr>
+                                            <td className='font-sans'>
 
-                                            Cod.Producto
+                                                <span>
+                                                    <i class="fi fi-rr-user"></i>
+                                                </span>
 
-                                        </td>
-                                        <td className='font-mono'>
+                                                Cod.Producto
 
-                                            <input
-                                                placeholder=' Codigo Producto '
-                                                className='
+                                            </td>
+                                            <td className='font-mono'>
+
+                                                <input
+                                                    placeholder=' Codigo Producto '
+                                                    className='
                                                     input-form
                                                     form-control 
                                                     form-control-sm
                                                     shadow-sm p-2  
                                                     rounded
                                                 '
-                                                value={codigoBarra}
+                                                    value={codigoBarra}
 
 
-                                            />
+                                                />
 
-                                        </td>
+                                            </td>
 
-                                    </tr>}
+                                        </tr>}
 
                                     <tr>
                                         <td className='font-sans'>
@@ -879,18 +842,21 @@ function MantenimientoProducto() {
 
                 </Modal>
 
-                <div className='mx-3 mt-20'>
+                <Titulo title={'Producto '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
 
-                    <Table
-                        modelo={ModeloProducto}
-                        columns={columns}
-                        url={`${urlAPI.Producto.url}`}
+                <div className='mx-3 mt-4'>
 
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
+
+                    <Grid
+                        data={productos}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
+
                                         bg-indigo-500 
                                         h-10 
                                         rounded-md
@@ -900,27 +866,86 @@ function MantenimientoProducto() {
                                         text-sm
                                         w-px-15
                                         w-48
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalRegistro"
-                                    onClick={() => {
-                                        limpiarData();
-                                        codigo()
 
-                                    }
-                                    }
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistro"
+                                        onClick={() => {
 
+                                            limpiarData()
+                                            codigo()
 
-                                >
-                                    Producto +
-                                </button>
+                                        }}
 
 
-                            </div>
+                                    >
+                                        Producto  +
+                                    </button>
 
+
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'codigo_barras', name: 'COD BARRAS' },
+                                    { id: 'descripcion', name: 'DESCRIPCION' },
+                                    { id: 'fecha_registro', name: 'FEC. REGISTRO' },
+                                    { id: 'stock', name: 'STOCK' },
+                                    { id: 'precio_venta', name: 'P.VENTA' },
+                                    { id: 'tipo', name: 'TIPO' },
+                                    {
+                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                            <td>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
+
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
+
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+                        className={
+                            {
+                                th: 'bg-orange-500',
+                                table: 'w-100',
+                            }
                         }
-                    />
 
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }}
+
+                    />
 
                 </div>
 

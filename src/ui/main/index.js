@@ -7,6 +7,9 @@ import { SubMenuItem } from './SubMenuItem';
 function Main() {
     const [mostrar, setMostrar] = React.useState(false);
     const [comprimir, setComprimir] = React.useState(false);
+    const [mostrarSubMenuCaja, setmostrarSubMenuCaja] = React.useState(false);
+    const [mostrarVentas, setMostrarVentas] = React.useState(false);
+    const [mostrarCompras, setMostrarCompras] = React.useState(false);
 
     const auth = useAuth();
 
@@ -78,12 +81,40 @@ function Main() {
                             <ItemMenu
                                 link='home'
                                 name="Inicio"
-                                icono="aca ira una img de un icono xd"
+                                icono="fi fi-rs-shop"
                             />
 
                             <ItemMenu
+                                name="Caja"
+                                icono="fi fi-rr-briefcase"
+                                onClick={() => setmostrarSubMenuCaja(!mostrarSubMenuCaja)}
+                            >
+                                {!!mostrarSubMenuCaja &&
+                                    <SubMenuItem>
+                                        <ItemMenu
+                                            link='caja'
+                                            name="Apertura"
+                                            icono="ICONO"
+                                        />
+                                        <ItemMenu
+                                            link='caja-cierre'
+                                            name="Cierre"
+                                            icono="ICONO"
+                                        />
+                                        <ItemMenu
+                                            link='caja-reporte'
+                                            name="Reporte"
+                                            icono="ICONO"
+                                        />
+                                    </SubMenuItem>
+
+                                }
+
+                            </ItemMenu>
+
+                            <ItemMenu
                                 name={'Mantenimiento'}
-                                icono=""
+                                icono="fi fi-rr-settings"
                                 onClick={() => setMostrar(!mostrar)}
 
                             >
@@ -98,13 +129,11 @@ function Main() {
                                         <ItemMenu
                                             link={'mantenimiento-cliente'}
                                             name="Cliente"
-                                            icono="icono"
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-producto'}
                                             name="Producto"
-                                            icono="icono"
                                         />
 
                                         <ItemMenu
@@ -136,6 +165,63 @@ function Main() {
 
 
                             </ItemMenu >
+
+                            <ItemMenu
+                                name='Ventas'
+                                icono="fi fi-rs-shop"
+                                onClick={() => setMostrarVentas(!mostrarVentas)}
+                            >
+                                {!!mostrarVentas &&
+                                    <SubMenuItem>
+                                        <ItemMenu
+                                            link='venta-punto_venta'
+                                            name='Punto de venta'
+
+                                        />
+                                        <ItemMenu
+                                            link='venta-lista_venta'
+                                            name='Lista de ventas'
+
+                                        />
+                                        <ItemMenu
+                                            link='venta-productos_mas_vendidos'
+                                            name='Productos mas vendidos'
+                                        />
+                                        <ItemMenu
+                                            link='venta-nota_salida'
+                                            name='Nota de salida'
+                                        />
+                                        <ItemMenu
+                                            link='venta-listado_salida'
+                                            name='Lista salida'
+                                        />
+                                    </SubMenuItem>
+                                }
+
+                            </ItemMenu>
+
+                            <ItemMenu
+                                name='Compras'
+                                icono='fi fi-rr-shopping-cart-add'
+                                onClick={() => setMostrarCompras(!mostrarCompras)}
+                            >
+
+                                {!!mostrarCompras &&
+
+                                    <SubMenuItem>
+                                        <ItemMenu
+                                            name='Registrar compras'
+                                            link='compras-registro_compras'
+                                        />
+
+                                        <ItemMenu
+                                            name='Lista compra'
+                                            link='compras-lista_compras'
+                                        />
+                                    </SubMenuItem>
+                                }
+
+                            </ItemMenu>
 
                         </div>
 

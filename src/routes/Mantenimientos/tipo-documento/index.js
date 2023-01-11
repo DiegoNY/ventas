@@ -1,5 +1,5 @@
-import { _ } from 'gridjs-react';
-import React from 'react';
+import { _, Grid } from 'gridjs-react';
+import React, { useEffect } from 'react';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
@@ -8,6 +8,8 @@ import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import img_1 from '../../img/mantenimiento-img/img-matenimiento-tc-3.png'
 import img_2 from '../../img/mantenimiento-img/img-mantenimiento-tc.png'
 import { Series } from './useSeries';
+import { getData } from '../../useFetch';
+import { Titulo } from '../../../ui/titulos-vistas';
 
 function MantenimientoTipoDocumento() {
 
@@ -16,8 +18,8 @@ function MantenimientoTipoDocumento() {
 */
 
     const [tipoDocumento, setTipoDocumento] = React.useState(null);
-
     const [loading, setLoading] = React.useState(false);
+    const [dataTipoDocumento, setDataTipoDocument] = React.useState([]);
 
 
     const saveTipoDocumento = (e) => {
@@ -26,6 +28,9 @@ function MantenimientoTipoDocumento() {
 
         SaveData(`${urlAPI.TipoDocumento.url}`, tipoDocumento);
 
+        setTimeout(() => {
+            dataDeTipoDocumentos();
+        }, 800)
 
     }
 
@@ -34,18 +39,29 @@ function MantenimientoTipoDocumento() {
         console.log(tipoDocumento);
         UpdateData(`${urlAPI.TipoDocumento.url}/${tipoDocumento._id}`, tipoDocumento)
 
+        setTimeout(() => {
+            dataDeTipoDocumentos();
+        }, 800)
+    }
+
+    const obtenerData = (id) => {
+
+        dataTipoDocumento.map(tipoDocumentoEncontrado => {
+            if (tipoDocumentoEncontrado._id == id) {
+                setTipoDocumento(tipoDocumentoEncontrado);
+            }
+        })
+
 
     }
 
-    const obtenerData = (data) => {
-        console.log(data);
-        setTipoDocumento(data);
+    const eliminar = (id) => {
 
-    }
+        DeleteData(`${urlAPI.TipoDocumento.url}/${id}`);
 
-    const eliminar = (data) => {
-        console.log(data)
-        DeleteData(`${urlAPI.TipoDocumento.url}/${data._id}`);
+        setTimeout(() => {
+            dataDeTipoDocumentos();
+        }, 800)
 
     }
 
@@ -54,77 +70,36 @@ function MantenimientoTipoDocumento() {
 
     const limpiarData = () => {
 
+        setTipoDocumento({
+            created_at: "",
+            descripcion_caja: "",
+            estado: "",
+            estatus: "",
+            ip_mask: "",
+            nombre: "",
+            serie: "",
+            updated_at: "",
+            _id: "",
+        })
+
     }
 
 
     /**
- * Informacion para la tabla
- */
-    let ModeloTipoDocumento = data => data.map(data => [
-        data._id,
-        data.nombre,
-        data.serie,
-        data.descripcion_caja,
-        data.ip_mask,
-        data.direccion,
-        data.max_correlativos,
-        data.estado,
-        _(<td>
-            <i
-                role="button"
-                class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditar"
-                onClick={() => {
-
-                    obtenerData(data);
-                }}>
-
-            </i>
-            <i
-                role="button"
-                class="fi fi-rr-trash text-danger"
-                onClick={() => eliminar(data)}
-            >
-            </i>
-
-        </td>)
+    * Informacion para la tabla
+    */
 
 
-    ]);
+    const dataDeTipoDocumentos = async () => {
+        const data = await getData(`${urlAPI.TipoDocumento.url}`);
+        console.log(data);
+        setDataTipoDocument(data);
 
+    }
 
-
-    const columns = [
-        {
-            name: '#'
-        },
-        {
-            name: 'Descripcion'
-        },
-        {
-            name: 'Serie'
-        },
-        {
-            name: 'Caja'
-        },
-        {
-            name: 'Ip Caja'
-        },
-        {
-            name: 'Direccion Sucu'
-        },
-        {
-            name: 'Max ( Correlativos )'
-        },
-        {
-            name: 'Estado'
-        },
-        {
-            name: 'Acciones',
-        }
-    ]
-
+    useEffect(() => {
+        dataDeTipoDocumentos();
+    }, [])
 
     return (
         <>
@@ -231,7 +206,7 @@ function MantenimientoTipoDocumento() {
                                     }}
                                 >
                                     <option value={'1'} >Activo</option>
-                                    <option value={'2'} >Inactivo</option>
+                                    <option value={'0'} >Inactivo</option>
                                 </Label>
 
 
@@ -279,6 +254,7 @@ function MantenimientoTipoDocumento() {
                 </form>
 
             </Modal>
+
             <Modal
                 id={'modalEditar'}
                 title={'EDITAR SERIE ' + tipoDocumento?.descripcion_caja}
@@ -428,21 +404,24 @@ function MantenimientoTipoDocumento() {
 
             </Modal>
 
-            <div className='card'>
 
-                <div className='mx-3 mt-20'>
+            <div className=''>
+
+                <Titulo title={'Tipo de documento '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+
+                <div className='mx-3 mt-4 card border-none'>
 
 
-                    <Table
-                        modelo={ModeloTipoDocumento}
-                        columns={columns}
-                        url={`${urlAPI.TipoDocumento.url}`}
+                    <Grid
+                        data={dataTipoDocumento}
+                        columns={[
+                            {
+                                id: 'button',
+                                name: _(<div class="flex flex-row-reverse">
+                                    <button
+                                        type="button"
+                                        class=" 
 
-                        button={
-                            <div class="flex flex-row-reverse">
-                                <button
-                                    type="button"
-                                    class=" 
                                         bg-indigo-500 
                                         h-10 
                                         rounded-md
@@ -452,23 +431,92 @@ function MantenimientoTipoDocumento() {
                                         text-sm
                                         w-px-15
                                         w-48
-                                    "
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalRegistro"
-                                    onClick={
-                                        limpiarData
-                                    }
+
+                                        "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistro"
+                                        onClick={() => limpiarData()}
+                                    >
+                                        Tipo Documento  +
+                                    </button>
 
 
-                                >
-                                    Tipo Documento +
-                                </button>
+                                </div>),
+                                columns: [
+                                    { id: '_id', name: '#' },
+                                    { id: 'descripcion_caja', name: 'ABREVIATURA' },
+                                    { id: 'serie', name: 'SERIE' },
+                                    { id: 'ip_mask', name: 'IP MASK' },
+                                    { id: 'direccion', name: 'DIRECCION' },
+                                    { id: 'max_correlativo', name: 'MAX ( correlativo )' },
+                                    {
+                                        id: 'estado', name: 'ESTADO', formatter: (cell) => {
+                                            if (cell == 1)
+                                                return _(<i className='badge bg-yellow w-14'>Activo</i>)
 
+                                            if (cell == 0)
+                                                return _(<i className='badge bg-orange-500'>Inactivo</i>)
 
-                            </div>
+                                        }
+                                    },
+                                    {
+                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                            <td>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditar"
+                                                    onClick={() => {
+                                                        obtenerData(row.cells[0].data);
+                                                    }}>
 
+                                                </i>
+                                                <i
+                                                    role="button"
+                                                    class="fi fi-rr-trash text-danger"
+                                                    onClick={() => {
+                                                        eliminar(row.cells[0].data)
+                                                    }}
+                                                >
+                                                </i>
+
+                                            </td>
+                                        )
+                                    },
+                                ]
+                            }
+                        ]}
+
+                        search={true}
+                        sort={true}
+                        pagination={{
+                            limit: 5,
+                        }}
+
+                        className={
+                            {
+                                th: 'bg-orange-500',
+                                table: 'w-100 z-20',
+                                header: ''
+
+                            }
+                        }
+
+                        language={{
+                            'search': {
+                                'placeholder': '🔍 Buscar por ...',
+                            },
+                            'pagination': {
+                                'previous': '⬅',
+                                'next': '⬅',
+                                'showing': 'Mostrando',
+                                'results': () => 'Resultados'
+                            }
+                        }
                         }
                     />
+
 
                 </div>
 
