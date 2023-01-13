@@ -21,6 +21,7 @@ import { ListaVenta } from './ventas/lista_ventas';
 import { ProductosMasVendidos } from './ventas/productos_mas_vendidos';
 import { NotaSalida } from './ventas/nota_salida';
 import { ListadoSalida } from './ventas/listado_salida';
+import { Titulo } from '../ui/titulos-vistas';
 function App() {
 
   // Rutas °° 🍅
@@ -32,16 +33,17 @@ function App() {
         <AuthProvider>
 
           <NavBar>
+           
             <MainUser />
           </NavBar>
 
-          <div className='page-content' id='scroll'>
+          <div className='page-content' >
 
             <Main />
 
             <div className='content-wrapper'>
 
-              <div className='content-inner h-100 bg-white' id='scroll' >
+              <div className='content-inner h-screen	bg-white' id='scroll' >
 
                 <Routes>
 

@@ -17,9 +17,9 @@ function Main() {
 
         return (
             <>
-                <div className={`sidebar sidebar-dark sidebar-main sidebar-expand-lg h-100${!!comprimir && ' sidebar-main-resized'} `}>
+                <div className={`sidebar sidebar-dark sidebar-main sidebar-expand-sm h-screen ${!!comprimir && ' sidebar-main-resized '} `}>
 
-                    <div className="sidebar-content h-auto">
+                    <div className="sidebar-content h-screen">
 
                         <div className="sidebar-section sidebar-user my-1">
                             <div className="sidebar-section-body">

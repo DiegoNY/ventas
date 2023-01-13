@@ -1,10 +1,81 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Label } from '../../../ui/forms/label';
 import { Titulo } from '../../../ui/titulos-vistas';
 import { InputForm } from './InputForm';
 import './index.css'
+import { getData } from '../../useFetch';
+import { urlAPI } from '../../../config';
+import { Modal } from '../../../ui/modal';
+import iconoMoneda from './img/icono-monedas.svg'
 
 function PuntoVenta() {
+    //Estados
+    const [venta, setVenta] = React.useState({});
+    const [serie, setSerie] = React.useState('')
+    const [tipoDocumento, setTipoDocumento] = React.useState([])
+    const [productos, setProductos] = React.useState([]);
+    const [stock, setStock] = React.useState([])
+
+    //Obtencion de data Necesaria
+
+    useEffect(() => {
+
+        const obtenerTiposDocumentos = async () => {
+            const data = await getData(`${urlAPI.TipoDocumento.url}`);
+            setTipoDocumento(data);
+        }
+
+        obtenerTiposDocumentos();
+
+        const obtenerProductos = async () => {
+            const data = await getData(`${urlAPI.Producto.url}`);
+            console.log(data);
+            setProductos(data);
+        }
+
+        obtenerProductos();
+
+
+
+
+    }, [])
+
+
+
+
+    //Funciones 
+
+    const generarNumeroFactura = (serie) => {
+
+
+        const numeroFactura = `${serie} - 000001`;
+
+        setSerie(numeroFactura);
+    }
+
+    //socket este activo debe enviar el id del producto 
+    const actualizarStock = async (id) => {
+
+        const stock = 'stock'
+
+        productos.map(producto => {
+            if (producto._id = id)
+                producto.stock = stock;
+            setProductos([{ ...productos }, producto])
+        })
+
+    }
+
+    //Sucedera cuando se realiza una venta esto sera emitido a todos los clientes 
+    //el socket tiene que enviar el id del producto y el Stock actual ;
+
+    useEffect(() => {
+        console.log('Se ejecuto');
+        actualizarStock('63bda472a1f3353740beaec2');
+
+    }, [stock])
+
+
 
     return (
         <>
@@ -23,7 +94,7 @@ function PuntoVenta() {
                         </h1>
 
                         <div className='text-xl font-medium proportional-nums '>
-                            B001-00234411
+                            {serie}
                         </div>
 
                     </div>
@@ -47,9 +118,21 @@ function PuntoVenta() {
                                         <select
                                             type="text"
                                             class="mt-1 form-control  font-mono block w-full rounded-md h-8 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            onChange={(e) => generarNumeroFactura(e.target.value)}
                                         >
-                                            <option>BOLETA</option>
-                                            <option>FACTURA</option>
+                                            <option>SELECCIONE</option>
+                                            {tipoDocumento.map(tp => {
+                                                return <option
+                                                    value={`${tp.serie}`}
+                                                >
+                                                    {
+                                                        tp.nombre == 'BOLETA ELECTRONICA' && 'BOLETA'
+                                                        || tp.nombre == 'FACTURA ELECTRONICA' && 'FACTURA'
+                                                        || 'TICKET'
+                                                    }
+                                                    ({tp.serie})
+                                                </option>
+                                            })}
                                         </select>
 
                                     </div>
@@ -61,11 +144,31 @@ function PuntoVenta() {
                                         >
                                             Dni / Ruc
                                         </label>
+                                        <div className='flex'>
 
-                                        <input
-                                            type="text"
-                                            class="mt-1 block form-control  w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
+                                            <input
+                                                type="text"
+                                                class=" block form-control   h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            />
+                                            <i
+                                                role='button'
+                                                className="
+                                                fi fi-rr-plus-small
+                                                w-14    
+                                                text-center
+                                                text-xl
+                                                text-indigo-400
+                                                bg
+                                                mt-1
+                                                hover:text-2xl 
+                                                
+                                            "
+                                                onClick={() => {
+                                                    console.log('Modal abierto')
+                                                }}
+                                            ></i>
+                                        </div>
+
 
                                     </div>
 
@@ -181,137 +284,60 @@ function PuntoVenta() {
 
                         <div className='col-span-6  '>
 
-                            <div className='card box-productos'>
-                                <div className='card-header text-lg '>
-                                    Productos
-                                </div>
-                                <div className='scroll-box'>
-                                    <table className='table '>
-                                        <thead>
 
-                                            <th>
-                                                Nombre
-                                            </th>
-                                            <th>
-                                                Laboratorio
-                                            </th>
-                                            <th>
-                                                P.Caja
-                                            </th>
-                                            <th>
-                                                Lote
-                                            </th>
-                                            <th>
-                                                F.Vencimiento
-                                            </th>
-                                            <th>
-                                                Stock
-                                            </th>
-                                        </thead>
-                                        <tbody>
+                            <div className='card border-none box-lista-producto '>
 
-                                            <tr>
-                                                <td>
-                                                    ACI BASIC X 220ML SUSPENSION
-                                                </td>
-                                                <td>
-                                                    TEVA
-                                                </td>
-                                                <td>
-                                                    28.0
-                                                </td>
-                                                <td>
-                                                    200004140
-                                                </td>
-                                                <td>
-                                                    12/12/12
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    ACI BASIC X 220ML SUSPENSION
-                                                </td>
-                                                <td>
-                                                    TEVA
-                                                </td>
-                                                <td>
-                                                    28.0
-                                                </td>
-                                                <td>
-                                                    200004140
-                                                </td>
-                                                <td>
-                                                    12/12/12
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    ACI BASIC X 220ML SUSPENSION
-                                                </td>
-                                                <td>
-                                                    TEVA
-                                                </td>
-                                                <td>
-                                                    28.0
-                                                </td>
-                                                <td>
-                                                    200004140
-                                                </td>
-                                                <td>
-                                                    12/12/12
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                <div className='flex flex-row-reverse  rounded-sm h-11 p-2 mb-2'>
 
-                                    </table>
+                                    <div
+                                        className='
+                                            flex 
+                                            cursor-pointer 
+                                            text-sky-500
+                                            hover:text-sky-200
+                                        '
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalProductos"
+                                    >
+                                        <div className='mt-1  text-sm  text-xs leading-6 '>
+                                            Agregar producto
+                                        </div>
+                                        <i className='fi fi-rr-shopping-cart-add p-1  leading-6 text-xl '> </i>
+
+                                    </div>
+
                                 </div>
 
-                            </div>
-                            <div className='card box-lista-producto '>
-
-                                <div className='card-header'>
-                                    Lista de Productos
-                                </div>
-
-                                <div className='scroll-box-table'>
-                                    <table className='border-collapse border border-slate-400'>
-                                        <thead className='static '>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                <div className='scroll-box-table mt-1'>
+                                    <table className=' border-collapse border border-slate-400 w-full h-full'>
+                                        <thead className='static navbar-dark'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Codigo
                                             </th >
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Producto
                                             </th>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Laboratorio
                                             </th>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Lote
                                             </th>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 F.Vencimiento
                                             </th >
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Cantidad
                                             </th>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Precio
                                             </th>
-                                            <th className='p-2 text-center text-sm font-normal'>
+                                            <th className='p-2 text-center text-sm '>
                                                 Total
                                             </th>
 
                                         </thead>
-                                        <tbody>
+                                        <tbody className='divide-y divide-slate-200'>
                                             <tr>
                                                 <td className='p-2 text-center'>
                                                     000001
@@ -380,6 +406,110 @@ function PuntoVenta() {
 
 
             </div>
+
+            {/** Modal de Productos */}
+
+            <Modal
+                id='modalProductos'
+                title='Productos 🛒'
+            >
+
+                <div className='card-body '>
+
+                    <div className='flex flex-row-reverse'>
+                        <input
+                            className='
+
+                              form-control
+                              border-gray-200
+                              my-2
+                              w-48	
+                            '
+                        />
+                    </div>
+
+
+                    <div className='box-productos'>
+
+                        <div className='scroll-box '>
+                            <table className='table'>
+                                <thead className='navbar-dark'>
+
+                                    <th>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        Laboratorio
+                                    </th>
+                                    <th>
+                                        P.Caja
+                                    </th>
+                                    <th>
+                                        Lote
+                                    </th>
+                                    <th>
+                                        F.Vencimiento
+                                    </th>
+                                    <th>
+                                        Stock
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    {productos.map(producto => {
+                                        return (
+                                            <tr>
+                                                <td>
+                                                    {producto.descripcion}
+                                                </td>
+                                                <td>
+                                                    {producto.id_laboratorio}
+                                                </td>
+                                                <td>
+                                                    {producto.precio_compra}
+                                                </td>
+                                                <td>
+                                                    {producto.codigo_barras}
+                                                </td>
+                                                <td>
+                                                    {producto.fecha_vencimiento}
+                                                </td>
+                                                <td>
+                                                    {producto.stock}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                    <tr>
+                                        <td>
+                                            ACI BASIC X 220ML SUSPENSION
+                                        </td>
+                                        <td>
+                                            TEVA
+                                        </td>
+                                        <td>
+                                            28.0
+                                        </td>
+                                        <td>
+                                            200004140
+                                        </td>
+                                        <td>
+                                            12/12/12
+                                        </td>
+                                        <td>
+                                            20
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </Modal>
+
         </>
     );
 

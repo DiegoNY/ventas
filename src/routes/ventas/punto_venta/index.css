@@ -1,4 +1,5 @@
 .scroll-box {
+    height: 100%;
     overflow-y: scroll;
 }
 
@@ -7,10 +8,13 @@
 }
 
 .box-productos {
-    height: 150px;
+    height: 60vh;
 }
 
 .box-lista-producto {
+    height: 380px;
+}
 
-    height: 200px;
+.head{
+    position: static;
 }

@@ -10,8 +10,7 @@ import { getData } from '../../useFetch';
 import { GeneradorCodigoBarras } from './useCodigoBarras';
 import io from 'socket.io-client';
 import { Titulo } from '../../../ui/titulos-vistas';
-const socket = io('http://localhost:8080/');
-
+const socket = io('http://192.168.1.43:8080/');
 
 function MantenimientoProducto() {
 
@@ -26,12 +25,12 @@ function MantenimientoProducto() {
     const [codigosBarras, setCodigosBarras] = React.useState([{ id: "", numero: '00008' }]);
     const [loading, setLoading] = React.useState(false);
 
-    const saveProducto = (e) => {
+    const saveProducto = async (e) => {
 
         e.preventDefault();
+        const response = await SaveData(`${urlAPI.Producto.url}`, producto);
 
-        SaveData(`${urlAPI.Producto.url}`, producto);
-        SaveData(`${urlAPI.CodigoBarras.url}`, { numero: producto.numero });
+        SaveData(`${urlAPI.CodigoBarras.url}`, { numero: producto.codigo_barras });
 
         //Obtiene codigo de barra  / se limpian los labels
         codigo();
@@ -93,7 +92,7 @@ function MantenimientoProducto() {
         setCodigoBarra(codigo);
         setProducto({
             ...producto,
-            numero: codigo,
+            codigo_barras: codigo,
         })
 
     }
@@ -114,6 +113,8 @@ function MantenimientoProducto() {
         dataCodigosBarra();
     }
 
+
+
     // Informacion adicional para el formulario se ejecutan al primer render solo una vez 
 
     useEffect(() => {
@@ -126,6 +127,24 @@ function MantenimientoProducto() {
 
         laboratorios();
 
+    }, [])
+
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('El socket se a conectado')
+        })
+
+        socket.on('welcome', data => {
+            console.log(data);
+        })
+        socket.on('codigo_barra_uso', data => {
+            console.log(data);
+            const codigoBarraObtenido = GeneradorCodigoBarras(data.codigo_barras);
+            console.log(codigoBarraObtenido);
+            setCodigoBarra(codigoBarraObtenido);
+        })
+
+        socket.emit('mensaje', 'Mensaje para todos');
     }, [])
 
     /**
@@ -873,7 +892,7 @@ function MantenimientoProducto() {
                                         onClick={() => {
 
                                             limpiarData()
-                                            codigo()
+                                            codigo();
 
                                         }}
 

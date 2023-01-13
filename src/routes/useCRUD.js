@@ -12,11 +12,8 @@ const SaveData = async (urlApi, data) => {
 
 
     const response = await postData(urlApi, data)
-    console.log(response);
-
-    
     Save();
-
+    return response;
 
 }
 
@@ -46,9 +43,9 @@ const DeleteData = async (urlApi) => {
  * un ejemplo es localhost/api/v1/example/id  <= 👈 
  * @param {*} body el objeto 
  */
-const UpdateData = async (urlAPI,body) => {
+const UpdateData = async (urlAPI, body) => {
 
-    const response = await updateData(urlAPI,body);
+    const response = await updateData(urlAPI, body);
     console.log(response);
 
     Save();
