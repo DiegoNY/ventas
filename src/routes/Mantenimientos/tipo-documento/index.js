@@ -135,8 +135,9 @@ function MantenimientoTipoDocumento() {
                                         setTipoDocumento(
                                             {
                                                 ...tipoDocumento,
+                                                tipo: Series[e.target.value].tipo,
                                                 nombre: e.target.value,
-                                                serie: Series[e.target.value].serie
+                                                serie: Series[e.target.value].serie,
                                             }
                                         )
                                     }}
@@ -287,6 +288,7 @@ function MantenimientoTipoDocumento() {
                                             {
                                                 ...tipoDocumento,
                                                 nombre: e.target.value,
+                                                tipo: Series[e.target.value].tipo
                                             }
                                         )
                                     }}

@@ -22,6 +22,7 @@ import { ProductosMasVendidos } from './ventas/productos_mas_vendidos';
 import { NotaSalida } from './ventas/nota_salida';
 import { ListadoSalida } from './ventas/listado_salida';
 import { Titulo } from '../ui/titulos-vistas';
+import { RegistroCompras } from './compras/RegistroCompras';
 function App() {
 
   // Rutas °° 🍅
@@ -33,7 +34,7 @@ function App() {
         <AuthProvider>
 
           <NavBar>
-           
+
             <MainUser />
           </NavBar>
 
@@ -41,7 +42,7 @@ function App() {
 
             <Main />
 
-            <div className='content-wrapper'>
+            <div className='content-wrapper '>
 
               <div className='content-inner h-screen	bg-white' id='scroll' >
 
@@ -109,7 +110,10 @@ function App() {
                     path='/venta-listado_salida'
                     element={<ListadoSalida />}
                   />
-
+                  <Route
+                    path='/compras-registro_compras'
+                    element={<RegistroCompras />}
+                  />
                   <Route
                     path='*'
                     element={<Caja />}

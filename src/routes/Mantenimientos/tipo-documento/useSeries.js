@@ -4,14 +4,17 @@
  */
 const Series = {
     'FACTURA ELECTRONICA': {
-        serie : 'F'
+        serie: 'F',
+        tipo: '01'
     },
-    'BOLETA ELECTRONICA' : {
-        serie : 'B'
+    'BOLETA ELECTRONICA': {
+        serie: 'B',
+        tipo: '03'
     },
-    'TICKET ELECTRONICO' : {
-        serie :'T'
+    'TICKET ELECTRONICO': {
+        serie: 'T',
+        tipo: '00'
     }
 }
 
-export {Series}
+export { Series }

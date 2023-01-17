@@ -46,7 +46,7 @@ function MainUser() {
                 >
 
                     <div >
-                        <i class="fi fi-rr-moon-stars text-orange-400 text-sm mr-1"></i>
+                        <i className="fi fi-rr-moon-stars text-orange-400 text-sm mr-1"></i>
                         {tiempo}
                     </div>
                 </div>
@@ -73,7 +73,7 @@ function MainUser() {
                     onClick={() => setMostrar(!mostrar)}
                 >
 
-                    <a href="#"
+                    <a href='#'
                         className="navbar-nav-link navbar-nav-link-toggler dropdown-toggle d-inline-flex align-items-center h-100"
                         data-toggle="dropdown">
                         <img src="../img/hombre-de-negocios.png" className="rounded-pill mr-lg-2" height="34" alt="" />
@@ -89,7 +89,11 @@ function MainUser() {
 
                     </a>
                     {!!mostrar &&
-                        <div className="dropdown-menu dropdown-menu-right menu-user">
+                        <div
+                            className="dropdown-menu dropdown-menu-right menu-user"
+                            onMouseLeave={() => setMostrar(!mostrar)}
+
+                        >
                             <a href="#" className="dropdown-item"><i className="icon-user-plus"></i> Mi perfil</a>
                             <div className="dropdown-divider"></div>
                             <a
@@ -108,7 +112,7 @@ function MainUser() {
 
                 </li>
 
-            </div>
+            </div >
 
 
         );

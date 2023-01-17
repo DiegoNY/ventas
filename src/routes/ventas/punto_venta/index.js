@@ -12,34 +12,10 @@ function PuntoVenta() {
     //Estados
     const [venta, setVenta] = React.useState({});
     const [serie, setSerie] = React.useState('')
-    const [tipoDocumento, setTipoDocumento] = React.useState([])
+    const [tipoDocumento, setTipoDocumento] = React.useState([]);
     const [productos, setProductos] = React.useState([]);
-    const [stock, setStock] = React.useState([])
-
-    //Obtencion de data Necesaria
-
-    useEffect(() => {
-
-        const obtenerTiposDocumentos = async () => {
-            const data = await getData(`${urlAPI.TipoDocumento.url}`);
-            setTipoDocumento(data);
-        }
-
-        obtenerTiposDocumentos();
-
-        const obtenerProductos = async () => {
-            const data = await getData(`${urlAPI.Producto.url}`);
-            console.log(data);
-            setProductos(data);
-        }
-
-        obtenerProductos();
-
-
-
-
-    }, [])
-
+    const [stock, setStock] = React.useState([]);
+    const [productosCarrito, setProductosCarrito] = React.useState([{}]);
 
 
 
@@ -66,6 +42,12 @@ function PuntoVenta() {
 
     }
 
+
+    const mostrarProductosCarrito = (producto) => {
+        console.log(producto.children);
+
+    }
+
     //Sucedera cuando se realiza una venta esto sera emitido a todos los clientes 
     //el socket tiene que enviar el id del producto y el Stock actual ;
 
@@ -74,6 +56,29 @@ function PuntoVenta() {
         actualizarStock('63bda472a1f3353740beaec2');
 
     }, [stock])
+
+    //Obtencion de data Necesaria
+
+    useEffect(() => {
+
+        const obtenerTiposDocumentos = async () => {
+            const data = await getData(`${urlAPI.TipoDocumento.url}`);
+            setTipoDocumento(data);
+        }
+
+        obtenerTiposDocumentos();
+
+        const obtenerProductos = async () => {
+            
+            const data = await getData(`${urlAPI.Producto.url}`);
+            console.log(data);
+            setProductos(data);
+        }
+
+        obtenerProductos();
+
+
+    }, [])
 
 
 
@@ -310,34 +315,70 @@ function PuntoVenta() {
 
                                 <div className='scroll-box-table mt-1'>
                                     <table className=' border-collapse border border-slate-400 w-full h-full'>
-                                        <thead className='static navbar-dark'>
-                                            <th className='p-2 text-center text-sm '>
-                                                Codigo
-                                            </th >
-                                            <th className='p-2 text-center text-sm '>
-                                                Producto
-                                            </th>
-                                            <th className='p-2 text-center text-sm '>
-                                                Laboratorio
-                                            </th>
-                                            <th className='p-2 text-center text-sm '>
-                                                Lote
-                                            </th>
-                                            <th className='p-2 text-center text-sm '>
-                                                F.Vencimiento
-                                            </th >
-                                            <th className='p-2 text-center text-sm '>
-                                                Cantidad
-                                            </th>
-                                            <th className='p-2 text-center text-sm '>
-                                                Precio
-                                            </th>
-                                            <th className='p-2 text-center text-sm '>
-                                                Total
-                                            </th>
+                                        <thead className='static navbar-dark '>
+                                            <tr>
+                                                <th className='p-2 text-center text-sm '>
+                                                    Codigo
+                                                </th >
+                                                <th className='p-2 text-center text-sm '>
+                                                    Producto
+                                                </th>
+                                                <th className='p-2 text-center text-sm '>
+                                                    Laboratorio
+                                                </th>
+                                                <th className='p-2 text-center text-sm '>
+                                                    Lote
+                                                </th>
+                                                <th className='p-2 text-center text-sm '>
+                                                    F.Vencimiento
+                                                </th >
+                                                <th className='p-2 text-center text-sm '>
+                                                    Cantidad
+                                                </th>
+                                                <th className='p-2 text-center text-sm '>
+                                                    Precio
+                                                </th>
+                                                <th className='p-2 text-center text-sm '>
+                                                    Total
+                                                </th>
+                                            </tr>
 
                                         </thead>
                                         <tbody className='divide-y divide-slate-200'>
+
+                                            {productosCarrito.map(producto => {
+
+                                                return (
+                                                    <tr>
+                                                        <td className='p-2 text-center'>
+                                                            {producto.codigo_barras}
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+                                                            {producto.descripcion}
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+                                                            {producto.laboratorio}
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+                                                            {producto.lote}
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+                                                            {producto.fecha_vencimiento}
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+
+                                                        </td>
+                                                        <td className='p-2 text-center'>
+                                                            {venta?.total}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+
+                                            }
                                             <tr>
                                                 <td className='p-2 text-center'>
                                                     000001
@@ -457,8 +498,14 @@ function PuntoVenta() {
                                 <tbody>
                                     {productos.map(producto => {
                                         return (
-                                            <tr>
+                                            <tr
+                                                onClick={(e) => {
+                                                    console.log(e.currentTarget);
+                                                    mostrarProductosCarrito(e.currentTarget);
+                                                }}
+                                            >
                                                 <td>
+                                                    {<input type={'hidden'} value={producto._id}></input>}
                                                     {producto.descripcion}
                                                 </td>
                                                 <td>
@@ -479,26 +526,6 @@ function PuntoVenta() {
                                             </tr>
                                         )
                                     })}
-                                    <tr>
-                                        <td>
-                                            ACI BASIC X 220ML SUSPENSION
-                                        </td>
-                                        <td>
-                                            TEVA
-                                        </td>
-                                        <td>
-                                            28.0
-                                        </td>
-                                        <td>
-                                            200004140
-                                        </td>
-                                        <td>
-                                            12/12/12
-                                        </td>
-                                        <td>
-                                            20
-                                        </td>
-                                    </tr>
                                 </tbody>
 
                             </table>

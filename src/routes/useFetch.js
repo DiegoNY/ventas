@@ -35,23 +35,41 @@ async function getData(urlAPI) {
  * @param {*} body data en formato objeto 🗾
  * @returns retorna mensaje que proporciona tu API 📨
  */
-async function postData(urlAPI, body) {
+async function postData(urlAPI, body, formData = false) {
 
-    const response = await fetch(urlAPI, {
+    if (!formData) {
 
-        method: 'POST',
-        redirect: 'follow',
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+        const response = await fetch(urlAPI, {
 
-        },
-        body: JSON.stringify(body)
+            method: 'POST',
+            redirect: 'follow',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
 
-    });
+            },
+            body: JSON.stringify(body)
 
-    const data = await response.json();
-    return data;
+        });
+
+        const data = await response.json();
+        return data;
+
+    }
+
+    if (formData) {
+
+        const response = await fetch(urlAPI, {
+            method: 'POST',
+            redirect: 'follow',
+            headers: {
+            },
+            body: body
+        });
+
+        const data = await response.json();
+        return data;
+    }
 
 }
 
@@ -72,7 +90,7 @@ async function destroyData(urlAPI) {
     return data;
 }
 
-async function updateData(urlAPI,body) {
+async function updateData(urlAPI, body) {
 
     const response = await fetch(urlAPI, {
 

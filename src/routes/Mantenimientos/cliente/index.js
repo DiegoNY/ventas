@@ -68,6 +68,7 @@ function MantenimientoCliente() {
             let descripcion = "";
             let direccion = "";
             let tipoIdentifiacion = 'DNI';
+            let identificacion = '01';
             let queryParametro = 'dni';
 
             /**
@@ -82,6 +83,7 @@ function MantenimientoCliente() {
 
                 tipoIdentifiacion = 'RUC';
                 queryParametro = 'ruc';
+                identificacion = '06';
 
             }
 
@@ -112,9 +114,8 @@ function MantenimientoCliente() {
                 ...cliente,
                 descripcion: descripcion,
                 direccion: direccion,
+                tipo_identificacion: tipoIdentifiacion,
             })
-
-
 
         }
 
@@ -166,7 +167,11 @@ function MantenimientoCliente() {
 
     return (
         <>
-            <div className=''>
+            <div
+                className='
+                grid grid-cols-12 auto-rows-fr	 h-96 gap-1
+                '
+            >
 
                 <Modal
                     id={'modalEditar'}
@@ -681,80 +686,79 @@ function MantenimientoCliente() {
                     </form>
 
                 </Modal>
+                {/* Titulo */}
+                <div className='
+                    col-span-12 row-span-2 sm:row-span-1 flex z-50
+                '>
+                    <Titulo title={'Clientes '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                    <div class="flex flex-row-reverse">
+                        <button
+                            type="button"
+                            class=" 
+                            bg-indigo-500 
+                            h-10 
+                            rounded-md
+                            text-white 
+                            cursor-pointer
+                            px-3
+                            text-sm
+                            w-px-15
+                            w-48
+                            margin-top-boton
+                            mr-4
+                        "
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
+                            onClick={() => limpiarData()}
 
-                <Titulo title={'Clientes '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'}/>
+
+                        >
+                            Cliente +
+                        </button>
 
 
+                    </div>
+                </div>
 
-                <div className='mx-3 mt-6 card border-none'>
+
+                {/* tabla */}
+                <div className='mt-2 mx-3 card z-0 h-96 border-none col-span-12 row-span-6'>
 
                     <Grid
                         data={dataCliente}
                         columns={[
+                            { id: '_id', name: '#' },
+                            { id: 'tipo_identificacion', name: 'Tipo.Documento' },
+                            { id: 'dni', name: 'Numero Identificacion' },
+                            { id: 'descripcion', name: 'Nombre' },
+                            { id: 'telefono', name: 'Telefono' },
+                            { id: 'direccion', name: 'Direccion' },
                             {
-                                id: 'button',
-                                name: _(<div class="flex flex-row-reverse">
-                                    <button
-                                        type="button"
-                                        class=" 
+                                id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
+                                    <td>
+                                        <i
+                                            role="button"
+                                            class="fi fi-rr-edit ml-2 mr-2 text-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEditar"
+                                            onClick={() => {
 
-                                        bg-indigo-500 
-                                        h-10 
-                                        rounded-md
-                                        text-white 
-                                        cursor-pointer
-                                        px-3
-                                        text-sm
-                                        w-px-15
-                                        w-48
+                                                obtenerData(row.cells[0].data);
+                                            }}>
 
-                                        "
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdrop"
-                                        onClick={() => limpiarData()}
+                                        </i>
+                                        <i
+                                            role="button"
+                                            class="fi fi-rr-trash text-danger"
+                                            onClick={() => {
+                                                eliminar(row.cells[0].data)
+                                            }}
+                                        >
+                                        </i>
 
-
-                                    >
-                                        Cliente +
-                                    </button>
-
-
-                                </div>),
-                                columns: [
-                                    { id: '_id', name: '#' },
-                                    { id: 'tipo', name: 'Tipo.Documento' },
-                                    { id: 'dni', name: 'Numero Identificacion' },
-                                    { id: 'descripcion', name: 'Nombre' },
-                                    { id: 'telefono', name: 'Telefono' },
-                                    { id: 'direccion', name: 'Direccion' },
-                                    {
-                                        id: 'acciones', name: 'Acciones', formatter: (cells, row) => _(
-                                            <td>
-                                                <i
-                                                    role="button"
-                                                    class="fi fi-rr-edit ml-2 mr-2 text-primary"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#modalEditar"
-                                                    onClick={() => {
-
-                                                        obtenerData(row.cells[0].data);
-                                                    }}>
-
-                                                </i>
-                                                <i
-                                                    role="button"
-                                                    class="fi fi-rr-trash text-danger"
-                                                    onClick={() => {
-                                                        eliminar(row.cells[0].data)
-                                                    }}
-                                                >
-                                                </i>
-
-                                            </td>
-                                        )
-                                    },
-                                ]
-                            }
+                                    </td>
+                                )
+                            },
                         ]}
                         search={true}
                         sort={true}

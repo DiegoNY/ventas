@@ -8,10 +8,10 @@ import { destroyData, postData, updateData } from "./useFetch";
  * @param {*} data  la data que se guardara
  */
 
-const SaveData = async (urlApi, data) => {
+const SaveData = async (urlApi, data, formData = false) => {
 
 
-    const response = await postData(urlApi, data)
+    const response = await postData(urlApi, data, formData)
     Save();
     return response;
 

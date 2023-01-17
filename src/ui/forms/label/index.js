@@ -49,6 +49,11 @@ function Label(props) {
                         />
 
                     }
+                    {props.varios &&
+
+                        props.children
+
+                    }
 
                     {props.select &&
 
