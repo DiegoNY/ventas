@@ -11,8 +11,8 @@ function ProductoSeleccionado(props) {
 
                 <div div className="table-cell ...">
                     <textarea
-                        rows={'1'}
-                        cols={'5'}
+                        rows={props.rows || '1'}
+                        cols={props.cols || '5'}
                         defaultValue={props.defaultValue}
                         onChange={props.onChange}
                     >

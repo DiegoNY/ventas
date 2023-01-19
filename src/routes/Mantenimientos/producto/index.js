@@ -440,7 +440,7 @@ function MantenimientoProducto() {
                                         <Label
                                             icon={'fi fi-rr-user'}
                                             text={"Precio.Compra"}
-                                            type={'number'}
+                                            varios={true}
                                             onChange={e => {
                                                 setProducto(
                                                     {
@@ -449,12 +449,51 @@ function MantenimientoProducto() {
                                                     }
                                                 )
                                             }}
-                                        />
+                                        >
+                                            <input
+                                                className='
+                                                    input-form
+                                                    form-control 
+                                                    px-2
+                                                    form-control-sm
+                                                    shadow-sm p-0  
+                                                    rounded
+                                                '
+                                                placeholder='Precio de compra por caja'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_compra_caja: e.target.value,
+                                                        }
+                                                    )
+                                                }}
+                                            />
+                                            <input
+                                                className='
+                                                input-form
+                                                form-control 
+                                                px-2
+                                                form-control-sm
+                                                shadow-sm p-0  
+                                                rounded
+                                            '
+                                                placeholder='Precio de compra por tableta'
+                                                onChange={(e)=>{
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_compra_tableta : e.target.value,
+                                                        }
+                                                    )
+                                                }}
+                                            />
+
+                                        </Label>
 
                                         <Label
                                             icon={'fi fi-rr-user'}
                                             text={"Precio venta"}
-                                            type={"number"}
                                             varios={true}
                                             onChange={e => {
                                                 setProducto(
@@ -477,6 +516,16 @@ function MantenimientoProducto() {
                                                     rounded
                                                 '
                                                 placeholder='Precio de venta por caja'
+                                                onChange={(e) => {
+
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_venta_caja: e.target.value,
+                                                        }
+                                                    )
+
+                                                }}
                                             />
                                             <input
                                                 className='
@@ -488,6 +537,14 @@ function MantenimientoProducto() {
                                                 rounded
                                             '
                                                 placeholder='Precio de venta por tableta'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_venta_tableta: e.target.value,
+                                                        }
+                                                    )
+                                                }}
                                             />
 
                                         </Label>
@@ -900,6 +957,7 @@ function MantenimientoProducto() {
                                             icon={'fi fi-rr-user'}
                                             text={"Precio.Compra"}
                                             value={producto?.precio_compra}
+                                            varios={true}
                                             type={'number'}
                                             onChange={e => {
                                                 setProducto(
@@ -909,12 +967,58 @@ function MantenimientoProducto() {
                                                     }
                                                 )
                                             }}
-                                        />
+                                        >
+
+                                            <input
+                                                value={producto?.precio_compra_caja}
+                                                className='
+                                                    input-form
+                                                    form-control 
+                                                    px-2
+                                                    form-control-sm
+                                                    shadow-sm p-0 
+                                                    mt-1 
+                                                    rounded
+                                                '
+                                                placeholder='Precio de compra por caja'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_compra_caja: e.target.value,
+                                                        }
+                                                    )
+                                                }}
+                                            />
+                                            <input
+                                                value={producto?.precio_compra_tableta}
+                                                className='
+                                                input-form
+                                                form-control 
+                                                mt-1
+                                                px-2
+                                                form-control-sm
+                                                shadow-sm p-0  
+                                                rounded
+                                            '
+                                                placeholder='Precio de compra por tableta'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_compra_tableta: e.target.value,
+                                                        }
+                                                    )
+                                                }}
+                                            />
+
+                                        </Label>
 
                                         <Label
                                             icon={'fi fi-rr-user'}
                                             text={"Precio venta"}
                                             type={'number'}
+                                            varios={true}
                                             value={producto?.precio_venta}
                                             onChange={e => {
                                                 setProducto(
@@ -925,11 +1029,56 @@ function MantenimientoProducto() {
                                                 )
                                             }}
 
-                                        />
+                                        >
+                                            <input
+                                                value={producto?.precio_venta_caja}
+                                                className='
+                                                    input-form
+                                                    form-control 
+                                                    px-2
+                                                    mt-1
+                                                    form-control-sm
+                                                    shadow-sm p-0  
+                                                    rounded
+                                                '
+                                                placeholder='Precio de venta por caja'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_venta_caja: e.target.value
+                                                        }
+                                                    )
+                                                }}
+                                            />
+                                            <input
+                                                value={producto?.precio_venta_tableta}
+                                                className='
+                                                    input-form
+                                                    form-control 
+                                                    px-2
+                                                    mt-1
+                                                    form-control-sm
+                                                    shadow-sm p-0  
+                                                    rounded
+                                                '
+                                                placeholder='Precio de venta por tableta'
+                                                onChange={(e) => {
+                                                    setProducto(
+                                                        {
+                                                            ...producto,
+                                                            precio_venta_tableta: e.target.value,
+                                                        }
+                                                    )
+                                                }}
+                                            />
+
+                                        </Label>
 
                                         <Label
                                             icon={'fi fi-rr-user'}
                                             text={"Descuento"}
+
                                             type={"number"}
                                             value={producto?.descuento}
                                             onChange={e => {
@@ -941,7 +1090,6 @@ function MantenimientoProducto() {
                                                 )
                                             }}
                                         />
-
                                         <Label
                                             icon={'fi fi-rr-user'}
                                             text={"Venta sujeta"}

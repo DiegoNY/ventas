@@ -23,6 +23,7 @@ import { NotaSalida } from './ventas/nota_salida';
 import { ListadoSalida } from './ventas/listado_salida';
 import { Titulo } from '../ui/titulos-vistas';
 import { RegistroCompras } from './compras/RegistroCompras';
+import { ListaCompra } from './compras/ListaCompras';
 function App() {
 
   // Rutas °° 🍅
@@ -113,6 +114,10 @@ function App() {
                   <Route
                     path='/compras-registro_compras'
                     element={<RegistroCompras />}
+                  />
+                  <Route
+                    path='/compras-lista_compras'
+                    element={<ListaCompra />}
                   />
                   <Route
                     path='*'

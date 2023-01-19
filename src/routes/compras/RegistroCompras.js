@@ -6,6 +6,10 @@ import icono_moneda from './img/icono-monedas.svg'
 import { ProductoSeleccionado } from './productosSeleccionados';
 import { obtnerDescuento } from './useDescuentos';
 import './index.css'
+import { TablaTalwindCss } from '../../ui/Tabla/useTabla';
+import { TableCell } from '../../ui/Tabla/tableCell';
+import { TablaRow } from '../../ui/Tabla/tableRow';
+import { SaveData } from '../useCRUD';
 
 function RegistroCompras() {
     //estados
@@ -122,7 +126,7 @@ function RegistroCompras() {
                 //esto se puede ya que al registrar un producto se tiene mapeado cuantas unidades 
                 //contiene una caja  y cuantas unidades contiene la tableta
 
-                if (unidadesCompra.CAJA == tipoUnidad) {
+                if (unidadesCompra.CAJA == tipoUnidad.toUpperCase()) {
                     // console.log("Se esta realizando una compra por caja");
 
                     const stock_comprado = stock * producto.stock_caja;
@@ -133,13 +137,13 @@ function RegistroCompras() {
 
                 }
 
-                if (unidadesCompra.TABLETA == tipoUnidad) {
+                if (unidadesCompra.TABLETA == tipoUnidad.toUpperCase()) {
                     const stock_comprado = stock * producto.stock_tableta;
                     producto.stock_comprado = stock_comprado;
                     console.log(producto);
                 }
 
-                if (unidadesCompra.UNIDAD == tipoUnidad) {
+                if (unidadesCompra.UNIDAD == tipoUnidad.toUpperCase()) {
 
                     const stock_comprado = stock;
                     producto.stock_comprado = stock_comprado;
@@ -186,6 +190,11 @@ function RegistroCompras() {
 
     }
 
+
+    const saveListaCompra = () => {
+        console.log(listaCompra);
+        SaveData(`${urlAPI.ListaCompra.url}`, listaCompra);
+    }
 
 
     //llamados a API o Funciones que se ejecuten solo una vez 
@@ -330,191 +339,165 @@ function RegistroCompras() {
 
                         </div>
 
-                        <div
-                            className='
-                                mx-1
-                                relative rounded-xl overflow-auto
-                                shadow-sm overflow-hidden my-8
-                            '
+                        <TablaTalwindCss
+                            headers={[
+                                { name: '#' },
+                                { name: 'Descripcion' },
+                                { name: 'Lote' },
+                                { name: 'F.Vencimiento' },
+                                { name: 'Cantidad' },
+                                { name: 'P.Compra unitario' },
+                                { name: 'P.Venta' },
+                                { name: 'Descuento 01' },
+                                { name: 'Descuento 02' },
+                                { name: 'Descuento 03' },
+                                { name: 'Total' },
+                            ]}
                         >
+                            <TablaRow>
 
-                            <div
-                                className='relative rounded-xl overflow-auto'
-                            >
-                                <div
-                                    className='shadow-sm  my-8 '
-                                >
-                                    <div className="table w-full border-collapse table-auto w-full text-sm">
-                                        <div className="table-header-group ">
-                                            <div className="table-row ">
-                                                <div className="table-cell text-center border-b text-xs p-2 pt-0  text-slate-400  text-left">#</div>
-                                                <div className="table-cell text-center border-b text-xs p-2 pt-0  text-slate-400  text-left">Descripcion</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Lote</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">F.Vencimiento</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Cantidad</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">P.Compra unitario</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">P.Venta</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Descuento 01</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Descuento 02</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Descuento 03</div>
-                                                <div className="table-cell text-center border-b text-xs p-2  pt-0  text-slate-400  text-left">Total</div>
-                                            </div>
-                                        </div>
-                                        <div className="table-row-group">
-                                            {listaCompra?.productos?.map(producto => {
+                            </TablaRow>
+
+                            {listaCompra?.productos?.map(producto => {
 
 
 
-                                                return (
-                                                    <>
-                                                        <div className="table-row">
-                                                            <div className="table-cell ...">{producto.id_compra} </div>
-                                                            <div className="table-cell ...">{producto.descripcion} </div>
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.lote}
-                                                                    onChange={(e) => {
-                                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'lote')
-                                                                    }}
-                                                                >
+                                return (
+                                    <>
 
-                                                                </textarea>
-                                                            </div>
-                                                            <div className="table-cell ...">
-                                                                <input
-                                                                    className='
-                                                                        form-control-sm 
-                                                                        w-46
-                                                                    '
-                                                                    value={producto?.fecha_venciemiento}
-                                                                    type={'date'}
-                                                                    onChange={(e) => {
-                                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'fecha_vencimiento')
-                                                                    }}
-                                                                />
+                                        <TablaRow>
+                                            <TableCell>
+                                                {producto.id_compra}
+                                            </TableCell>
+                                            <TableCell>
+                                                {producto.descripcion}
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.lote}
+                                                    onChange={(e) => {
+                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'lote')
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    input={true}
+                                                    value={producto?.fecha_venciemiento}
+                                                    type={'date'}
+                                                    onChange={(e) => {
+                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'fecha_vencimiento')
+                                                    }}
+                                                />
 
-                                                            </div>
-                                                            <div className="table-cell ...">
+                                            </TableCell>
+                                            <TableCell>
+                                                <textarea
+                                                    className=' uppercase'
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.stock}
+                                                    onChange={(e) => {
+                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'stock')
+                                                    }}
+                                                >
+                                                </textarea>
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.precio_compra}
+                                                    onChange={(e) => {
 
-                                                                <textarea
-                                                                    className=' uppercase'
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.stock}
-                                                                    onChange={(e) => {
-                                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'stock')
-                                                                    }}
-                                                                >
-                                                                </textarea>
-                                                            </div>
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.precio_compra}
-                                                                    onChange={(e) => {
+                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'precio_compra')
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell
+                                            >
+                                                <div
+                                                    className='
+                                                 flex
+                                                 flex-col
+                                                '
+                                                >
+                                                    <ProductoSeleccionado
+                                                        rows={'1'}
+                                                        cols={'6'}
+                                                        defaultValue={`U-${producto?.precio_venta || ''}`}
+                                                        onChange={(e) => {
+                                                            let stringValue = e.target.value;
+                                                            let arrStringValue = stringValue.split('-');
+                                                            modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta')
+                                                        }}
+                                                    />
 
-                                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'precio_compra')
-                                                                    }}
-                                                                >
-                                                                </textarea>
+                                                    <ProductoSeleccionado
+                                                        rows={'1'}
+                                                        cols={'6'}
+                                                        defaultValue={`C-${producto?.precio_venta_caja || ''}`}
+                                                        onChange={(e) => {
+                                                            let stringValue = e.target.value;
+                                                            let arrStringValue = stringValue.split('-');
+                                                            modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta_caja')
+                                                        }}
+                                                    />
+                                                    <ProductoSeleccionado
+                                                        rows={'1'}
+                                                        cols={'6'}
+                                                        defaultValue={`T-${producto?.precio_venta_tableta || ''}`}
+                                                        onChange={(e) => {
+                                                            let stringValue = e.target.value;
+                                                            let arrStringValue = stringValue.split('-');
+                                                            modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta_tableta')
+                                                        }}
+                                                    />
+                                                </div>
 
-
-                                                            </div>
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'6'}
-                                                                    defaultValue={`U-${producto?.precio_venta_unidad || ''}`}
-                                                                    onChange={(e) => {
-                                                                        let stringValue = e.target.value;
-                                                                        let arrStringValue = stringValue.split('-');
-                                                                        modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta_unidad')
-                                                                    }}
-                                                                >
-
-                                                                </textarea>
-
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'6'}
-                                                                    defaultValue={`C-${producto?.precio_venta_caja || ''}`}
-                                                                    onChange={(e) => {
-                                                                        let stringValue = e.target.value;
-                                                                        let arrStringValue = stringValue.split('-');
-                                                                        modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta_caja')
-                                                                    }}
-                                                                >
-                                                                </textarea>
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'6'}
-                                                                    defaultValue={`T-${producto?.precio_venta_tableta || ''}`}
-                                                                    onChange={(e) => {
-                                                                        let stringValue = e.target.value;
-                                                                        let arrStringValue = stringValue.split('-');
-                                                                        modificandoProductosSeleccionados(producto._id, arrStringValue[1], 'precio_venta_tableta')
-                                                                    }}
-                                                                >
-                                                                </textarea>
-
-                                                            </div>
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.descuento}
-                                                                    onChange={(e) => {
-                                                                        console.log(e.target.value)
-                                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'descuento', true)
-                                                                    }}
-                                                                >
-
-                                                                </textarea>
-                                                            </div>
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.descuento_1}
-                                                                    onChange={(e) => {
-                                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'descuento_1', true)
-                                                                    }}
-                                                                >
-
-                                                                </textarea>
-                                                            </div>
-                                                            {/* <ProductoSeleccionado /> */}
-                                                            <div className="table-cell ...">
-                                                                <textarea
-                                                                    rows={'1'}
-                                                                    cols={'5'}
-                                                                    defaultValue={producto?.descuento_2}
-                                                                    onChange={(e) => {
-                                                                        console.log(e.target.value)
-                                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'descuento_2', true)
-                                                                    }}
-                                                                >
-
-                                                                </textarea>
-                                                            </div>
-                                                            <ProductoSeleccionado total={producto.total} />
-                                                        </div>
-                                                    </>
-                                                )
-                                            })}
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.descuento}
+                                                    onChange={(e) => {
+                                                        console.log(e.target.value)
+                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'descuento', true)
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.descuento_1}
+                                                    onChange={(e) => {
+                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'descuento_1', true)
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <ProductoSeleccionado
+                                                    rows={'1'}
+                                                    cols={'5'}
+                                                    defaultValue={producto?.descuento_2}
+                                                    onChange={(e) => {
+                                                        console.log(e.target.value)
+                                                        modificandoProductosSeleccionados(producto._id, e.target.value, 'descuento_2', true)
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <ProductoSeleccionado total={producto.total} />
+                                        </TablaRow>
+                                    </>
+                                )
+                            })}
 
 
-                        </div>
-
+                        </TablaTalwindCss>
                     </div>
 
 
@@ -568,9 +551,14 @@ function RegistroCompras() {
                             '
                             onChange={(e) => {
 
+                                let tipodocumento = '';
+                                if (e.target.value == 'B001-') tipodocumento = 'BOLETA';
+                                if (e.target.value == 'F001-') tipodocumento = 'FACTURA';
+
                                 setListaCompra({
                                     ...listaCompra,
-                                    numero_documento: e.target.value
+                                    numero_documento: e.target.value,
+                                    tipo_documento: tipodocumento,
                                 })
 
                             }}
@@ -624,7 +612,15 @@ function RegistroCompras() {
                              form-control
                              form-control-sm
                              h-4
-                          '
+                            '
+                            onChange={(e) => {
+                                setListaCompra(
+                                    {
+                                        ...listaCompra,
+                                        proveedor: e.target.value,
+                                    }
+                                )
+                            }}
                         >
 
                             <option>SELECCIONE</option>
@@ -749,7 +745,7 @@ function RegistroCompras() {
                                font-semibold
                             '
                             onClick={() => {
-                                console.log(listaCompra)
+                                saveListaCompra();
                             }}
                         >
                             registrar compra

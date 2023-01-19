@@ -68,7 +68,7 @@ body {
 }
 
 .primary-button {
-    background-color: var(--hospital-green);
+    background-color: #000000;
     border-radius: 8px;
     border: none;
     color: var(--white);

@@ -79,7 +79,7 @@ function Login() {
                         <input
                             type="submit"
                             value="Ingresar"
-                            className="primary-button login-button"
+                            className="primary-button bg-gray-900 login-button"
                             id="btnIngresarUsuarios"
 
                         />

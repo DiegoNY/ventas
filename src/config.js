@@ -30,7 +30,7 @@ const urlAPI = {
 
     Usuario: {
 
-        url: `${hostAPIV2}/api/v2/usuario`,   
+        url: `${hostAPIV2}/api/v2/usuario`,
 
     },
 
@@ -43,12 +43,15 @@ const urlAPI = {
 
         url: `${hostAPIV2}/api/v2/laboratorio`
     },
-    TipoDocumento :{
+    TipoDocumento: {
         url: `${hostAPIV2}/api/v2/tipo_documento`
     },
-    CodigoBarras : 
+    CodigoBarras:
     {
         url: `${hostAPIV2}/api/v2/codigo_barras`
+    },
+    ListaCompra: {
+        url: `${hostAPIV2}/api/v2/lista_compra`
     }
 
 }
