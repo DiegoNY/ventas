@@ -13,6 +13,7 @@ import iconodolar from './img/icono-dolar.svg';
 import { TablaTalwindCss } from '../../../ui/Tabla/useTabla';
 import { TableCell } from '../../../ui/Tabla/tableCell';
 import { TablaRow } from '../../../ui/Tabla/tableRow';
+import imagenagregarclientes from './img/icono-agregar-cliente.svg';
 
 function PuntoVenta() {
     //Estados
@@ -21,12 +22,12 @@ function PuntoVenta() {
 
         tipo_documento: '',
         productos: [],
-        serie: '',
+        serie: 'XXXX-XXXXXXX',
         total: 0,
         subtotal: 0,
         igv: 0,
-        identificacion: '',
-        cliente: '',
+        identificacion: '00000000',
+        cliente: 'CLIENTES VARIOS',
         tipo_impresion: '',
         tipo_moneda: '',
         forma_pago: '',
@@ -70,7 +71,7 @@ function PuntoVenta() {
 
     //Funciones 
 
-    const generarSerie = (serie) => {
+    const GenerarSerie = (serie) => {
 
         const numeroFactura = `${serie} - 000001`;
         setVenta({ ...venta, serie: numeroFactura })
@@ -78,10 +79,10 @@ function PuntoVenta() {
     }
 
     //socket este activo debe enviar el id del producto 
-    const actualizarStock = async (id) => {
+    const ActualizarStock = async (id, stock_venta) => {
 
-        const stock = 'stock'
 
+        const stock = 'stock';
         productos.map(producto => {
             if (producto._id = id)
                 producto.stock = stock;
@@ -90,7 +91,127 @@ function PuntoVenta() {
 
     }
 
+    const obtenerCantidadCompra = (cantidad, cantidadesMedida) => {
+        const cantidad_comprada_String = cantidad.toUpperCase();
+        const cantidad_comprada_Array = cantidad_comprada_String.split('-');
+        const cantidad_comprada = cantidad_comprada_Array[1];
+        const MEDIDA = cantidad_comprada_Array[0];
 
+        // console.log(cantidad_comprada_String);
+        // console.log(cantidad_comprada_Array);
+        // console.log(cantidadesMedida);
+
+        if (MEDIDA == cantidadesMedida.CAJA.MEDIDA) {
+            return { MEDIDA: MEDIDA, CANTIDAD: cantidad_comprada * cantidadesMedida.CAJA.CANTIDAD, CANTIDAD_COMPRA: cantidad_comprada };
+        }
+        if (MEDIDA == cantidadesMedida.UNIDAD.MEDIDA) {
+            return { MEDIDA: MEDIDA, CANTIDAD: cantidad_comprada, CANTIDAD_COMPRA: cantidad_comprada };
+        }
+        if (MEDIDA == cantidadesMedida.TABLETA.MEDIDA) {
+            return { MEDIDA: MEDIDA, CANTIDAD: cantidad_comprada * cantidadesMedida.TABLETA.CANTIDAD, CANTIDAD_COMPRA: cantidad_comprada };
+        }
+
+
+    }
+
+    const obtenerTotalCompraProducto = (cantidad, medidaPrecio) => {
+
+        const MEDIDA = cantidad?.MEDIDA;
+        const CANTIDAD = cantidad?.CANTIDAD_COMPRA;
+
+
+        if (MEDIDA == medidaPrecio.CAJA.MEDIDA) {
+            console.log(medidaPrecio.CAJA.PRECIO);
+            let total = CANTIDAD * medidaPrecio.CAJA.PRECIO;
+            return total;
+        }
+
+        if (MEDIDA == medidaPrecio.UNIDAD.MEDIDA) {
+            console.log(medidaPrecio.UNIDAD.PRECIO);
+            let total = CANTIDAD * medidaPrecio.UNIDAD.PRECIO;
+            return total;
+        }
+
+        if (MEDIDA == medidaPrecio.TABLETA.MEDIDA) {
+            console.log(medidaPrecio.TABLETA.PRECIO);
+            let total = CANTIDAD * medidaPrecio.TABLETA.PRECIO;
+            return total;
+        }
+
+    }
+
+    const ModificarTotalGlobla = () => {
+        let total = 0;
+
+        venta.productos.map(producto => {
+            total += producto.total;
+        })
+
+        venta.total = total;
+    }
+
+    const ModificadorTotalCantidad = (id, cantidad) => {
+        let MEDIDA = '';
+
+
+        venta.productos.map(producto => {
+
+
+            if (producto._id == id) {
+
+                producto.cantidad = cantidad;
+
+                const cantidad_medida_precio = {
+                    CAJA: { MEDIDA: 'C', CANTIDAD: Number(producto?.stock_caja), PRECIO: Number(producto?.precio_venta_caja) },
+                    TABLETA: { MEDIDA: 'T', CANTIDAD: Number(producto?.stock_tableta), PRECIO: Number(producto?.precio_venta_tableta) },
+                    UNIDAD: { MEDIDA: 'U', CANTIDAD: 1, PRECIO: Number(producto?.precio_venta) }
+                }
+                const cantidad_comprada = obtenerCantidadCompra(cantidad, cantidad_medida_precio)
+                const total = obtenerTotalCompraProducto(cantidad_comprada, cantidad_medida_precio);
+                MEDIDA = cantidad_comprada?.MEDIDA;
+                // const precio = obtenerPrecioCompraMedida(MEDIDA);
+
+                //obtener precio
+                for (let key in cantidad_medida_precio) {
+                    if (cantidad_medida_precio[key].MEDIDA == MEDIDA) {
+                        producto.precio = cantidad_medida_precio[key].PRECIO;
+                    }
+                }
+                producto.cantidad_comprada = cantidad_comprada.CANTIDAD_COMPRA;
+                producto.stock_vendido = cantidad_comprada?.CANTIDAD;
+                producto.total = total;
+            }
+
+
+
+        })
+
+        ModificarTotalGlobla();
+
+        setVenta({
+            ...venta,
+        })
+
+        return MEDIDA;
+
+    }
+
+    const ModificarTotalPrecio = (id, valor) => {
+        venta.productos.map(producto => {
+
+            if (producto._id == id) {
+                const total = producto.cantidad_comprada * valor
+                producto.total = total;
+            }
+        });
+
+        ModificarTotalGlobla();
+
+        return setVenta({
+            ...venta,
+        });
+    }
+    //Funciones complementarias
     /**
     * Recibe el producto seleccionado y cambia el estado de la
     * listaProductosSeleccionados 📖 pero no la borra solo agrega el producto 
@@ -138,7 +259,7 @@ function PuntoVenta() {
 
     }, [])
 
-    console.log(venta);
+
 
 
     return (
@@ -199,8 +320,8 @@ function PuntoVenta() {
                                 content-center
                             '
                         >
-                            <h1 className='ml-2  text-lg font-semibold'>
-                                Datos Necesarios
+                            <h1 className='ml-2  text-lg text-slate-400 font-'>
+                                Datos necesarios
                             </h1>
                         </div>
 
@@ -240,10 +361,10 @@ function PuntoVenta() {
                                     </h1>
                                     <select
                                         type="text"
-                                        class="mt-1 form-control  font-mono block w-full rounded-md h-8 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        onChange={(e) => generarSerie(e.target.value)}
+                                        class="mt-1 form-control  font-mono block w-full rounded-md h-8 border-gray-300  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        onChange={(e) => GenerarSerie(e.target.value)}
                                     >
-                                        <option>SELECCIONE</option>
+                                        <option  >SELECCIONE</option>
                                         {tipoDocumento.map(tp => {
                                             return <option
                                                 value={`${tp.serie}`}
@@ -269,9 +390,15 @@ function PuntoVenta() {
                                     >
                                         Dni / Ruc
                                     </span>
-                                    <input
-                                        type={'number'}
-                                        className="
+                                    <div
+                                        className='
+                                            flex
+                                        '
+                                    >
+                                        <input
+                                            type={'number'}
+                                            value={venta?.identificacion}
+                                            className="
                                             mt-1 
                                             form-control  
                                             font-mono 
@@ -280,16 +407,27 @@ function PuntoVenta() {
                                             rounded-md 
                                             h-8 
                                             border-gray-300 
-                                            shadow-sm 
                                             focus:border-indigo-500 
                                             focus:ring-indigo-500 
                                             sm:text-sm
                                         "
-                                        onChange={(e) => {
-                                            let identificacion = e.target.valueAsNumber
-                                            setVenta({ ...venta, identificacion: identificacion })
-                                        }}
-                                    />
+                                            onChange={(e) => {
+                                                let identificacion = e.target.valueAsNumber
+                                                setVenta({ ...venta, identificacion: identificacion })
+                                            }}
+                                        />
+                                        <img
+                                            src={imagenagregarclientes}
+                                            className='
+                                                h-4
+                                                mt-2
+                                                ml-2
+                                                cursor-pointer
+
+                                            '
+                                        />
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -318,6 +456,7 @@ function PuntoVenta() {
                                     </span>
 
                                     <input
+                                        value={venta?.cliente}
                                         type="text"
                                         className="
                                             mt-1 
@@ -326,7 +465,6 @@ function PuntoVenta() {
                                             h-8 
                                             rounded-md 
                                             border-gray-300 
-                                            shadow-sm 
                                             focus:border-indigo-500 
                                             focus:ring-indigo-500 
                                             sm:text-sm
@@ -718,7 +856,7 @@ s                                                '
                                             font-normal
                                         '
                                     >
-                                        150
+                                        {venta?.total}
                                     </span>
                                 </span>
                             </div>
@@ -736,7 +874,7 @@ s                                                '
                             '
                         >
                             <button
-                              className='
+                                className='
                                 bg-orange-500
                                 rounded-xl	
                                 w-1/2
@@ -790,7 +928,7 @@ s                                                '
                                      mt-4
                                      form-control
                                     '
-                                placeholder=' Busca un producto ... '
+                                placeholder=' Busca un producto ... 💊'
                                 onFocus={() => setSearch(!search)}
                                 onChange={(e) => {
                                     setSearchProducto(e.target.value)
@@ -827,7 +965,7 @@ s                                                '
                                                     '
                                                     onClick={() => obteniendoProductoSeleccionado(producto)}
                                                 >
-                                                    {producto.descripcion} ({producto.id_laboratorio})
+                                                    {producto.descripcion} ( {producto.id_laboratorio} ) | STOCK : {producto.stock}
                                                 </div>
                                             </>
                                         )
@@ -841,6 +979,7 @@ s                                                '
                             <div
                                 className='
                                     text-xl 
+                                    text-slate-400
                                     proportional-nums
                                     mt-4
                                     mx-2
@@ -859,6 +998,7 @@ s                                                '
                                 mb-2
                                 flex
                                 flex-col
+                                h-96
                             '
                         >
 
@@ -879,6 +1019,7 @@ s                                                '
 
                                 {venta.productos.map(producto => {
 
+
                                     return (
                                         <>
                                             <TablaRow TablaRow >
@@ -898,20 +1039,36 @@ s                                                '
                                                     {producto.fecha_vencimiento}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <input
-                                                        placeholder='Cantidad'
-                                                        className='
-                                                           w-1/2
-                                                        '
-                                                    />
+                                                    <textarea
+                                                        defaultValue={producto?.stock}
+                                                        cols={'8'}
+                                                        rows={'1'}
+                                                        onChange={(e) => {
+
+
+
+
+                                                            const medida = ModificadorTotalCantidad(producto._id, e.target.value);
+
+
+
+
+                                                        }}
+
+                                                    ></textarea>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <input
-                                                        placeholder='Precio'
-                                                        className='
-                                                            w-1/2
-                                                        '
-                                                    />
+                                                    <textarea
+                                                        defaultValue={producto?.precio}
+                                                        cols={'8'}
+                                                        rows={'1'}
+                                                        onChange={(e) => {
+
+                                                            ModificarTotalPrecio(producto._id, e.target.value);
+
+                                                        }}
+
+                                                    ></textarea>
                                                 </TableCell>
                                                 <TableCell>
                                                     {producto.total}

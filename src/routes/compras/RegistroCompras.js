@@ -385,7 +385,7 @@ function RegistroCompras() {
                                             <TableCell>
                                                 <ProductoSeleccionado
                                                     input={true}
-                                                    value={producto?.fecha_venciemiento}
+                                                    value={producto?.fecha_vencimiento}
                                                     type={'date'}
                                                     onChange={(e) => {
                                                         modificandoProductosSeleccionados(producto._id, e.target.value, 'fecha_vencimiento')

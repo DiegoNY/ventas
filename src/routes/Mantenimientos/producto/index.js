@@ -136,25 +136,38 @@ function MantenimientoProducto() {
 
     }, [])
 
-    socket.on('connect', () => {
-        console.log('El socket se a conectado');
-    })
 
-    socket.on('welcome', data => {
-        console.log(data);
-    })
 
 
 
     useEffect(() => {
-        socket.on('codigo_barra_uso', data => {
-            console.log(data);
+
+        const RecibirCodigoBarras = (data) => {
             const codigoBarraObtenido = GeneradorCodigoBarras(data.codigo_barras);
-            console.log(codigoBarraObtenido);
             setCodigoBarra(codigoBarraObtenido);
+        }
+
+        socket.on('codigo_barra_uso', RecibirCodigoBarras);
+
+        socket.on('connect', () => {
+            console.log('El socket se a conectado');
+        })
+
+        socket.on('welcome', data => {
+            console.log(data);
         })
 
         socket.emit('mensaje', 'Mensaje para todos');
+
+        return () => {
+            socket.off('codigo_barra_uso', RecibirCodigoBarras);
+            socket.off('connect', () => {
+                console.log('El socket se a conectado');
+            })
+            socket.off('welcome', data => {
+                console.log(data);
+            })
+        }
     }, [])
 
     /**
@@ -479,11 +492,11 @@ function MantenimientoProducto() {
                                                 rounded
                                             '
                                                 placeholder='Precio de compra por tableta'
-                                                onChange={(e)=>{
+                                                onChange={(e) => {
                                                     setProducto(
                                                         {
                                                             ...producto,
-                                                            precio_compra_tableta : e.target.value,
+                                                            precio_compra_tableta: e.target.value,
                                                         }
                                                     )
                                                 }}

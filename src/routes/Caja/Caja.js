@@ -140,7 +140,7 @@ function Caja() {
 
         sendingBox(requestOptions)
             .then(data => {
-                
+
                 if (data.message === "save") {
 
                     setOpenBox(true);
@@ -197,26 +197,125 @@ function Caja() {
 
             <>
 
-                <div className='card mb-1'>
-                    <h3
+                <div
+                    className='
+                        grid
+                        grid-cols-12
+                        grid-rows-6
+                        h-screen
+                    '
+                >
+
+
+                    <div
                         className='
-                            text-xl
-                            my-3 
-                            ml-3 
-                            w-40 
-                            font-bold
-                            font-sans
+                            col-start-4
+                            //bg-yellow-400
+                            col-span-6
+                            row-span-6
+                            grid
+                            grid-cols-12
+                            grid-rows-6
                         '
                     >
 
-                        Apertura Caja
+                        <div
+                            className='
+                                //bg-indigo-300
+                                col-start-3
+                                col-span-8
+                                row-span-6
+                                my-4
+                                grid
+                                grid-rows-6
+                                grid-cols-4  
+                            '
+                        >
 
-                    </h3>
+                            <div
+                                className='
+                                    //bg-indigo-200
+                                    col-span-4
+                                    flex
+                                    justify-center
+                                '
+                            >
+                                <h1 className='text-2xl font-bold text-slate-600  mt-4'>Bienvenido Usuario 🖐, para continuar registra el monto que hay en caja 😃</h1>
+                            </div>
 
+                            <div
+                                className='
+                                    //bg-red-200
+                                    col-span-4
+                                    row-span-5
+                                    mt-2
+                                    mx-2
+                                    flex 
+                                    flex-col
+                                '
+                            >
+
+                                <div
+                                    className='
+                                        //bg-indigo-200
+                                        mx-2
+                                        h-20
+                                        mt-1
+                                        text-lg
+                                        flex
+                                        text-center
+                                    '
+                                >
+                                    <h1 className='mt-3 '> <span className='mt-3'>La ip de la maquina que estas usando es 192.290.2.43</span> </h1>
+
+                                </div>
+
+                                <div
+                                    className='
+                                        mx-2
+                                        bg-red-100
+                                        h-80
+                                    '
+                                >
+
+                                </div>
+
+                                <div
+                                    className='
+                                        //bg-green-100
+                                        h-16
+                                        flex
+                                        justify-end
+                                    '
+                                >
+                                    <button
+                                        className='
+                                            mx-2
+                                            mt-2
+                                            bg-green-800
+                                            h-10
+                                            rounded-xl
+                                            w-25
+                                            text-white
+                                        '
+                                        onClick={sendingMoneyDay}
+                                    >
+                                        aperturar
+                                    </button>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
+
 
                 <div
                     className='
+                       inactive
                         card  
                         mx-9 
                         mt-2 

@@ -7,7 +7,10 @@ import imgventas from './img/imagen-venta.png';
 import imgproductos from './img/imagen-productos.png';
 import imgclientes from './img/imagen-clientes.png';
 import imgcompras from './img/imagen-compras.png';
-import imgojoproductos from './img/icono-ojo-productos.svg'
+import './index.css'
+import { Tabventa } from './ventas';
+import { Tabcompra } from './compras';
+import { Tabproducto } from './productos';
 
 
 function PanelControl() {
@@ -26,7 +29,7 @@ function PanelControl() {
     const [userData, setUserData] = useState({
         labels: UserDat.map((data) => data.year),
         datasets: [{
-            label: "Productos mas vendidos",
+            label: "Ventas diarias",
             data: UserDat.map((data) => data.useGain),
 
         }]
@@ -40,14 +43,12 @@ function PanelControl() {
 
     })
 
-    const [estadosTabs, setEstadosTabs] = React.useState({
+    const [estadosTabs, setEstadosTabs] = React.useState(0)
 
-        ventas: true,
-        productos: false,
-        compras: false,
-        clientes: false,
+    const cambiarTab = (tab) => {
+        setEstadosTabs(tab);
+    }
 
-    })
 
     return (
 
@@ -501,7 +502,8 @@ function PanelControl() {
                 <div
                     className='
                         //bg-red-400
-                        col-span-7
+                        col-span-12
+                        sm:col-span-7
                         row-span-6
                         grid
                         grid-cols-7
@@ -510,213 +512,157 @@ function PanelControl() {
                 >
                     <div
                         className='
-                            bg-yellow-400
+                            //bg-yellow-400
                             col-span-10
+                            grid
+                           
+                            sm:grid-cols-12
+                            grid-rows-3
+                            row-span-1
                             mx-3
                         '
                     >
+                        <div
+                            className='
+                                bg-amber-500
+                                col-span-12
+                                row-span-2
+                                my-1
+                                mx-3
+                            '
+                        >
+
+                        </div>
+
+                        <div
+                            className='
+                            //bg-red-200
+                            col-span-12
+                            mb-1
+                          '
+                        >
+
+                            <span
+                                className='
+                                    text-lg
+                                    text-slate-400
+                                '
+                            >
+                                Informacion reciente
+                            </span>
+
+                        </div>
 
                     </div>
-                    <div
-                        className='
-                            bg-red-200
-                            row-start-2
-                            col-span-10
-                            row-span-2
-                            mx-3
-                            my-2
-                        '
-                    >
-
-                    </div>
 
                     <div
                         className='
-                                row-span-3
+                                row-span-5
                                 col-span-7
                                 //bg-orange-500
                                 mb-1
                                 mx-1
                                 flex
                                 flex-col
+                              
                             '
                     >
                         <div
                             className='
                                     h-10
-                                    //bg-white
+                                    //bg-red-400
                                     mx-2
                                     mt-1
-                                    flex
-                                    justify-center  
+                                    grid
+                                    grid-cols-4
+                                    sm:grid-cols-7
                                 '
                         >
                             <span
                                 className='
-                                        mx-2
-                                        cursor-pointer
-                                        hover:text-gray-500
-                                        border-b-4
-                                        hover:border-b-indigo-500
-                                    '
+                                    //bg-red-200
+                                    cursor-pointer
+                                    hover:text-gray-500
+                                    border-b-4
+                                    rounded-lg
+                                    flex
+                                    justify-center
+                                '
+                                onClick={() => cambiarTab(0)}
                             >
-                                Ventas
+                                <span className='mt-1'>Ventas</span>
                             </span>
                             <span
                                 className='
-                                     mx-2
-                                     cursor-pointer
-                                     hover:text-gray-500
-                                     border-b-4
-                                     hover:border-b-indigo-500
+                                cursor-pointer
+                                text-gray-400
+                                hover:border-b-4
+                                rounded-lg
+                                flex
+                                justify-center
                                  '
+                                onClick={() => cambiarTab(1)}
+
                             >
-                                Productos
+                                <span className='mt-1'>Productos</span>
                             </span>
                             <span
                                 className='
-                                     mx-2
-                                     cursor-pointer
-                                     hover:text-gray-500
-                                     border-b-4
-                                     hover:border-b-indigo-500
-                                 '
+                                cursor-pointer
+                                text-gray-400
+                                hover:border-b-4
+                                rounded-lg
+                                flex
+                                justify-center
+                                '
+                                onClick={() => cambiarTab(2)}
+
                             >
-                                Compras
+                                <span className='mt-1'>Compras</span>
                             </span>
                             <span
 
                                 className='
-                                     mx-2
-                                     cursor-pointer
-                                     hover:text-gray-500
-                                     border-b-4
-                                     hover:border-b-indigo-500
-                                     
-                                 '
+                                cursor-pointer
+                                text-gray-400
+                                hover:border-b-4
+                                rounded-lg
+                                flex
+                                justify-center
+                                '
+                                onClick={() => cambiarTab(3)}
+
                             >
-                                Clientes
+                                <span className='mt-1'>Clientes</span>
+
                             </span>
                         </div>
 
-                        <div
-                            className='
-                                    h-full
-                                    grid
-                                    grid-cols-12
-                                    grid-rows-6
-                                '
-                        >
+                        {estadosTabs == 0 &&
+
+                            <Tabventa
+                                ventas={[]}
+                            />
+                        }
+
+                        {estadosTabs == 1 &&
+                            <Tabproducto />
+                        }
+                        {estadosTabs == 2 &&
+
+                            <Tabcompra
+                                compras={[]}
+                            />
+                        }
+                        {estadosTabs == 3 &&
                             <div
                                 className='
-                                        col-span-12
-                                        row-span-6
-                                        //bg-gray-200
-                                        mx-3
-                                        my-2
-                                        flex
-                                        flex-col
-                                        rounded-sm
-    
-                                    '
+                                    scroll-content
+                                '
                             >
 
-                                {!!estadosTabs.ventas && !estadosTabs.compras && !estadosTabs.productos &&
-                                    <div
-                                        className='
-                                hover:bg-gray-200
-                                //bg-white
-                                mx-1
-                                my-1
-                                h-50
-                                w-48
-                                rounded-sm
-                                shadow-sm
-                                grid
-                                grid-rows-6
-                                                                        
-                            '
-                                    >
-
-                                        <span
-                                            className='
-                                    font-sans
-                                    font-semibold
-                                    mt-3
-                                    mx-2
-                                '
-                                        >
-                                            Usuario : 1
-                                        </span>
-
-                                        <span
-                                            className='
-                                    font-sans
-                                    font-semibold
-                                    mt-3
-                                    mx-2
-                                '
-                                        >
-                                            Fecha : 12/12/1212
-                                        </span>
-                                        <span
-                                            className='
-                                    font-sans
-                                    font-semibold
-                                    mt-3
-                                    mx-2
-                                '
-                                        >
-                                            Codigo : B001-00007150
-                                        </span>
-                                        <span
-                                            className='
-                                    font-sans
-                                    font-semibold
-                                    mt-3
-                                    mx-2
-                                '
-                                        >
-                                            Total : 150
-                                        </span>
-
-                                        <span
-                                            className='
-                                    font-sans
-                                    font-semibold
-                                    mt-3
-                                    mx-2
-                                        flex
-                                    '
-                                        >
-                                            Productos :
-                                            <img
-                                                src={imgojoproductos}
-                                                className='
-                                        h-4
-                                       
-                                        cursor-pointer
-                                        hover:bg-orange-200
-                                        roundered-xl                                                
-                                    '
-                                            />
-
-                                        </span>
-
-
-
-                                    </div>
-                                }
-
-                                {!!estadosTabs.compras && !estadosTabs.ventas && !estadosTabs.productos &&
-
-                                    1234
-
-                                }
-
                             </div>
-
-                        </div>
+                        }
 
                     </div>
 
@@ -727,15 +673,7 @@ function PanelControl() {
 
             </div>
 
-            {/* Ejemplo de grafico */}
-            <div className='card inactive'>
-
-                Panel de control
-                <div className='w-50 h-60'>
-                    <BarChart chartData={userData} />
-                </div>
-
-            </div>
+            
         </>
 
     );

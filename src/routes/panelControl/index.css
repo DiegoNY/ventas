@@ -1,3 +1,12 @@
-.panelControl{
+/* .panelControl{
     height: 50px;
+} */
+
+.card-panel-control {
+    height: 7rem;
+}
+
+.scroll-content {
+    height:27rem ;
+    overflow: scroll;
 }
