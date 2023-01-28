@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
 import BarChart from '../../ui/Graficos';
@@ -11,6 +11,8 @@ import './index.css'
 import { Tabventa } from './ventas';
 import { Tabcompra } from './compras';
 import { Tabproducto } from './productos';
+import { getData } from '../useFetch';
+import { urlAPI } from '../../config';
 
 
 function PanelControl() {
@@ -35,20 +37,96 @@ function PanelControl() {
         }]
     })
 
-    const [informacionPrincipal, setInformacionPrincipal] = React.useState({
-        ventas: 150,
-        productos: 15,
-        compras: 12,
-        clientes: 11
-
-    })
+    const [venta, setVenta] = useState(0);
+    const [producto, setProducto] = useState(0);
+    const [compras, setCompras] = useState(0);
+    const [clientes, setClientes] = React.useState(0)
 
     const [estadosTabs, setEstadosTabs] = React.useState(0)
 
+    //funciones
     const cambiarTab = (tab) => {
         setEstadosTabs(tab);
     }
 
+    const [fecha, setFecha] = useState('Enero 18th , 2022');
+
+
+
+    useEffect(() => {
+
+        const objFecha = new Date();
+
+        let mesString = objFecha.toLocaleDateString("es-ES", {
+            month: 'long',
+        })
+
+        let dia = objFecha.toLocaleDateString("es-ES", {
+            day: 'numeric',
+        })
+
+        let año = objFecha.toLocaleDateString("es-ES", {
+            year: 'numeric',
+        })
+        let mesArr = mesString.split('');
+
+        let mesComplementario = '';
+        mesArr.map((mes, index) => {
+
+            if (index != 0) {
+                mesComplementario = mesComplementario + mes;
+            }
+        })
+
+        let fecha = `${mesArr[0].toUpperCase() + mesComplementario} ${dia}th , ${año}`;
+        setFecha(fecha);
+
+    }, [])
+
+
+    //Data Necesaria 
+
+    useEffect(() => {
+
+
+
+        const obtenerDataVenta = async () => {
+            const dataVentas = await getData(`${urlAPI.Venta.url}`);
+            const venta = dataVentas.length;
+
+            setVenta(venta);
+
+        }
+
+        const obtenerDataProductos = async () => {
+            const dataProductos = await getData(`${urlAPI.Producto.url}`);
+            const producto = dataProductos.length;
+            setProducto(producto);
+        }
+
+        const obtenerDataCompras = async () => {
+            const dataCompras = await getData(`${urlAPI.ListaCompra.url}`);
+            const compras = dataCompras.length;
+
+            setCompras(compras);
+        }
+
+        const obtenerDataClientes = async () => {
+            const dataClientes = await getData(`${urlAPI.Cliente.url}`);
+            const clientes = dataClientes[0].body.length;
+            setClientes(clientes);
+        }
+
+
+
+        obtenerDataClientes();
+        obtenerDataVenta();
+        obtenerDataProductos();
+        obtenerDataCompras();
+
+        return;
+
+    }, [])
 
     return (
 
@@ -89,7 +167,7 @@ function PanelControl() {
                         <h1
                             className='
                                 text-3xl
-                                font-bold
+                                font-black
                             '
                         >
                             Panel control
@@ -98,10 +176,10 @@ function PanelControl() {
                         <span
                             className='
                                 text-sky-500
-                                font-semibold
+                                font-black
                             '
                         >
-                            Enero 18th , 2022
+                            {fecha}
                         </span>
 
                     </div>
@@ -195,7 +273,7 @@ function PanelControl() {
                                             font-semibold
                                         '
                                     >
-                                        {informacionPrincipal.ventas}
+                                        {venta}
                                     </span>
 
                                 </div>
@@ -290,7 +368,7 @@ function PanelControl() {
                                             font-semibold
                                         '
                                     >
-                                        {informacionPrincipal.productos}
+                                        {producto}
                                     </span>
                                 </div>
                             </div>
@@ -384,7 +462,7 @@ function PanelControl() {
                                             font-semibold
                                         '
                                     >
-                                        {informacionPrincipal.compras}
+                                        {compras}
                                     </span>
                                 </div>
                             </div>
@@ -477,7 +555,7 @@ function PanelControl() {
                                             font-semibold
                                         '
                                     >
-                                        {informacionPrincipal.clientes}
+                                        {clientes}
                                     </span>
                                 </div>
                             </div>
@@ -579,42 +657,49 @@ function PanelControl() {
                                 '
                         >
                             <span
-                                className='
+                                className={`
                                     //bg-red-200
                                     cursor-pointer
-                                    hover:text-gray-500
-                                    border-b-4
+                                    text-gray-400
                                     rounded-lg
                                     flex
                                     justify-center
-                                '
+                                    ${estadosTabs == 0 && 'text-dark border-b-4'} 
+
+                                `}
                                 onClick={() => cambiarTab(0)}
                             >
                                 <span className='mt-1'>Ventas</span>
                             </span>
                             <span
-                                className='
+                                className={`
                                 cursor-pointer
                                 text-gray-400
                                 hover:border-b-4
                                 rounded-lg
                                 flex
                                 justify-center
-                                 '
+                                ${estadosTabs == 1 && 'text-dark border-b-4'} 
+
+                                 `}
                                 onClick={() => cambiarTab(1)}
 
                             >
                                 <span className='mt-1'>Productos</span>
                             </span>
                             <span
-                                className='
-                                cursor-pointer
-                                text-gray-400
-                                hover:border-b-4
-                                rounded-lg
-                                flex
-                                justify-center
-                                '
+                                className={
+                                    `
+                                        cursor-pointer
+                                        text-gray-400
+                                        hover:border-b-4
+                                        rounded-lg
+                                        flex
+                                        justify-center
+                                        ${estadosTabs == 2 && 'text-dark border-b-4'} 
+
+                                    `
+                                }
                                 onClick={() => cambiarTab(2)}
 
                             >
@@ -622,14 +707,17 @@ function PanelControl() {
                             </span>
                             <span
 
-                                className='
-                                cursor-pointer
-                                text-gray-400
-                                hover:border-b-4
-                                rounded-lg
-                                flex
-                                justify-center
-                                '
+                                className={
+                                    `
+                                    cursor-pointer
+                                    text-gray-400
+                                    hover:border-b-4
+                                    rounded-lg
+                                    flex
+                                    justify-center
+                                    ${estadosTabs == 3 && 'text-dark border-b-4'} 
+                                    `
+                                }
                                 onClick={() => cambiarTab(3)}
 
                             >
@@ -673,7 +761,7 @@ function PanelControl() {
 
             </div>
 
-            
+
         </>
 
     );

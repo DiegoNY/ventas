@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Cardventa() {
+function Cardventa({ numero, fecha, codigo, total, onClick }) {
 
     return (
         <>
@@ -41,7 +41,7 @@ function Cardventa() {
                             mt-1
                         '
                     >
-                        Venta <span className='ml-1 font-normal '>N°7205</span>
+                        Venta N°<span className='ml-1 font-normal '>{numero || '0'}</span>
                     </span>
 
                     <span
@@ -52,7 +52,7 @@ function Cardventa() {
                             justify-between
                         '
                     >
-                        Fecha : <span className='font-normal text-xs'>12/12/1212</span>
+                        Fecha : <span className='font-normal text-xs'>{fecha || '12/12/1212'}</span>
                     </span>
                     <span
                         className='
@@ -62,7 +62,7 @@ function Cardventa() {
                             justify-between
                         '
                     >
-                        Codigo : <span className='font-normal text-xs'>B001-00007150</span>
+                        Codigo : <span className='font-normal text-xs'>{codigo || 'xxx-xxxxx'}</span>
                     </span>
                     <span
                         className='
@@ -72,7 +72,7 @@ function Cardventa() {
                             justify-between
                         '
                     >
-                        Total : <span className='font-normal text-xs'>150</span>
+                        Total : <span className='font-normal text-xs'>{total || '0'}</span>
                     </span>
 
                     <span
@@ -84,6 +84,9 @@ function Cardventa() {
                             cursor-pointer
                             hover:text-xs
                         '
+                        data-bs-toggle="modal"
+                        data-bs-target="#productos"
+                        onClick={onClick}
                     >
                         ver productos 🛒
 

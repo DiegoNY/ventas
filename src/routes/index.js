@@ -8,7 +8,6 @@ import { Main } from '../ui/main';
 import { NavBar } from '../ui/NavBar';
 import { MainUser } from '../ui/main-user';
 import { MantenimientoCliente } from './Mantenimientos/cliente';
-
 import './index.css';
 import { MantenimientoLaboratorio } from './Mantenimientos/laboratorio';
 import { MantenimientoMoneda } from './Mantenimientos/moneda';
@@ -21,7 +20,6 @@ import { ListaVenta } from './ventas/lista_ventas';
 import { ProductosMasVendidos } from './ventas/productos_mas_vendidos';
 import { NotaSalida } from './ventas/nota_salida';
 import { ListadoSalida } from './ventas/listado_salida';
-import { Titulo } from '../ui/titulos-vistas';
 import { RegistroCompras } from './compras/RegistroCompras';
 import { ListaCompra } from './compras/ListaCompras';
 function App() {

@@ -1,7 +1,6 @@
 import React from 'react';
 
 function TablaTalwindCss(props) {
-    console.log(props.headers)
 
     return (
         <>
@@ -44,7 +43,7 @@ function TablaTalwindCss(props) {
                                 </div>
                             </div>
                             <div className="table-row-group">
-
+                                
                                 {props.children}
 
 

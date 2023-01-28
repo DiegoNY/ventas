@@ -1,3 +1,7 @@
+import { io } from "socket.io-client";
+const socket = io('http://192.168.1.43:8080/');
+
+
 // Archivo de Configuracion 🔩🔩🔩
 const hostAPI = 'http://192.168.1.43:8000';
 const hostAPIV2 = 'http://192.168.1.43:8080';
@@ -12,7 +16,7 @@ const urlAPI = {
 
     Caja: {
 
-        url: `${hostAPI}/api/v1/checkoutbox`,
+        url: `${hostAPIV2}/api/v2/caja`,
 
     },
 
@@ -52,11 +56,21 @@ const urlAPI = {
     },
     ListaCompra: {
         url: `${hostAPIV2}/api/v2/lista_compra`
+    },
+    Venta: {
+        url: `${hostAPIV2}/api/v2/venta`
+    },
+    Numeros_ventas: {
+        url: `${hostAPIV2}/api/v2/serie_ventas`
     }
 
+
 }
+
+
 
 export {
     hostAPI,
     urlAPI,
+    socket
 }

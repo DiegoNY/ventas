@@ -46,7 +46,7 @@ function MantenimientoCliente() {
 
         const data = await getData(`${urlAPI.Cliente.url}`);
         console.log(data);
-        setDataCliente(data);
+        setDataCliente(data[0].body);
 
     }
 
@@ -471,22 +471,22 @@ function MantenimientoCliente() {
                                                     type='number'
                                                     placeholder='DNI / RUC'
                                                     className='
-                                                        input-form
-                                                        form-control 
-                                                        form-control-sm
-                                                        shadow-sm p-2  
-                                                        rounded
-                                                    '
+                                                            input-form
+                                                            form-control 
+                                                            form-control-sm
+                                                            shadow-sm p-2  
+                                                            rounded
+                                                        '
                                                 />
 
                                                 <i
                                                     role='button'
                                                     className="
-                                                        fi fi-rr-search
-                                                        w-14    
-                                                        text-center
-                                                        mt-2
-                                                    "
+                                                            fi fi-rr-search
+                                                            w-14    
+                                                            text-center
+                                                            mt-2
+                                                        "
                                                     onClick={() => {
                                                         setLoading(true);
                                                     }}
@@ -513,12 +513,12 @@ function MantenimientoCliente() {
                                             <input
                                                 placeholder=' Razon social / Nombres '
                                                 className='
-                                                    input-form
-                                                    form-control 
-                                                    form-control-sm
-                                                    shadow-sm p-2  
-                                                    rounded
-                                                '
+                                                        input-form
+                                                        form-control 
+                                                        form-control-sm
+                                                        shadow-sm p-2  
+                                                        rounded
+                                                    '
 
                                                 value={cliente?.descripcion}
                                                 onChange={e => {
@@ -549,12 +549,12 @@ function MantenimientoCliente() {
                                             <input
                                                 placeholder='Telefono'
                                                 className='
-                                                    input-form
-                                                    form-control 
-                                                    form-control-sm
-                                                    shadow-sm p-2  
-                                                    rounded
-                                                '
+                                                        input-form
+                                                        form-control 
+                                                        form-control-sm
+                                                        shadow-sm p-2  
+                                                        rounded
+                                                    '
                                                 type={'number'}
                                                 value={cliente?.telefono}
                                                 onChange={e => {
@@ -586,12 +586,12 @@ function MantenimientoCliente() {
                                             <input
                                                 placeholder='Direccion'
                                                 className='
-                                                    input-form
-                                                    form-control 
-                                                    form-control-sm
-                                                    shadow-sm p-2  
-                                                    rounded
-                                                '
+                                                        input-form
+                                                        form-control 
+                                                        form-control-sm
+                                                        shadow-sm p-2  
+                                                        rounded
+                                                    '
                                                 value={cliente?.direccion}
                                                 onChange={e => {
                                                     setCliente(
@@ -621,12 +621,12 @@ function MantenimientoCliente() {
                                             <input
                                                 placeholder='Correo'
                                                 className='
-                                                input-form
-                                                form-control 
-                                                form-control-sm
-                                                shadow-sm p-2  
-                                                rounded
-                                                '
+                                                    input-form
+                                                    form-control 
+                                                    form-control-sm
+                                                    shadow-sm p-2  
+                                                    rounded
+                                                    '
                                                 value={cliente?.correo}
                                                 onChange={e => {
                                                     setCliente(
@@ -654,8 +654,8 @@ function MantenimientoCliente() {
                             <button
                                 type="button"
                                 className="
-                                    btn
-                                "
+                                        btn
+                                    "
                                 data-bs-dismiss="modal"
                             >
                                 Cerrar
@@ -664,18 +664,18 @@ function MantenimientoCliente() {
                             <button
                                 type="submit"
                                 className="
-                                ml-2
-                                bg-indigo-500 
-                                h-10 
-                                rounded-md
-                                text-white 
-                                cursor-pointer
-                                px-3
-                                text-sm
-                                w-px-15
-                                w-30
-                                mr-2
-                            "
+                                    ml-2
+                                    bg-indigo-500 
+                                    h-10 
+                                    rounded-md
+                                    text-white 
+                                    cursor-pointer
+                                    px-3
+                                    text-sm
+                                    w-px-15
+                                    w-30
+                                    mr-2
+                                "
 
                             >
                                 Registrar

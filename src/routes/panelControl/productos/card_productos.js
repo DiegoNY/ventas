@@ -1,6 +1,6 @@
 import React from 'react';
 import iconoprueba from '../img/imagen-clientes.png';
-function Cardproducto() {
+function Cardproducto({ descripcion, tipo, stock }) {
 
     return (
         <>
@@ -49,18 +49,18 @@ function Cardproducto() {
                             src={iconoprueba}
                         />
                     </div>
-                  
-                    
+
+
                     <span
                         className='
                             mx-2
                             row-span-2
                             text-xs
-                            flex
+                            uppercase
                             text-center
                         '
                     >
-                       AMBROXOL 30MG X120ML JARABE7
+                        {descripcion || 'AMBROXOL 30MG X120ML JARABE7'}
                     </span>
                     <span
                         className='
@@ -70,11 +70,11 @@ function Cardproducto() {
                             justify-between
                         '
                     >
-                        <span className='font-normal text-xs'>Generico</span> 
-                        <span className='text-sm '>S/ 15</span>
+                        <span className='font-normal text-xs lowercase'>{tipo || 'Generico'}</span>
+                        <span className='text-sm '> stock: {stock || '0'}</span>
                     </span>
 
-                   
+
 
                 </div>
             </div>

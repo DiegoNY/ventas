@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { urlAPI } from '../../../config';
+import { getData } from '../../useFetch';
 import { Cardcompra } from './card_compras';
 
-function Tabcompra({ compras }) {
+function Tabcompra() {
+    const [compras, setCompras] = useState([]);
+
+    useEffect(() => {
+        const obtenerDataCompras = async () => {
+            const comprasData = await getData(`${urlAPI.ListaCompra.url}?recientes=9`);
+            setCompras(comprasData)
+        }
+
+        obtenerDataCompras();
+    }, [])
 
     return (
         <>
@@ -18,15 +30,20 @@ function Tabcompra({ compras }) {
                     auto-rows-auto
                 '
                 >
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                    <Cardcompra/>
-                        
+                    {compras.map((compra, index) => {
+
+
+                        return (
+
+                            <Cardcompra
+                                fecha={compra.fecha_registro}
+                                numero={index + 1}
+                                total={compra.total}
+                                proveedor={compra.proveedor}
+                            />
+                        )
+                    })}
+
                 </div>
             </div>
         </>

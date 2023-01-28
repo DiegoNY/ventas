@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function ItemMenu(props) {
+
 
     return (
         <div >
 
             <ul
-                className="nav nav-sidebar" data-nav-type="accordion" id="navigationMenu"
-               
+                className={`nav nav-sidebar ${props.blur || ''}	`}
+                data-nav-type="accordion"
+                id="navigationMenu"
+                onClick={props.onClickBlur}
             >
 
                 <li className="nav-item" >
@@ -24,7 +27,7 @@ function ItemMenu(props) {
                         </Link> || <Link
                             className={`nav-link `}
                             onClick={props.onClick}
-                            
+
                         >
 
                             <i className={props.icono}></i>
@@ -40,7 +43,7 @@ function ItemMenu(props) {
 
 
             </ul>
-        </div>
+        </div >
 
     );
 }

@@ -20,7 +20,7 @@ function Titulo(props) {
                            inline-block 
                            text-2xl 
                            sm:text-2xl 
-                           font-extrabold 
+                           font-black 
                            text-slate-900 
                            tracking-tight 
                            dark:text-slate-200
@@ -32,7 +32,7 @@ function Titulo(props) {
                     <span
                         className='
                             text-base 
-                            font-normal 
+                            font-black 
                             text-sky-400
                             leading-6
                             text-sm
@@ -40,7 +40,8 @@ function Titulo(props) {
                         '
                     > {props.navegacion}
                     </span>
-                    <i  className={`${props.icono} text-xs ml-2 `}></i>
+                    <i className={`${props.icono} text-xs ml-2 `}>{props.iconoEmoji}</i>
+
                 </h3>
 
 

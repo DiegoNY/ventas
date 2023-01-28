@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { urlAPI } from '../../../config';
+import { getData } from '../../useFetch';
 import { Cardproducto } from './card_productos';
 
-function Tabproducto({ productos }) {
+function Tabproducto() {
+    const [productos, setProductos] = useState([]);
+
+    useEffect(() => {
+        const obtenerProductos = async () => {
+            const productosData = await getData(`${urlAPI.Producto.url}?recientes=9`);
+            setProductos(productosData);
+        }
+        obtenerProductos();
+    }, [])
 
     return (
         <>
@@ -18,17 +29,19 @@ function Tabproducto({ productos }) {
                     auto-rows-auto
                 '
                 >
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
-                    <Cardproducto />
+
+                    {productos.map(producto => {
+
+
+                        return (
+                            <Cardproducto
+                                descripcion={producto?.descripcion}
+                                tipo={producto?.tipo}
+                                stock={producto.stock}
+                            />
+                        )
+
+                    })}
 
                 </div>
             </div>

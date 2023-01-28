@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Cardcompra() {
+function Cardcompra({ numero, fecha, proveedor, total }) {
 
     return (
         <>
@@ -40,7 +40,7 @@ function Cardcompra() {
                             mt-1
                         '
                     >
-                        N°7205
+                        N°{numero || '0'}
                     </span>
 
                     <span
@@ -51,7 +51,7 @@ function Cardcompra() {
                             justify-between
                         '
                     >
-                        Fecha : <span className='font-normal text-xs'>12/12/1212</span>
+                        Fecha : <span className='font-normal text-xs'>{fecha || '12/12/1212'}</span>
                     </span>
                     <span
                         className='
@@ -61,7 +61,7 @@ function Cardcompra() {
                             justify-between
                         '
                     >
-                        Proveedor : <span className='font-normal text-xs'>Famide</span>
+                        Proveedor : <span className='font-normal text-xs'>{proveedor || 'Famide'}</span>
                     </span>
                     <span
                         className='
@@ -71,7 +71,7 @@ function Cardcompra() {
                             justify-between
                         '
                     >
-                        Total : <span className='font-normal text-xs'>150</span>
+                        Total : <span className='font-normal text-xs'>S/{total || '0'}</span>
                     </span>
 
                     <span
@@ -82,7 +82,7 @@ function Cardcompra() {
                             mt-1
                         '
                     >
-                        
+
                         📦
 
                     </span>

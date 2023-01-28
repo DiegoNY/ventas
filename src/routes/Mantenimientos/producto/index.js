@@ -1,16 +1,12 @@
 import { _, Grid } from 'gridjs-react';
 import React, { useEffect } from 'react';
-import { urlAPI } from '../../../config';
+import { socket, urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
-import { Table } from '../../../ui/Tabla';
-import img_registro from '../../img/mantenimiento-img/img-registro-cliente.png'
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import { getData } from '../../useFetch';
 import { GeneradorCodigoBarras } from './useCodigoBarras';
-import io from 'socket.io-client';
 import { Titulo } from '../../../ui/titulos-vistas';
-const socket = io('http://192.168.1.43:8080/');
 
 function MantenimientoProducto() {
 
@@ -135,9 +131,6 @@ function MantenimientoProducto() {
         laboratorios();
 
     }, [])
-
-
-
 
 
     useEffect(() => {
@@ -377,6 +370,45 @@ function MantenimientoProducto() {
 
                                         </tr>
 
+                                        <tr
+                                            className='
+                                                ml-4 
+                                                mt-1
+                                            '
+                                        >
+                                            <td>
+                                                <span>
+                                                    <i class="fi fi-rr-user"></i>
+                                                </span>
+                                                Tipo venta
+                                            </td>
+
+                                            <td
+                                                className='
+                                                    flex
+                                                    font-mono
+                                                    font-black
+                                                    text-xs
+                                                '
+                                            >
+                                                <div>
+                                                    <input type={'checkbox'} />
+                                                    <span className='ml-1'>Unidad</span>
+                                                </div>
+                                                <div>
+                                                    <input type={'checkbox'} />
+                                                    <span className='ml-1'>Tableta</span>
+                                                    
+                                                </div>
+                                                <div>
+                                                    <input type={'checkbox'} />
+                                                    <span className='ml-1' >Caja</span>
+                                                    
+                                                </div>
+                                            </td>
+
+
+                                        </tr>
                                         <tr>
                                             <td className='font-sans'>
 
@@ -465,6 +497,7 @@ function MantenimientoProducto() {
                                         >
                                             <input
                                                 className='
+                                                mt-2
                                                     input-form
                                                     form-control 
                                                     px-2
@@ -484,6 +517,7 @@ function MantenimientoProducto() {
                                             />
                                             <input
                                                 className='
+                                                mt-2
                                                 input-form
                                                 form-control 
                                                 px-2
@@ -527,6 +561,7 @@ function MantenimientoProducto() {
                                                     form-control-sm
                                                     shadow-sm p-0  
                                                     rounded
+                                                    mt-2
                                                 '
                                                 placeholder='Precio de venta por caja'
                                                 onChange={(e) => {
@@ -548,6 +583,7 @@ function MantenimientoProducto() {
                                                 form-control-sm
                                                 shadow-sm p-0  
                                                 rounded
+                                                mt-2
                                             '
                                                 placeholder='Precio de venta por tableta'
                                                 onChange={(e) => {
@@ -621,48 +657,48 @@ function MantenimientoProducto() {
                                     </table>
 
 
-                                    <div
-                                        className='
-                                                sm:ml-4
-                                                sm:mt-1
-                                                sm:w-96
-                                                flex 
-                                                grid
-                                            '
-                                    >
-                                        <label class="block text-sm font-medium text-gray-700">Foto producto</label>
-                                        <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-2 pb-2">
-                                            <div class="space-y-1 text-center">
-                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                                <div class="flex text-sm text-gray-600">
-                                                    <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
-                                                        <span>Sube un archivo </span>
-                                                        <input
-                                                            id="file-upload"
-                                                            name="file-upload"
-                                                            type="file"
-                                                            class="sr-only"
-                                                            onChange={(e) => {
-                                                                setProducto(
-                                                                    {
-                                                                        ...producto,
-                                                                        imagen: e.target.files[0],
-                                                                    }
-                                                                )
-                                                            }}
-                                                        />
-                                                    </label>
-                                                    <p class="pl-1">📷</p>
-                                                </div>
-                                                <p class="text-xs text-gray-500">PNG, JPG </p>
+                                </div>
+
+
+                                <div
+                                    className='
+                                        sm:ml-4
+                                        sm:mt-1
+                                        col-span-6
+                                        grid
+                                    '
+                                >
+                                    <label class="block text-sm font-medium text-gray-700">Foto producto</label>
+                                    <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-2 pb-2">
+                                        <div class="space-y-1 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <div class="flex text-sm text-gray-600">
+                                                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
+                                                    <span>Sube un archivo </span>
+                                                    <input
+                                                        id="file-upload"
+                                                        name="file-upload"
+                                                        type="file"
+                                                        class="sr-only"
+                                                        onChange={(e) => {
+                                                            setProducto(
+                                                                {
+                                                                    ...producto,
+                                                                    imagen: e.target.files[0],
+                                                                }
+                                                            )
+                                                        }}
+                                                    />
+                                                </label>
+                                                <p class="pl-1">📷</p>
                                             </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG </p>
                                         </div>
                                     </div>
-
-
                                 </div>
+
 
 
 
@@ -990,7 +1026,7 @@ function MantenimientoProducto() {
                                                     px-2
                                                     form-control-sm
                                                     shadow-sm p-0 
-                                                    mt-1 
+                                                    mt-2 
                                                     rounded
                                                 '
                                                 placeholder='Precio de compra por caja'
@@ -1008,7 +1044,7 @@ function MantenimientoProducto() {
                                                 className='
                                                 input-form
                                                 form-control 
-                                                mt-1
+                                                mt-2
                                                 px-2
                                                 form-control-sm
                                                 shadow-sm p-0  
@@ -1048,6 +1084,7 @@ function MantenimientoProducto() {
                                                 className='
                                                     input-form
                                                     form-control 
+                                                    mt-2
                                                     px-2
                                                     mt-1
                                                     form-control-sm
@@ -1068,7 +1105,8 @@ function MantenimientoProducto() {
                                                 value={producto?.precio_venta_tableta}
                                                 className='
                                                     input-form
-                                                    form-control 
+                                                    form-control
+                                                    mt-2 
                                                     px-2
                                                     mt-1
                                                     form-control-sm
@@ -1145,43 +1183,44 @@ function MantenimientoProducto() {
 
                                     </table>
 
-                                    <div
-                                        className='
-                                                sm:ml-4
-                                                sm:mt-1
-                                                sm:w-96
-                                                flex 
-                                                grid
-                                            '
-                                    >
-                                        <label class="block text-sm font-medium text-gray-700">Foto producto</label>
-                                        <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-2 pb-2">
-                                            <div class="space-y-1 text-center">
-                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                                <div class="flex text-sm text-gray-600">
-                                                    <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
-                                                        <span>Sube un archivo </span>
-                                                        <input
-                                                            id="file-upload"
-                                                            name="file-upload"
-                                                            type="file"
-                                                            class="sr-only"
-                                                            onChange={(e) => {
-                                                                console.log(e.target.files[0])
-                                                            }}
-                                                        />
-                                                    </label>
-                                                    <p class="pl-1">📷</p>
-                                                </div>
-                                                <p class="text-xs text-gray-500">PNG, JPG </p>
-                                            </div>
-                                        </div>
-                                    </div>
 
 
                                 </div>
+
+                                <div
+                                    className='
+                                        sm:ml-4
+                                        sm:mt-1
+                                        col-span-6
+                                        grid
+                                    '
+                                >
+                                    <label class="block text-sm font-medium text-gray-700">Foto producto</label>
+                                    <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-2 pb-2">
+                                        <div class="space-y-1 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <div class="flex text-sm text-gray-600">
+                                                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
+                                                    <span>Sube un archivo </span>
+                                                    <input
+                                                        id="file-upload"
+                                                        name="file-upload"
+                                                        type="file"
+                                                        class="sr-only"
+                                                        onChange={(e) => {
+                                                            console.log(e.target.files[0])
+                                                        }}
+                                                    />
+                                                </label>
+                                                <p class="pl-1">📷</p>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG </p>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
 

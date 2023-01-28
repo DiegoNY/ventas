@@ -10,6 +10,7 @@ function Main() {
     const [mostrarSubMenuCaja, setmostrarSubMenuCaja] = React.useState(false);
     const [mostrarVentas, setMostrarVentas] = React.useState(false);
     const [mostrarCompras, setMostrarCompras] = React.useState(false);
+    const [blur, setBlur] = React.useState(0);
 
     const auth = useAuth();
 
@@ -82,6 +83,8 @@ function Main() {
                                 link='home'
                                 name="Inicio"
                                 icono="fi fi-rs-shop"
+                                blur={blur == 18 && 'backdrop-blur-sm bg-white/10'}
+                                onClickBlur={() => setBlur(18)}
                             />
 
                             <ItemMenu
@@ -95,16 +98,22 @@ function Main() {
                                             link='caja'
                                             name="Apertura"
                                             icono="ICONO"
+                                            blur={blur == 19 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(19)}
                                         />
                                         <ItemMenu
                                             link='caja-cierre'
                                             name="Cierre"
                                             icono="ICONO"
+                                            blur={blur == 17 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(17)}
                                         />
                                         <ItemMenu
                                             link='caja-reporte'
                                             name="Reporte"
                                             icono="ICONO"
+                                            blur={blur == 16 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(16)}
                                         />
                                     </SubMenuItem>
 
@@ -124,40 +133,54 @@ function Main() {
                                             link={'mantenimiento-tipo-documento'}
                                             name="Tipo de documento"
                                             icono="icono"
+                                            blur={blur == 15 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(15)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-cliente'}
                                             name="Cliente"
+                                            blur={blur == 14 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(14)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-producto'}
                                             name="Producto"
+                                            blur={blur == 13 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(13)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-usuarios'}
                                             name="Usuario"
                                             icono="icono"
+                                            blur={blur == 12 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(12)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-laboratorio'}
                                             name="Laboratorio"
                                             icono="icono"
+                                            blur={blur == 11 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(11)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-moneda'}
                                             name="Moneda"
                                             icono="icono"
+                                            blur={blur == 10 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(10)}
                                         />
 
                                         <ItemMenu
                                             link={'mantenimiento-proveedor'}
                                             name="Proveedor"
                                             icono="icono"
+                                            blur={blur == 9 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(9)}
                                         />
 
                                     </SubMenuItem>
@@ -176,24 +199,35 @@ function Main() {
                                         <ItemMenu
                                             link='venta-punto_venta'
                                             name='Punto de venta'
-
+                                            blur={blur == 1 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(1)}
                                         />
                                         <ItemMenu
                                             link='venta-lista_venta'
                                             name='Lista de ventas'
+                                            blur={blur == 2 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(2)}
 
                                         />
                                         <ItemMenu
                                             link='venta-productos_mas_vendidos'
                                             name='Productos mas vendidos'
+                                            blur={blur == 3 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(3)}
+
                                         />
                                         <ItemMenu
                                             link='venta-nota_salida'
                                             name='Nota de salida'
+                                            blur={blur == 4 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(4)}
+
                                         />
                                         <ItemMenu
                                             link='venta-listado_salida'
                                             name='Lista salida'
+                                            blur={blur == 5 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(5)}
                                         />
                                     </SubMenuItem>
                                 }
@@ -204,6 +238,7 @@ function Main() {
                                 name='Compras'
                                 icono='fi fi-rr-shopping-cart-add'
                                 onClick={() => setMostrarCompras(!mostrarCompras)}
+
                             >
 
                                 {!!mostrarCompras &&
@@ -212,11 +247,15 @@ function Main() {
                                         <ItemMenu
                                             name='Registrar compras'
                                             link='compras-registro_compras'
+                                            blur={blur == 7 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(7)}
                                         />
 
                                         <ItemMenu
                                             name='Lista compra'
                                             link='compras-lista_compras'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
                                         />
                                     </SubMenuItem>
                                 }

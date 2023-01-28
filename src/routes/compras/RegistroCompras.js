@@ -133,21 +133,21 @@ function RegistroCompras() {
                     // console.log(stock_comprado);
                     producto.stock_comprado = stock_comprado;
 
-                    console.log(producto);
+                    // console.log(producto);
 
                 }
 
                 if (unidadesCompra.TABLETA == tipoUnidad.toUpperCase()) {
                     const stock_comprado = stock * producto.stock_tableta;
                     producto.stock_comprado = stock_comprado;
-                    console.log(producto);
+                    // console.log(producto);
                 }
 
                 if (unidadesCompra.UNIDAD == tipoUnidad.toUpperCase()) {
 
                     const stock_comprado = stock;
                     producto.stock_comprado = stock_comprado;
-                    console.log(producto);
+                    // console.log(producto);
 
                 }
 
@@ -162,7 +162,7 @@ function RegistroCompras() {
                     )
 
                     producto.total = total;
-                    console.log(producto);
+                    // console.log(producto);
 
                 }
 
@@ -398,7 +398,6 @@ function RegistroCompras() {
                                                     className=' uppercase'
                                                     rows={'1'}
                                                     cols={'5'}
-                                                    defaultValue={producto?.stock}
                                                     onChange={(e) => {
                                                         modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'stock')
                                                     }}
@@ -626,7 +625,7 @@ function RegistroCompras() {
                             <option>SELECCIONE</option>
                             {proveedores.map(proveedor => {
 
-                                return (<option value={`${proveedor.nombre} - ${proveedor.abreviatura}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
+                                return (<option value={`${proveedor.abreviatura}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
 
                             })}
                         </select>

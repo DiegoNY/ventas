@@ -2,3 +2,12 @@
     display: block;
 }
 
+.historial-venta-container {
+    margin-top: 310px;
+    width: 320px;
+}
+
+.scroll-historial {
+    height: 27rem;
+    overflow: scroll;
+}

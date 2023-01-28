@@ -7,7 +7,7 @@ function Modal(props) {
         <>
 
             <div className="modal fade" id={props.id} data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg">
+                <div className={props.className || `modal-dialog modal-lg`}>
                     <div className="modal-content ">
                         <div className="modal-header navbar-dark ">
                             <h1 className="modal-title fs-5 mb-2" id="staticBackdropLabel">{props.title}</h1>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../routes/useLocalStorage';
 
@@ -28,7 +28,7 @@ function AuthProvider({ children }) {
         console.log("validando");
 
         setUser({ nombre: username, cargo: "cargo", dni: 75447008 })
-        
+
         navigate('/caja');
 
     }
