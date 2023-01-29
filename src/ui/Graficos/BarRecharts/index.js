@@ -58,7 +58,6 @@ function RechartsBar() {
                     bottom: 5,
                 }}
             >
-                <CartesianGrid strokeDasharray="4 1 2" />
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />
                 <Tooltip />

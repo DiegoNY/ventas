@@ -7,6 +7,12 @@
 }
 
 .scroll-content {
-    height:27rem ;
+    height: 12rem;
     overflow: scroll;
+}
+
+.container-card {
+    width: 20vh;
+    height: 20vh;
+
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CardInformacion({ icono, numero, informacion }) {
+function CardInformacion({ icono, numero, informacion, children }) {
 
     return (
         <>
@@ -13,18 +13,10 @@ function CardInformacion({ icono, numero, informacion }) {
                     <h1 className='font-semibold text-sm ml-4 '>{numero || '00'}</h1>
                     <p className='text-xs ml-4 mb-2 w-30'>{informacion || 'Informacion adicional'}</p>
                 </div>
-
                 <div
-                    className='
-
-                            bg-green-100
-                            flex
-                            mx-auto
-                            my-auto
-                             
-                          '
+                    className='my-auto mx-auto w-1/2'
                 >
-                    centro de
+                    {children}
                 </div>
             </div>
         </>
