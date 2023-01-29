@@ -90,7 +90,7 @@ function MantenimientoProducto() {
         let ultimoCodigoBarra = codigosBarras[codigosBarras.length - 1];
         console.log(ultimoCodigoBarra);
 
-        const codigo = GeneradorCodigoBarras(ultimoCodigoBarra.numero);
+        const codigo = GeneradorCodigoBarras(ultimoCodigoBarra?.numero);
 
         setCodigoBarra(codigo);
         setProducto({

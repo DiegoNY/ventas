@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
-import BarChart from '../../ui/Graficos';
-import { UserDat } from '../../ui/Graficos/data';
-import imgventas from './img/imagen-venta.png';
-import imgproductos from './img/imagen-productos.png';
-import imgclientes from './img/imagen-clientes.png';
-import imgcompras from './img/imagen-compras.png';
+import LineChart from '../../ui/Graficos/Lineal';
 import './index.css'
-import { Tabventa } from './ventas';
-import { Tabcompra } from './compras';
-import { Tabproducto } from './productos';
 import { getData } from '../useFetch';
 import { urlAPI } from '../../config';
+import icono_clientes from './img/icono-clientes.svg'
+import { CardInformacion } from './cardInformacion';
+import { RechartsLineal } from '../../ui/Graficos/LinealRecharts';
+import { Cardventa } from './ventas/cards_venta';
+import { RechartsBar } from '../../ui/Graficos/BarRecharts';
 
 
 function PanelControl() {
@@ -28,14 +25,47 @@ function PanelControl() {
 
     if (!auth.user) navigate('/');
 
+    //Grafico info 
     const [userData, setUserData] = useState({
-        labels: UserDat.map((data) => data.year),
+        labels: ["Mat 10", "May 11", "May 12", "May 13", "May 14", "May 14", "May 14", "May 14"],
         datasets: [{
-            label: "Ventas diarias",
-            data: UserDat.map((data) => data.useGain),
+            data: [8, 7, 8, 2, 2.3, 2, 9, 6],
+            backgroundColor: 'transparent',
+            borderColor: '#f26c6d',
+            pointBorderColor: 'transparent',
+            pointBorderWidth: 4,
+            tension: 0.5
 
         }]
     })
+
+    const options = {
+        plugins: {
+            legend: false
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                }
+            },
+            y: {
+                min: 0,
+                max: 10,
+                ticks: {
+                    stepSize: 2,
+                    callback: (value) => value + 'k'
+                },
+                grid: {
+                    display: false,
+
+                }
+
+            },
+
+        }
+
+    };
 
     const [venta, setVenta] = useState(0);
     const [producto, setProducto] = useState(0);
@@ -134,6 +164,162 @@ function PanelControl() {
 
             <div
                 className='
+                    grid
+                    grid-cols-12
+                    h-screen
+                    mx-auto
+                    w-full
+                '
+            >
+                <div
+                    className='
+                        col-span-12
+                        //bg-red-200
+                        row-span-1
+                        flex
+                        justify-between
+                        mx-2
+                        my-3
+                    '
+                >
+                    <div
+                        className='
+                            font-black
+                            text-lg
+                            h-full
+                            flex
+                            justify-center
+                            flex-col
+                        '
+                    >
+                        <h1 className='ml-2'>PANEL CONTROL</h1>
+                        <p className='font-normal text-xs ml-2'>Bienvenido a tu panel control</p>
+                    </div>
+                    <p>Enero 12th 2023</p>
+                </div>
+
+                <div
+                    className='
+                        col-span-12
+                        row-span-2
+                        //bg-green-100
+                        grid
+                        grid-cols-4
+                        mb-2
+                    '
+                >
+
+                    <CardInformacion
+                        icono={icono_clientes}
+                        numero={clientes}
+                        informacion={'Clientes registrados'}
+                    />
+                    <CardInformacion
+                        icono={icono_clientes}
+                        numero={venta}
+                        informacion='Ventas realizadas '
+                    />
+                    <CardInformacion
+                        icono={icono_clientes}
+                        numero={producto}
+                        informacion='Productos registrados'
+                    />
+                    <CardInformacion
+                        icono={icono_clientes}
+                        numero={compras}
+                        informacion='Compras realizadas'
+                    />
+
+
+                </div>
+                <div
+                    className='
+                        col-span-12
+                        row-span-6
+                        //bg-green-600
+                        grid
+                        grid-cols-3
+
+                    '
+                >
+                    <div
+                        className='
+                            bg-slate-700
+                            col-span-2
+                            row-span-4
+                            flex
+                            rounded-sm
+                            mx-2
+                            mb-2
+
+                        '
+                    >
+                        <div
+                            className='mx-auto  w-full'
+                            style={{ height: '150px' }}
+                        >
+                            {/* <LineChart chartData={userData} options={options} /> */}
+                            <h1 className=' text-white mt-2 ml-2 mb-4'>Productos mas vendidos</h1>
+                            <RechartsLineal />
+
+                        </div>
+
+                    </div>
+                    <div
+                        className='
+                            bg-slate-700
+                            rounded-sm
+                            row-span-4
+                            mb-2
+                            mr-2
+
+                        '
+                    >
+                        <h1 className='text-white  ml-3 mt-2 mb-1'>Ventas Recientes</h1>
+
+                        <Cardventa />
+                        <Cardventa />
+                        <Cardventa />
+                        <Cardventa />
+                    </div>
+
+                    <div
+                        className='
+                            bg-green-100
+                        '
+                    >
+                        <div
+                            className='
+                                mx-auto
+                                w-full
+                            '
+                        >
+                            <RechartsBar />
+                        </div>
+
+
+                    </div>
+                    <div
+                        className='
+                            bg-green-200
+                        '
+                    >
+
+                    </div>
+                    <div
+                        className='
+                            bg-green-300
+                        '
+                    >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* <div
+                className='
                 grid
                 grid-cols-12
                 auto-rows-auto
@@ -151,6 +337,7 @@ function PanelControl() {
                         grid
                         grid-cols-12
                         grid-rows-6
+                        
                     '
                 >
 
@@ -759,7 +946,7 @@ function PanelControl() {
 
                 </div>
 
-            </div>
+            </div> */}
 
 
         </>

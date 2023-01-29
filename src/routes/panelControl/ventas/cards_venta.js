@@ -6,92 +6,34 @@ function Cardventa({ numero, fecha, codigo, total, onClick }) {
         <>
             <div
                 className='
-                    col-span-4
-                    row-span-3
-                    //bg-gray-200
-                    ml-24
-                    sm:mx-3
-                    my-2
-                    flex
-                    flex-col
+                    mt-1
+                    mx-2
+                    bg-slate-600
+                    mb-auto
                     rounded-sm
-    
                 '
             >
                 <div
                     className='
-                        mt-2
-                        hover:bg-blue-600
-                        //bg-white
-                        bg-blue-500
+                        flex
+                        justify-between 
                         text-white
-                        mx-1
-                        w-48
-                        rounded-lg
-                        shadow-sm
-                        grid
-                        grid-rows-6
-                        card-panel-control
+                        text-xs
                     '
                 >
-
-                    <span
-                        className='
-                            mx-2
-                            mt-1
-                        '
-                    >
-                        Venta N°<span className='ml-1 font-normal '>{numero || '0'}</span>
+                    <span className='mt-2 ml-2'>
+                        N° 001
                     </span>
-
-                    <span
-                        className='
-                            mt-1
-                            mx-2
-                            flex
-                            justify-between
-                        '
-                    >
-                        Fecha : <span className='font-normal text-xs'>{fecha || '12/12/1212'}</span>
+                    <span className='mt-2'>
+                        B001-00001
                     </span>
-                    <span
-                        className='
-                            mt-1
-                            mx-2
-                            flex
-                            justify-between
-                        '
-                    >
-                        Codigo : <span className='font-normal text-xs'>{codigo || 'xxx-xxxxx'}</span>
+                    <span className='mt-2'>
+                        S/ 120
                     </span>
-                    <span
-                        className='
-                            mt-1
-                            mx-2
-                            flex
-                            justify-between
-                        '
-                    >
-                        Total : <span className='font-normal text-xs'>{total || '0'}</span>
-                    </span>
-
-                    <span
-                        className='
-                            mx-2
-                            flex
-                            justify-end
-                            mt-1
-                            cursor-pointer
-                            hover:text-xs
-                        '
-                        data-bs-toggle="modal"
-                        data-bs-target="#productos"
-                        onClick={onClick}
-                    >
-                        ver productos 🛒
-
-                    </span>
-
+                    <div className='mt-2 mb-1 mr-1  text-white flex flex-col text-xs '>
+                        <span className='cursor-pointer hover:' >ver productos 🛒</span>
+                        <span className='mt-1 ml-3 '>12-12-2023</span>
+                    </div>
                 </div>
             </div>
         </>
