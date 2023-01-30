@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
-import { Modal } from '../../../ui/modal';
 import { getData } from '../../useFetch';
-import { CardProductoVenta } from './cardProductoVentas';
 import { Cardventa } from './cards_venta';
 
 
@@ -20,80 +18,60 @@ function Tabventa() {
         obtenerInformacionRecienteVentas();
     }, [])
 
+    console.log(informacionVentaProductos);
 
     return (
         <>
             <div
                 className='
-                    scroll-content
+                    bg-slate-700
+                    rounded-sm
+                    row-span-4
+                    mb-2
+                    mr-2
                 '
             >
+                <h1 className='text-white  ml-3 mt-2 mb-1 font-semibold'>Ventas recientes</h1>
                 <div
-                    className='
-                    h-full
-                    grid
-                    sm:grid-cols-12
-                    auto-rows-auto
-                '
+                    className='scroll-content'
                 >
                     {ventas.map((venta, index) => {
-
+                        let numero = Number(venta?.correlativo);
                         return (
                             <Cardventa
-                                numero={index + 1}
-                                fecha={venta.fecha_registro}
+                                numero={numero}
                                 codigo={venta.numero_venta}
                                 total={venta.total}
+                                fecha={venta.fecha_registro}
                                 onClick={() => {
-                                    setInformacionVentaProducto({ productos: venta.productos, correlativo: venta.correlativo });
+                                    setInformacionVentaProducto(venta.productos)
                                 }}
                             />
                         )
-                    })
+                    })}
 
-                    }
-
+                    <div
+                        className='
+                            flex
+                            justify-end
+                        '
+                    >
+                        <p
+                            className='
+                                my-2
+                                mr-2
+                                text-white
+                                font-bold
+                                cursor-pointer
+                            '
+                        >
+                            ver todo
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <Modal
-                id={'productos'}
-                title={'Productos 🛍'}
-                className={'modal-dialog'}
-            >
 
-                <div
-                    className='flex scroll-content'
-                >
-                    <div
-                        className='
-                            mx-2
-                            w-full
-                            my-2
-                            grid
-                            grid-cols-2
-                            auto-rows-auto
-                        '
-                    >
-                        {informacionVentaProductos?.productos?.map(producto => {
-                            return (
-                                <CardProductoVenta
-                                    correlativo={informacionVentaProductos.correlativo}
-                                    codigo={producto.codigo_barras}
-                                    cantidad={producto.cantidad_comprada}
-                                    descripcion={producto.descripcion}
-                                    precio={producto.precio}
-                                    total={producto.total}
-                                />
-                            )
-                        })
-
-                        }
-
-                    </div>
-                </div>
-
-            </Modal>
 
         </>
     );

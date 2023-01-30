@@ -23,7 +23,7 @@ function Titulo(props) {
                            font-black 
                            text-slate-900 
                            tracking-tight 
-                           dark:text-slate-200
+                           
                         '
                 >
 

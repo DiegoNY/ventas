@@ -1,12 +1,16 @@
 import React from 'react';
-import { Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { Cell, Label, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
-const data01 = [
-    { name: 'Cantidad productos', value: 400 }
 
-];
 
-function RechartsPie({ fill, data }) {
+
+function RechartsPie({ fill, data, innerRadius, outerRadius, tooltip, colors, label }) {
+    const COlORS = colors;
+    const data01 = [
+        { name: 'Producto C', value: 500 },
+        { name: 'Producto A', value: 500 }
+
+    ];
 
     return (
 
@@ -15,12 +19,22 @@ function RechartsPie({ fill, data }) {
                 <Pie
                     dataKey="value"
                     data={data || data01}
-                    innerRadius={19}
-                    outerRadius={25}
+                    innerRadius={innerRadius || 19}
+                    outerRadius={outerRadius || 25}
                     fill={fill || "#8884d8"}
+                    label={label}
 
                 >
+                    {!!colors && data01.map((entry, index) => {
+                        return <Cell key={`cell-${index}`} fill={COlORS[index % COlORS.length]} />
+                    })}
+                    <Legend align='right' wrapperStyle={{ position: 'absolute', top: 10, right: 0, }} layout='vertical' />
+
                 </Pie>
+
+                {!!tooltip && <Tooltip />}
+
+
             </PieChart>
         </ResponsiveContainer>
 

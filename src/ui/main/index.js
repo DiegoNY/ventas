@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../../auth/auth';
 import { ItemMenu } from './ItemMenu';
 import { SubMenuItem } from './SubMenuItem';
+import icono_menu from './img/icono-menu.svg'
 
 
 function Main() {
@@ -65,7 +66,6 @@ function Main() {
                                     >
 
                                         <button type="button" className="btn btn-outline-light-100 text-white border-transparent btn-icon rounded-pill btn-sm sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
-                                            <i className="icon-transmission"></i>
                                         </button>
 
                                         <button type="button" className="btn btn-outline-light-100 text-white border-transparent btn-icon rounded-pill btn-sm sidebar-mobile-main-toggle d-lg-none">

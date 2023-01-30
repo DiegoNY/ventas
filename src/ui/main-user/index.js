@@ -35,7 +35,7 @@ function MainUser() {
     useEffect(() => {
 
         const obtenerVentasRecientes = (informacion) => {
-            console.log(informacion);
+            ventasRecientes.push(informacion);
         }
 
         socket.on('ventas_recientes', obtenerVentasRecientes);
@@ -138,8 +138,9 @@ function MainUser() {
 
 
                 </div >
+
                 {!!mostrarInformacion &&
-                    <div
+                    <div div
                         className='
                             bg-white
                             border
@@ -147,7 +148,6 @@ function MainUser() {
                             z-10
                             absolute
                             historial-venta-container
-                            h-60
                             rounded-xl
                             mr-14
                             grid
@@ -155,12 +155,23 @@ function MainUser() {
                         '
                         onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
                     >
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
+                        {ventasRecientes?.map(venta => {
+                            console.log(venta);
+                            return (
+
+                                <CardVentasRecientes
+                                    usuario={venta.usuario}
+                                    hora={venta.hora}
+                                    total={venta.venta.total}
+                                />
+
+                            )
+                        })}
+                        <CardVentasRecientes/>
+                        <CardVentasRecientes/>
+                        <CardVentasRecientes/>
+                        <CardVentasRecientes/>
+
                     </div>
                 }
 

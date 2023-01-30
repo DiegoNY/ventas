@@ -33,62 +33,7 @@ function NotaSalida() {
                         />
                     </div>
 
-                    <h1 className='mt-2 ml-4 text-lg font-black text-slate-700 mx-5'>Datos Necesarios</h1>
-
-                    <div
-                        className='
-                            mt-2
-                            mx-auto
-                            h-full
-                            flex
-                            flex-col
-                            w-full
-                        '
-                    >
-                        <div
-                            className='
-                                flex
-                                justify-end
-                                mx-4
-                            '
-                        >
-                            <input type={'date'} className='mt-3 ' />
-
-                        </div>
-                        <div
-                            className='
-                                mt-3
-                                flex
-                                flex-col
-                                mx-4
-                            '
-                        >
-                            <h1 className='text-lg font-extrabold' >Solicitante</h1>
-                            <input className='border rounded-sm h-14 mx-3 px-2' />
-                        </div>
-                        <div
-                            className='
-                                mt-3
-                                flex
-                                flex-col
-                                mx-4
-                            '
-                        >
-                            <h1 className=' text-lg font-extrabold' >Motivo salida</h1>
-                            <textarea
-                                className='
-                                    border
-                                    rounded-sm
-                                    h-40
-                                    mx-3
-                                    p-2
-                                '
-                            >
-
-                            </textarea>
-                        </div>
-
-                    </div>
+                    
                 </div>
                 <div
                     className='
@@ -108,8 +53,8 @@ function NotaSalida() {
                     >
                         <input
                             className='
-                                    border-2
-                                    rounded-xl
+                                    border
+                                    rounded-sm
                                     my-4
                                     mr-9
                                     w-1/2

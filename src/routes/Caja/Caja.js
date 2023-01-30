@@ -253,7 +253,7 @@ function Caja() {
                                             
                                             mx-2
                                             mt-2
-                                            bg-green-800
+                                            bg-indigo-500
                                             h-10
                                             rounded-xl
                                             w-25

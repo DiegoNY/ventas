@@ -1,7 +1,9 @@
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import CustomizedXAxisTick from '../LinealRecharts/CustomizedXAxisTick';
+import CustomizedYAxisTick from '../LinealRecharts/CustomizedYAxisTick';
 
-const data = [
+const dataPrueba = [
     {
         name: 'Producto',
         uv: 4000,
@@ -26,31 +28,19 @@ const data = [
         pv: 3908,
         amt: 2000,
     },
-    {
-        name: 'Producto',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Producto',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
-
 
 ];
 
 
-function RechartsBar() {
+function RechartsBar({ data, fill, fill_2, dataKey, height, width }) {
 
     return (
-        <ResponsiveContainer width={"100%"} aspect={2}>
+        <ResponsiveContainer width={"100%"}  aspect={2}>
             <BarChart
-                width={500}
+                width={width || 500}
                 height={300}
-                data={data}
+                aspect={2}
+                data={data || dataPrueba}
                 margin={{
                     top: 5,
                     right: 30,
@@ -58,12 +48,21 @@ function RechartsBar() {
                     bottom: 5,
                 }}
             >
-                <XAxis dataKey="name" stroke="#8884d8" />
-                <YAxis />
+                <XAxis dataKey="name" tick={<CustomizedXAxisTick className="text-xs text-center " />} tickLine={true} />
+                <YAxis tick={<CustomizedYAxisTick className="text-xs text-center " />} tickLine={false} />
+
                 <Tooltip />
-                <Legend align='right' wrapperStyle={{ position: 'absolute', top: 10, right: 0, }} layout='vertical' />
-                <Bar dataKey="uv" fill="#8884d8" barSize={30} />
-                <Bar dataKey="pv" fill="#efcfcf" barSize={30} />
+                {dataKey?.map(dataKey => {
+                    return <Bar dataKey={dataKey.name} fill={dataKey.fill} barSize={dataKey.barSize} />
+                })}
+
+                {!dataKey &&
+                    <Bar dataKey="uv" fill={fill || "#fca5a5"} barSize={30} />
+
+                }
+                {!dataKey &&
+                    <Bar dataKey="pv" fill={fill_2 || "#fdba74"} barSize={30} />
+                }
             </BarChart>
         </ResponsiveContainer>
     )

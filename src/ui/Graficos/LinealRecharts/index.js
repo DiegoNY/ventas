@@ -46,15 +46,15 @@ const data = [
 
 ];
 
-function RechartsLineal() {
+function RechartsLineal({ datos, dataKey, aspect, height }) {
 
     return (
         <>
-            <ResponsiveContainer width="100%" height={'100%'}>
+            <ResponsiveContainer width="100%" height={height || '100%'} aspect={aspect}>
                 <LineChart
                     width={500}
                     height={300}
-                    data={data}
+                    data={datos || data}
                     margin={{
                         top: 5,
                         right: 30,
@@ -65,9 +65,11 @@ function RechartsLineal() {
                     <XAxis dataKey="name" tick={<CustomizedXAxisTick className="text-xs text-center " />} tickLine={false} />
                     <YAxis tick={<CustomizedYAxisTick className="text-xs text-center " />} tickLine={false} />
                     <Tooltip contentStyle={{ borderWidth: 1 }} />
-                    <Legend align='right' wrapperStyle={{ position: 'absolute', top: 10, right: 0, }} layout='vertical' />
-                    <Line type="monotone" dataKey="pv" stroke="#8884d8" dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />
+                    {dataKey?.map(dataKey => {
+                        return <Line type="monotone" dataKey={dataKey.name} stroke={dataKey.stroke} dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />
+                    })}
+                    {!dataKey && <Line type="monotone" dataKey="pv" stroke="#8884d8" dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />}
+
                 </LineChart>
             </ResponsiveContainer>
         </>

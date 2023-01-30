@@ -5,12 +5,18 @@ import LineChart from '../../ui/Graficos/Lineal';
 import './index.css'
 import { getData } from '../useFetch';
 import { urlAPI } from '../../config';
-import icono_clientes from './img/icono-clientes.svg'
+import icono_clientes from './img/icono-clientes.svg';
+import icono_carrito_compras from './img/icono-carrito-compras.svg';
+import icono_producto from './img/icono-productos.svg';
+import icono_ventas from './img/icono-ventas.svg';
 import { CardInformacion } from './cardInformacion';
 import { RechartsLineal } from '../../ui/Graficos/LinealRecharts';
 import { Cardventa } from './ventas/cards_venta';
 import { RechartsBar } from '../../ui/Graficos/BarRecharts';
 import { RechartsPie } from '../../ui/Graficos/PieRecharts';
+import { CardCompra } from './compras/card_compras';
+import { Tabventa } from './ventas';
+import { Tabcompra } from './compras';
 
 
 function PanelControl() {
@@ -193,10 +199,9 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='ml-2'>PANEL CONTROL</h1>
+                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight '>PANEL CONTROL</h1>
                         <p className='font-normal text-xs ml-2'>Bienvenido a tu panel control</p>
                     </div>
-                    <p>Enero 12th 2023</p>
                 </div>
 
                 <div
@@ -218,7 +223,7 @@ function PanelControl() {
                         <RechartsPie />
                     </CardInformacion>
                     <CardInformacion
-                        icono={icono_clientes}
+                        icono={icono_ventas}
                         numero={venta}
                         informacion='Ventas realizadas '
                     >
@@ -227,14 +232,14 @@ function PanelControl() {
                         />
                     </CardInformacion>
                     <CardInformacion
-                        icono={icono_clientes}
+                        icono={icono_producto}
                         numero={producto}
                         informacion='Productos registrados'
                     >
                         <RechartsPie />
                     </CardInformacion>
                     <CardInformacion
-                        icono={icono_clientes}
+                        icono={icono_carrito_compras}
                         numero={compras}
                         informacion='Compras realizadas'
                     >
@@ -268,36 +273,16 @@ function PanelControl() {
                         '
                     >
                         <div
-                            className='mx-auto  w-full'
+                            className='mx-auto  w-full  '
                             style={{ height: '150px' }}
                         >
-                            <h1 className=' text-white mt-2 ml-2 mb-4'>Productos mas vendidos</h1>
+                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Productos mas vendidos</h1>
                             <RechartsLineal />
 
                         </div>
 
                     </div>
-                    <div
-                        className='
-                            bg-slate-700
-                            rounded-sm
-                            row-span-4
-                            mb-2
-                            mr-2
-
-                        '
-                    >
-                        <h1 className='text-white  ml-3 mt-2 mb-1'>Ventas recientes</h1>
-                        <div
-                            className='scroll-content'
-                        >
-
-                            <Cardventa />
-                            <Cardventa />
-                            <Cardventa />
-                            <Cardventa />
-                        </div>
-                    </div>
+                    <Tabventa />
 
                     <div
                         className='
@@ -308,10 +293,11 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='text-white ml-2 my-2'>Stock productos</h1>
+                        <h1 className='text-white ml-2 my-2 font-semibold'>Stock productos</h1>
                         <div
                             className='
                                 w-full
+                                mt-2
                             '
                         >
                             <RechartsBar />
@@ -319,25 +305,52 @@ function PanelControl() {
 
 
                     </div>
-                    <div
-                        className='
-                            bg-slate-700
-                            mx-2
-                            rounded-sm
-                        '
-                    >
-
-                    </div>
+                    <Tabcompra/>
                     <div
                         className='
                             bg-slate-700
                             ml-1
                             mr-2
                             rounded-sm
-                           
                         '
                     >
+                        <h1 className='text-white mt-2 ml-2 mb-1 font-semibold'>Tipo de clientes</h1>
+                        <div
+                            className=''
+                        >
+                            <div
+                                className='
+                                    mb-auto
+                                    
+                                '
+                            >
+                                <RechartsPie
+                                    innerRadius={43}
+                                    outerRadius={80}
+                                    tooltip={true}
+                                    data={[{ name: 'DNI', value: 10 }, { name: 'RUC', value: 30 }, { name: 'VARIOS', value: 1 }]}
+                                    colors={['#fde68a', '#82ca9d']}
+                                    label={true}
+                                />
 
+                                <div
+                                    className='
+                                    flex
+                                    text-white
+                                    w-full
+                                    justify-center
+                                    text
+                                    font-medium 
+                                    italic  
+                                  '
+                                >
+                                    <p className='mx-2 text-green-300'>RUC</p> <p className='mx-2 text-yellow-200'>DNI</p> <p className='mx-2 text-indigo-300'>VARIOS</p>
+                                </div>
+                            </div>
+
+
+
+                        </div>
                     </div>
 
                 </div>

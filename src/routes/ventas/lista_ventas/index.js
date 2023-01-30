@@ -114,8 +114,8 @@ function ListaVenta() {
                         >
                             <input
                                 className='
-                                    border-2
-                                    rounded-xl
+                                    border
+                                    rounded-lg
                                     my-4
                                     mr-9
                                     w-1/2

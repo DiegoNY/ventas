@@ -22,17 +22,20 @@ function Cardventa({ numero, fecha, codigo, total, onClick }) {
                     '
                 >
                     <span className='mt-2 ml-2'>
-                        N° 001
+                        N° {numero || 'N° 001'}
                     </span>
                     <span className='mt-2'>
-                        B001-00001
+                        {codigo || 'B001-00001'}
                     </span>
                     <span className='mt-2'>
-                        S/ 120
+                       S/ {total || '120'}
                     </span>
                     <div className='mt-2 mb-1 mr-1  text-white flex flex-col text-xs '>
-                        <span className='cursor-pointer hover:' >ver productos 🛒</span>
-                        <span className='mt-1 ml-3 '>12-12-2023</span>
+                        <span
+                            className='cursor-pointer hover:'
+                            onClick={onClick}
+                        >ver productos 🛒</span>
+                        <span className='mt-1 ml-3 '>{fecha || '12-12-2023'}</span>
                     </div>
                 </div>
             </div>

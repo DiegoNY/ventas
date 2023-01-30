@@ -257,6 +257,9 @@ function PuntoVenta() {
             ...venta,
         });
     }
+    const ObtenerObtenerSubtotalIgv = () => {
+
+    }
     //Funciones complementarias
     /**
     * Recibe el producto seleccionado y cambia el estado de la
@@ -450,6 +453,7 @@ function PuntoVenta() {
         })
 
     }
+
 
     //Obtencion de data Necesaria
 
@@ -1092,8 +1096,7 @@ s                                                '
                                     mt-2
                                     mx-2
                                     flex
-                                   
-                                    justify-center
+                                    justify-start
                                 '
                             >
                                 <span
@@ -1152,22 +1155,23 @@ s                                                '
                             className='
                                 //bg-indigo-200
                                 col-span-12
-                                mx-4
+                                mx-2
                                 my-3
                                 flex
-                                justify-center
+                                justify-end
                             '
                         >
                             <button
                                 className='
-                                bg-orange-500
+                                bg-indigo-500
                                 rounded-xl	
-                                w-1/2
+                                w-40
+                                h-9
                                 text-white
                               '
                                 onClick={emitirVenta}
                             >
-                                Emitir venta
+                               <p className='italic' >Emitir venta</p> 
                             </button>
                         </div>
                     </div>
@@ -1222,8 +1226,11 @@ s                                                '
                                     <p className='font-medium italic '>Cantidad : <span className='text-sm font-normal not-italic'>00</span></p>
                                     <p className='font-medium italic'>Dinero recaudado: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
                                 </div>
+                                <div>
+                                    <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
+                                    <p className='ml-2 font-medium italic'>Apertura caja: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
+                                </div>
 
-                                <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
                             </div>
                             <p
                                 className='mt-3 mr-2 text-sm text-sky-300 font-bold cursor-pointer hover:text-sky-500'
@@ -1724,7 +1731,7 @@ s                                                '
 
                             <div className='flex justify-start ml-3 mt-1 text-lg'>Stock disponible :</div>
                             <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
-                            <h1 className='flex text-sm ml-20 text-sm  mt-1' >Tabletas disponibles : {error?.stock_tableta} y una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
+                            <h1 className='flex text-sm ml-20 text-sm  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
                             <h1 className='flex text-sm ml-20 text-sm  mt-1' >Stock general : {error.stock} unidades</h1>
 
 

@@ -11,6 +11,11 @@
     overflow: scroll;
 }
 
+.scroll-content-card {
+    height: 15rem;
+    overflow: scroll;
+}
+
 .container-card {
     width: 20vh;
     height: 20vh;
