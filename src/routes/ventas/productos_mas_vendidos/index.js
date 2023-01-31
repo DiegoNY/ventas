@@ -2,7 +2,7 @@ import React from 'react';
 import { RechartsBar } from '../../../ui/Graficos/BarRecharts';
 import { RechartsLineal } from '../../../ui/Graficos/LinealRecharts';
 import { Titulo } from '../../../ui/titulos-vistas';
-
+import icono_descarga from './img/icono-descarga.svg';
 
 function ProductosMasVendidos() {
 
@@ -44,7 +44,7 @@ function ProductosMasVendidos() {
                     className='
                         col-span-12
                         grid 
-                        grid-cols-2
+                        grid-cols-3
                     '
                 >
                     <div
@@ -79,7 +79,37 @@ function ProductosMasVendidos() {
                         <h1 className='ml-2 font-semibold my-2' >Mes pasado</h1>
                         <RechartsBar fill={'#8884d8'} fill_2={'#82ca9d'} />
                     </div>
+                    <div
+                        className='
+                        mx-2
+                        bg-slate-700
+                        mb-auto
+                        flex
+                        flex-col
+                        text-white
+                        rounded-sm
+
+                    '
+                    >
+                        <div
+                            className='
+                                flex
+                                justify-between
+                                ml-2
+                                mr-1
+                            '
+                        >
+                            <h1 className=' font-semibold my-2' >Hace 3 meses</h1>
+                            <button className='border my-1  text-xs w-36 flex justify-center   hover:' >
+                                <h1 className='mt-1'>Descargar reporte</h1>
+                                <img src={icono_descarga} className=' mt-1 h-4' />
+                            </button>
+
+                        </div>
+                        <RechartsBar fill={'#8884d8'} fill_2={'#82ca9d'} />
+                    </div>
                 </div>
+
                 <div
                     className='
                         col-span-12

@@ -29,8 +29,11 @@ function Tabcompra() {
                     className='scroll-content-card'
                 >
                     {compras.map((compra, index) => {
-                        let numeroCorrelativoArray = compra.numero_documento.split('-');
-                        let correlativo = Number(numeroCorrelativoArray[1]);
+                        let numeroCorrelativoArray = compra?.numero_documento?.split('-');
+                        let correlativo;
+                        if (numeroCorrelativoArray) {
+                            correlativo = Number(numeroCorrelativoArray[1]);
+                        }
 
                         return (
                             <CardCompra
