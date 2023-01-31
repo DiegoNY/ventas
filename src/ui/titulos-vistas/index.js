@@ -27,7 +27,7 @@ function Titulo(props) {
                         '
                 >
 
-                    {props.title}
+                    <span className='font-sans' >{props.title}</span>
                     /
                     <span
                         className='
@@ -35,8 +35,6 @@ function Titulo(props) {
                             font-black 
                             text-sky-400
                             leading-6
-                            text-sm
-                            font-semibold
                         '
                     > {props.navegacion}
                     </span>

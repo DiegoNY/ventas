@@ -20,11 +20,19 @@ import { generarSerieVenta } from './useSerie';
 import { Delete } from '../../useAlert';
 import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
+import { useAuth } from '../../../auth/auth';
+import { useNavigate } from 'react-router';
 
 
 
 function PuntoVenta() {
     //Estados
+
+    const auth = useAuth();
+    const navigation = useNavigate();
+    console.log(auth);
+
+    if (!auth.user) navigation('/');
 
     const [venta, setVenta] = React.useState({
 
@@ -1171,7 +1179,7 @@ s                                                '
                               '
                                 onClick={emitirVenta}
                             >
-                               <p className='italic' >Emitir venta</p> 
+                                <p className='italic' >Emitir venta</p>
                             </button>
                         </div>
                     </div>
@@ -1371,24 +1379,24 @@ s                                                '
                                                     {producto.codigo_barras}
                                                 </TableCell>
                                                 <TableCell
-                                                    className={'text-xs font-light'}
+                                                    className={'text-xs '}
                                                 >
                                                     {producto.descripcion}
                                                 </TableCell>
                                                 <TableCell
-                                                    className={'text-xs font-light'}
+                                                    className={'text-xs '}
 
                                                 >
                                                     {producto.id_laboratorio}
                                                 </TableCell>
                                                 <TableCell
-                                                    className={'text-xs font-light'}
+                                                    className={'text-xs '}
 
                                                 >
                                                     {producto.lote}
                                                 </TableCell>
                                                 <TableCell
-                                                    className={'text-xs font-light'}
+                                                    className={'text-xs '}
                                                 >
                                                     {producto.fecha_vencimiento}
                                                 </TableCell>
@@ -1731,8 +1739,8 @@ s                                                '
 
                             <div className='flex justify-start ml-3 mt-1 text-lg'>Stock disponible :</div>
                             <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
-                            <h1 className='flex text-sm ml-20 text-sm  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
-                            <h1 className='flex text-sm ml-20 text-sm  mt-1' >Stock general : {error.stock} unidades</h1>
+                            <h1 className='flex text-sm ml-20  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
+                            <h1 className='flex text-sm ml-20  mt-1' >Stock general : {error.stock} unidades</h1>
 
 
                         </div>

@@ -32,59 +32,13 @@ function PanelControl() {
 
     if (!auth.user) navigate('/');
 
-    //Grafico info 
-    const [userData, setUserData] = useState({
-        labels: ["Mat 10", "May 11", "May 12", "May 13", "May 14", "May 14", "May 14", "May 14"],
-        datasets: [{
-            data: [8, 7, 8, 2, 2.3, 2, 9, 6],
-            backgroundColor: 'transparent',
-            borderColor: '#f26c6d',
-            pointBorderColor: 'transparent',
-            pointBorderWidth: 4,
-            tension: 0.5
-
-        }]
-    })
-
-    const options = {
-        plugins: {
-            legend: false
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                }
-            },
-            y: {
-                min: 0,
-                max: 10,
-                ticks: {
-                    stepSize: 2,
-                    callback: (value) => value + 'k'
-                },
-                grid: {
-                    display: false,
-
-                }
-
-            },
-
-        }
-
-    };
-
     const [venta, setVenta] = useState(0);
     const [producto, setProducto] = useState(0);
     const [compras, setCompras] = useState(0);
     const [clientes, setClientes] = React.useState(0)
 
-    const [estadosTabs, setEstadosTabs] = React.useState(0)
-
     //funciones
-    const cambiarTab = (tab) => {
-        setEstadosTabs(tab);
-    }
+
 
     const [fecha, setFecha] = useState('Enero 18th , 2022');
 
@@ -199,8 +153,8 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight '>PANEL CONTROL</h1>
-                        <p className='font-normal text-xs ml-2'>Bienvenido a tu panel control</p>
+                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight font-sans '>PANEL CONTROL</h1>
+                        <p className='font-normal text-sm ml-2 '>Bienvenido a tu panel control</p>
                     </div>
                 </div>
 
@@ -219,6 +173,7 @@ function PanelControl() {
                         icono={icono_clientes}
                         numero={clientes}
                         informacion={'Clientes registrados'}
+                        navigation={'/mantenimiento-cliente'}
                     >
                         <RechartsPie />
                     </CardInformacion>
@@ -226,6 +181,7 @@ function PanelControl() {
                         icono={icono_ventas}
                         numero={venta}
                         informacion='Ventas realizadas '
+                        navigation={'/venta-punto_venta'}
                     >
                         <RechartsPie
                             fill={'#82ca9d'}
@@ -235,6 +191,8 @@ function PanelControl() {
                         icono={icono_producto}
                         numero={producto}
                         informacion='Productos registrados'
+                        navigation={'/mantenimiento-producto'}
+
                     >
                         <RechartsPie />
                     </CardInformacion>
@@ -242,6 +200,8 @@ function PanelControl() {
                         icono={icono_carrito_compras}
                         numero={compras}
                         informacion='Compras realizadas'
+                        navigation={'/compras-registro_compras'}
+
                     >
                         <RechartsPie
                             fill={'#82ca9d'}
@@ -305,7 +265,7 @@ function PanelControl() {
 
 
                     </div>
-                    <Tabcompra/>
+                    <Tabcompra />
                     <div
                         className='
                             bg-slate-700

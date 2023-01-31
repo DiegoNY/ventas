@@ -1,10 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/auth';
 import { RechartsBar } from '../../../ui/Graficos/BarRecharts';
 import { RechartsLineal } from '../../../ui/Graficos/LinealRecharts';
 import { Titulo } from '../../../ui/titulos-vistas';
 import icono_descarga from './img/icono-descarga.svg';
 
 function ProductosMasVendidos() {
+
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
+
 
     const dataPrueba = [
         {

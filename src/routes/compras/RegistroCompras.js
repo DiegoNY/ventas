@@ -10,8 +10,15 @@ import { TablaTalwindCss } from '../../ui/Tabla/useTabla';
 import { TableCell } from '../../ui/Tabla/tableCell';
 import { TablaRow } from '../../ui/Tabla/tableRow';
 import { SaveData } from '../useCRUD';
+import { useAuth } from '../../auth/auth';
+import { useNavigate } from 'react-router';
 
 function RegistroCompras() {
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
+
     //estados
     const [search, setSearch] = React.useState(false);
     const [productos, setProductos] = React.useState([{}]);
@@ -550,7 +557,7 @@ function RegistroCompras() {
                             '
                             onChange={(e) => {
 
-                                let tipodocumento = '';
+                                let tipodocumento = e.target.value;
                                 if (e.target.value == 'B001-') tipodocumento = 'BOLETA';
                                 if (e.target.value == 'F001-') tipodocumento = 'FACTURA';
 
@@ -624,8 +631,7 @@ function RegistroCompras() {
 
                             <option>SELECCIONE</option>
                             {proveedores.map(proveedor => {
-
-                                return (<option value={`${proveedor.abreviatura}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
+                                return (<option value={`${proveedor.abreviatura}-${proveedor.ruc}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
 
                             })}
                         </select>

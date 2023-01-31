@@ -8,14 +8,13 @@ function CardListadoVenta({ tipo, numero, cliente, identificacion, fecha, total 
         <>
             <div
                 className='
-                    bg-slate-800
+                    //bg-slate-800
                     mx-1
                     my-1
                     rounded-sm
                     flex
                     flex-col
                     border
-                    text-white
                 '
             >
                 <div className=' mx-2 mt-2 flex font-semibold uppercase italic'>{tipo || 'BOLETA'}</div>
@@ -28,6 +27,7 @@ function CardListadoVenta({ tipo, numero, cliente, identificacion, fecha, total 
                         className='
                                 flex
                                 flex-col
+                                mt-2
                             '
                     >
                         <h1 className='font-medium'>Imprimir</h1>
@@ -35,19 +35,21 @@ function CardListadoVenta({ tipo, numero, cliente, identificacion, fecha, total 
                             className='flex mx-2'
                         >
 
-                            <img src={icono_ticket} className='h-4 cursor-pointer' />
+                            <img src={icono_ticket} className='h-4 cursor-pointer rotate-90' />
                             <img src={icono_pdf} className='ml-1 h-4 cursor-pointer' />
                         </div>
                     </div>
                     <div
                         className='
                             flex
+                            mt-4
                         '
                     >
                         <button
                             className='
                                 //ext-red-400
-                                font-light
+                                font-bold
+                                text-cyan-500
 
                             '
                         >
@@ -56,7 +58,8 @@ function CardListadoVenta({ tipo, numero, cliente, identificacion, fecha, total 
                         <button
                             className='
                                 ml-2
-                                font-light
+                                font-bold
+                                text-green-500
                             '
                         >
                             NC

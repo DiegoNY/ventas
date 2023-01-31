@@ -7,8 +7,15 @@ import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import { getData } from '../../useFetch';
 import { GeneradorCodigoBarras } from './useCodigoBarras';
 import { Titulo } from '../../../ui/titulos-vistas';
+import { useAuth } from '../../../auth/auth';
+import { useNavigate } from 'react-router';
 
 function MantenimientoProducto() {
+
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
 
     /**
    * @producto , @setProducto maneja el estado de los clientes
@@ -398,12 +405,12 @@ function MantenimientoProducto() {
                                                 <div>
                                                     <input type={'checkbox'} />
                                                     <span className='ml-1'>Tableta</span>
-                                                    
+
                                                 </div>
                                                 <div>
                                                     <input type={'checkbox'} />
                                                     <span className='ml-1' >Caja</span>
-                                                    
+
                                                 </div>
                                             </td>
 
@@ -1362,7 +1369,7 @@ function MantenimientoProducto() {
 
                         language={{
                             'search': {
-                                'placeholder': '🔍 Buscar por ...',
+                                'placeholder': 'Buscar por ...',
                             },
                             'pagination': {
                                 'previous': '⬅',

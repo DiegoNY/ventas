@@ -1,15 +1,21 @@
 import { _, Grid } from 'gridjs-react';
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/auth';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
-import { Table } from '../../../ui/Tabla';
 import { Titulo } from '../../../ui/titulos-vistas';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import { getData } from '../../useFetch';
 
 
 function MantenimientoProveedor() {
+
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
 
     /**
    * @cliente , @setCliente maneja el estado de los clientes

@@ -40,7 +40,7 @@ function Table(props) {
         },
         language: {
             'search': {
-                'placeholder': '🔍 Buscar por ...',
+                'placeholder': 'Buscar por ...',
             },
             'pagination': {
                 'previous': '⬅',

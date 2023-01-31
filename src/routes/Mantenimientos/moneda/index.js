@@ -1,5 +1,7 @@
 import { _, Grid } from 'gridjs-react';
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/auth';
 import { urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
@@ -11,9 +13,14 @@ import { getData } from '../../useFetch';
 
 function MantenimientoMoneda() {
 
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
+
     /**
-  * @cliente , @setCliente maneja el estado de los clientes
-  */
+    * @cliente , @setCliente maneja el estado de los clientes
+    */
 
     const [moneda, setMoneda] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -36,10 +43,10 @@ function MantenimientoMoneda() {
         e.preventDefault();
         console.log(moneda);
         UpdateData(`${urlAPI.Moneda.url}/${moneda._id}`, moneda)
-        
-        setTimeout(()=>{
+
+        setTimeout(() => {
             obtenerDataMonedas();
-        },800)
+        }, 800)
 
     }
 
@@ -53,10 +60,10 @@ function MantenimientoMoneda() {
 
     const eliminar = (id) => {
         DeleteData(`${urlAPI.Moneda.url}/${id}`);
-        
-        setTimeout(()=>{
+
+        setTimeout(() => {
             obtenerDataMonedas();
-        },800)
+        }, 800)
     }
 
     const limpiarData = () => {
@@ -397,7 +404,7 @@ function MantenimientoMoneda() {
 
                         language={{
                             'search': {
-                                'placeholder': '🔍 Buscar por ...',
+                                'placeholder': 'Buscar por ...',
                             },
                             'pagination': {
                                 'previous': '⬅',

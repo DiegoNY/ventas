@@ -8,19 +8,23 @@ import img1_1 from '../../img/mantenimiento-img/editarLaboratorio2.png'
 import img1_2 from '../../img/mantenimiento-img/editarLaboratorio3.png'
 import { getData } from '../../useFetch';
 import { Titulo } from '../../../ui/titulos-vistas';
+import { useAuth } from '../../../auth/auth';
+import { useNavigate } from 'react-router';
 
 function MantenimientoLaboratorio() {
 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
+
+
     /**
-  * @cliente , @setCliente maneja el estado de los clientes
-  */
+    * @cliente , @setCliente maneja el estado de los clientes
+    */
 
     const [laboratorio, setLaboratorio] = React.useState(null);
-
     const [dataLaboratoriosEstado, setDataLaboratiosEstado] = React.useState([]);
-
     const [loading, setLoading] = React.useState(false);
-
 
     const saveLaboratorio = (e) => {
 
@@ -451,7 +455,7 @@ function MantenimientoLaboratorio() {
 
                         language={{
                             'search': {
-                                'placeholder': '🔍 Buscar por ...',
+                                'placeholder': 'Buscar por ...',
                             },
                             'pagination': {
                                 'previous': '⬅',

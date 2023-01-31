@@ -143,7 +143,6 @@ function MainUser() {
                     <div div
                         className='
                             bg-white
-                            border
                             border-2
                             z-10
                             absolute

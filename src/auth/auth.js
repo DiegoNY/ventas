@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { urlAPI } from '../config';
+import { postData } from '../routes/useFetch';
 import { useLocalStorage } from '../routes/useLocalStorage';
 
 /**
@@ -22,13 +24,21 @@ function AuthProvider({ children }) {
     } = useLocalStorage('USER_V2');
 
 
-    const login = ({ username, password }) => {
+    const login = async ({ username, password }) => {
 
-        console.log(username, password);
-        console.log("validando");
+        // console.log(username, password);
+        const usuarioValidar = {
+            usuario: username,
+            contraseña: password
+        }
+        // console.log("validando");
 
-        setUser({ nombre: username, cargo: "cargo", dni: 75447008 })
+        let Usuario = await postData(`${urlAPI.Usuario.url}?login=true`, usuarioValidar, false);
+        if (Usuario.error == true) {
+            return setUser(null);
+        }
 
+        setUser(Usuario[0].body)
         navigate('/caja');
 
     }

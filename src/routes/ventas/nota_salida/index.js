@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/auth';
 import { TablaTalwindCss } from '../../../ui/Tabla/useTabla';
 import { Titulo } from '../../../ui/titulos-vistas';
 
 function NotaSalida() {
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
 
     return (
         <>
@@ -33,7 +39,7 @@ function NotaSalida() {
                         />
                     </div>
 
-                    
+
                 </div>
                 <div
                     className='
@@ -55,7 +61,7 @@ function NotaSalida() {
                             className='
                                     border
                                     rounded-sm
-                                    my-4
+                                    mt-8
                                     mr-9
                                     w-1/2
                                     px-1

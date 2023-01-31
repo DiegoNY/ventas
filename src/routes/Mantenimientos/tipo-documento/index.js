@@ -10,12 +10,18 @@ import img_2 from '../../img/mantenimiento-img/img-mantenimiento-tc.png'
 import { Series } from './useSeries';
 import { getData } from '../../useFetch';
 import { Titulo } from '../../../ui/titulos-vistas';
+import { useAuth } from '../../../auth/auth';
+import { useNavigate } from 'react-router';
 
 function MantenimientoTipoDocumento() {
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
 
     /**
-* @cliente , @setCliente maneja el estado de los clientes
-*/
+    * @cliente , @setCliente maneja el estado de los clientes
+    */
 
     const [tipoDocumento, setTipoDocumento] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -498,8 +504,7 @@ function MantenimientoTipoDocumento() {
 
                         className={
                             {
-                                th: 'bg-orange-500',
-                                table: 'w-100 z-20',
+                                table: 'w-100 z-20 ',
                                 header: ''
 
                             }
@@ -507,7 +512,7 @@ function MantenimientoTipoDocumento() {
 
                         language={{
                             'search': {
-                                'placeholder': '🔍 Buscar por ...',
+                                'placeholder': 'Buscar por ...',
                             },
                             'pagination': {
                                 'previous': '⬅',

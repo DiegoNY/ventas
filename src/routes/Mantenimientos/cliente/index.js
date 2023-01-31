@@ -7,20 +7,23 @@ import { Modal } from '../../../ui/modal';
 import { DeleteData, SaveData, UpdateData } from '../../useCRUD';
 import { Titulo } from '../../../ui/titulos-vistas';
 import { getData } from '../../useFetch';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/auth';
 
 
 function MantenimientoCliente() {
+    //Usuario autenticado ? 
+    const auth = useAuth();
+    const navigation = useNavigate();
+    if (!auth.user) navigation('/');
+
 
     /**
     * @cliente , @setCliente maneja el estado de los clientes
     */
-
     const [cliente, setCliente] = React.useState(null);
-
     const [loading, setLoading] = React.useState(false);
-
     const [dataCliente, setDataCliente] = React.useState([{}])
-
 
     const obtenerData = (id) => {
         dataCliente.map(cliente => {
@@ -774,7 +777,7 @@ function MantenimientoCliente() {
 
                         language={{
                             'search': {
-                                'placeholder': '🔍 Buscar por ...',
+                                'placeholder': 'Buscar por ...',
                             },
                             'pagination': {
                                 'previous': '⬅',
