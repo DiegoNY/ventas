@@ -462,6 +462,32 @@ function PuntoVenta() {
 
     }
 
+    const limpiarVenta = () => {
+        
+    }
+    //Funcion para imprimir pdf 
+    const printComponent = () => {
+        const printWindow = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+        printWindow.document.write(`
+          <html>
+            <head>
+              <style>
+                /* Estilos para la hoja de impresión */
+              </style>
+            </head>
+            <body>
+              <div>
+                <MyComponent />
+                Imprimir esto 👀
+              </div>
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
 
     //Obtencion de data Necesaria
 
@@ -540,6 +566,7 @@ function PuntoVenta() {
         }
 
     }, [venta])
+
 
 
     return (
@@ -807,6 +834,7 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'TICKET'}
+                                                checked={true}
                                                 className='
                                                  mr-1
                                                  mb-3
@@ -910,23 +938,24 @@ function PuntoVenta() {
                                     >
                                         <div
                                             className='
-                                            p-1 
-                                            text-center 
-                                            ml-2 
-                                            hover:text-gray-500 
-                                            flex
-                                            cursor-pointer 
-                                            w-full
-                                        '
+                                                p-1 
+                                                text-center 
+                                                ml-2 
+                                                hover:text-gray-500 
+                                                flex
+                                                cursor-pointer 
+                                                w-full
+                                            '
                                         >
 
                                             <input
                                                 type={'checkbox'}
                                                 value={'SOLES'}
+                                                checked={true}
                                                 className='
-                                             mr-1
-                                             mb-3
-                                            '
+                                                 mr-1
+                                                 mb-3
+                                                '
                                                 onChange={(e) => {
                                                     let soles = e.target.value;
                                                     setVenta({ ...venta, tipo_moneda: soles })
@@ -1027,10 +1056,11 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'EFECTIVO'}
+                                                checked={true}
                                                 className='
-                                             mr-1
-                                             mb-3
-                                            '
+                                                 mr-1
+                                                 mb-3
+                                                '
                                                 onChange={(e) => {
                                                     let formapago = e.target.value;
                                                     setVenta({ ...venta, forma_pago: formapago })
@@ -1169,6 +1199,21 @@ s                                                '
                                 justify-end
                             '
                         >
+                            <h1
+                                className='
+                                    mr-3 mt-1 
+                                    rounded-xl 
+                                    w-28 
+                                    text-center 
+                                    cursor-pointer 
+                                    hover:border-b-2 
+                                    hover:border-b-slate-400 
+                                '
+                                onClick={limpiarVenta}
+                            >
+                                Cancelar venta
+                            </h1>
+
                             <button
                                 className='
                                 bg-indigo-500
