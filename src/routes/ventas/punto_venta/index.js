@@ -22,6 +22,7 @@ import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
 import { useAuth } from '../../../auth/auth';
 import { useNavigate } from 'react-router';
+import { DataGrid, esES } from '@mui/x-data-grid';
 
 
 
@@ -63,6 +64,7 @@ function PuntoVenta() {
     const [correlativo, setSerieComplementaria] = React.useState('0000030');
     const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [idProductoEnfocado, setIdProductoEnfocado] = React.useState(0);
 
 
 
@@ -88,6 +90,93 @@ function PuntoVenta() {
         })
     }
 
+    //Informacion para la tabla Datagrid 
+
+    const columns = [
+        {
+            field: 'codigo_barras',
+            headerName: 'Codigo',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+
+        },
+        {
+            field: 'descripcion',
+            headerName: 'Producto',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+
+        },
+        {
+            field: 'lote',
+            headerName: 'Laboratorio',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+
+        },
+        {
+            field: 'fecha_vencimiento',
+            headerName: 'Fecha vencimiento',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.2,
+
+        },
+        {
+            field: 'cantidad',
+            headerName: 'Cantidad',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+            renderCell: (params) => {
+                // console.log(params)
+                return (
+                    <textarea
+                        cols={'8'}
+                        defaultValue={params.row?.cantidad_comprada}
+                        rows={'1'}
+                        onChange={(e) => {
+                            // console.log(producto);
+                            // if (e.target.value > producto.cantidad) console.log("La cantidad solicitadad no esta disponible");
+                            ModificadorTotalCantidad(params.row.id_compra, e.target.value);
+
+                        }}
+
+                    ></textarea>
+                )
+            }
+
+        },
+        {
+            field: 'precio',
+            headerName: 'Precio',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+            renderCell: (params) => {
+                // console.log(params)
+                return (
+                    <textarea
+                        defaultValue={params.row?.precio}
+                        cols={'8'}
+                        rows={'1'}
+                        onChange={(e) => {
+
+                            ModificarTotalPrecio(params.row?.id_compra, e.target.value);
+
+                        }}
+
+                    ></textarea>
+                )
+            }
+
+        },
+        {
+            field: 'total',
+            headerName: 'Total',
+            headerClassName: 'font-bold text-xs',
+            flex: 0.1,
+
+        },
+
+    ]
 
 
     //Funciones 
@@ -109,10 +198,10 @@ function PuntoVenta() {
         const cantidad_comprada = cantidad_comprada_Array[1];
         const MEDIDA = cantidad_comprada_Array[0];
 
-        // console.log(cantidad_comprada_String);
-        // console.log(cantidad_comprada_Array);
-        // console.log(cantidadesMedida);
-        // console.log(cantidad_comprada);
+        console.log(cantidad_comprada_String);
+        console.log(cantidad_comprada_Array);
+        console.log(cantidadesMedida);
+        console.log(cantidad_comprada);
 
 
         if (MEDIDA == cantidadesMedida.CAJA.MEDIDA) {
@@ -265,10 +354,14 @@ function PuntoVenta() {
             ...venta,
         });
     }
+
+
     const ObtenerObtenerSubtotalIgv = () => {
 
     }
+
     //Funciones complementarias
+
     /**
     * Recibe el producto seleccionado y cambia el estado de la
     * listaProductosSeleccionados 📖 pero no la borra solo agrega el producto 
@@ -279,7 +372,18 @@ function PuntoVenta() {
 
         if (producto.stock == 0) console.log("Stock es de 0 producto no puede ser vendido");
 
-        setVenta({ ...venta, productos: [...venta.productos, { ...producto, id_compra: idsCompras.id }] });
+        setVenta({
+            ...venta,
+            productos: [
+                ...venta.productos,
+                {
+                    ...producto,
+                    id_compra: idsCompras.id,
+                    precio: '',
+                    medida: 'U'
+                }
+            ]
+        });
         setIdesCompras({ id: idsCompras.id + 1 });
 
     }
@@ -463,7 +567,7 @@ function PuntoVenta() {
     }
 
     const limpiarVenta = () => {
-        
+
     }
     //Funcion para imprimir pdf 
     const printComponent = () => {
@@ -488,6 +592,7 @@ function PuntoVenta() {
         printWindow.print();
         printWindow.close();
     };
+
 
     //Obtencion de data Necesaria
 
@@ -1397,8 +1502,6 @@ s                                                '
                             '
                         >
 
-
-
                             <TablaTalwindCss
                                 headers={[
                                     { name: 'Codigo' },
@@ -1412,12 +1515,34 @@ s                                                '
                                 ]}
                             >
 
-                                {venta.productos.map(producto => {
+                                {venta.productos.map((producto, index) => {
 
 
                                     return (
                                         <>
-                                            <TablaRow TablaRow >
+                                            <TablaRow TablaRow
+                                                tabIndex={index}
+                                                onClick={(event) => {
+                                                    event.preventDefault();
+                                                }}
+
+                                                onKeyDown={(event) => {
+
+                                                    //Eventes para cambiar el tipo de medida
+                                                    if (event.key == 't') {
+                                                        producto.medida = 'T';
+                                                    }
+
+                                                    if (event.key == 'c') {
+                                                        producto.medida = 'C';
+                                                    }
+
+                                                    if (event.key == 'u') {
+                                                        producto.medida = 'U';
+                                                    }
+
+                                                }}
+                                            >
                                                 <TableCell
                                                     className={'font-bold'}
                                                 >
@@ -1451,9 +1576,10 @@ s                                                '
                                                         defaultValue={producto.cantidad_comprada}
                                                         rows={'1'}
                                                         onChange={(e) => {
-                                                            console.log(producto);
-                                                            // if (e.target.value > producto.cantidad) console.log("La cantidad solicitadad no esta disponible");
-                                                            ModificadorTotalCantidad(producto.id_compra, e.target.value);
+
+                                                            let cantidad = `${producto.medida}-${e.target.value}`;
+
+                                                            ModificadorTotalCantidad(producto.id_compra, cantidad);
 
                                                         }}
 
@@ -1487,9 +1613,16 @@ s                                                '
 
                             </TablaTalwindCss>
 
+
                         </div>
+
+
+
+
+
                     </div>
                 </div>
+
 
                 <Modal
                     id={'cliente'}

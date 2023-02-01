@@ -18,7 +18,7 @@ function TablaTalwindCss(props) {
                     <div
                         className='shadow-sm  my-8 '
                     >
-                        <div className="table w-full border-collapse table-auto w-full text-sm">
+                        <div className="table w-full border-collapse table-auto  text-sm">
                             <div className="table-header-group ">
                                 <div className="table-row ">
                                     {props?.headers?.map(header => {
@@ -32,7 +32,6 @@ function TablaTalwindCss(props) {
                                                 p-2 
                                                 pt-0  
                                                 text-slate-400  
-                                                text-left
                                             "
                                         >
                                             {header.name}
