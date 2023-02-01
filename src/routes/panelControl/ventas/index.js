@@ -60,12 +60,13 @@ function Tabventa() {
                             className='
                                 my-2
                                 mr-2
-                                text-white
+                                text-sky-100
                                 font-bold
                                 cursor-pointer
+                                hover:text-sky-300
                             '
                         >
-                            ver todo
+                            ver mas
                         </p>
                     </div>
                 </div>

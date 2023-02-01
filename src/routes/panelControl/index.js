@@ -236,8 +236,23 @@ function PanelControl() {
                             className='mx-auto  w-full  '
                             style={{ height: '150px' }}
                         >
-                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Productos mas vendidos</h1>
-                            <RechartsLineal />
+                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Ventas diarias</h1>
+                            <RechartsLineal
+                                datos={[
+                                    { name: 'Lunes', Ventas: 20 },
+                                    { name: 'Martes', Ventas: 100 },
+                                    { name: 'Miercoles', Ventas: 100 },
+                                    { name: 'Jueves', Ventas: 380 },
+                                    { name: 'Viernes', Ventas: 100 },
+                                ]}
+
+                                dataKey={[
+                                    {
+                                        name: 'Ventas',
+                                        stroke: '#8884d8'
+                                    }
+                                ]}
+                            />
 
                         </div>
 
@@ -253,14 +268,16 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='text-white ml-2 my-2 font-semibold'>Stock productos</h1>
+                        <h1 className='text-white ml-2 my-2 font-semibold'>Productos con stock mas bajo</h1>
                         <div
                             className='
                                 w-full
                                 mt-2
                             '
                         >
-                            <RechartsBar />
+                            <RechartsBar
+
+                            />
                         </div>
 
 
