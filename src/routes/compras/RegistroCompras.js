@@ -90,7 +90,18 @@ function RegistroCompras() {
     const obteniendoProductoSeleccionado = (producto) => {
 
 
-        setListaCompra({ ...listaCompra, productos: [...listaCompra.productos, { ...producto, id_compra: idsCompras.id }] });
+        setListaCompra({
+            ...listaCompra,
+            productos: [
+                ...listaCompra.productos,
+                {
+                    ...producto,
+                    id_compra: idsCompras.id,
+                    medida: 'U'
+                }
+            ]
+        });
+
         setIdesCompras({ id: idsCompras.id + 1 })
 
     }
@@ -365,14 +376,38 @@ function RegistroCompras() {
 
                             </TablaRow>
 
-                            {listaCompra?.productos?.map(producto => {
+                            {listaCompra?.productos?.map((producto, index) => {
 
 
 
                                 return (
                                     <>
 
-                                        <TablaRow>
+                                        <TablaRow
+
+                                            tabIndex={index}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                            }}
+
+                                            onKeyDown={(event) => {
+
+                                                //Eventes para cambiar el tipo de medida
+                                                if (event.key == 't') {
+                                                    producto.medida = 'T';
+                                                }
+
+                                                if (event.key == 'c') {
+                                                    producto.medida = 'C';
+                                                }
+
+                                                if (event.key == 'u') {
+                                                    producto.medida = 'U';
+                                                }
+
+                                            }}
+
+                                        >
                                             <TableCell>
                                                 {producto.id_compra}
                                             </TableCell>
@@ -406,7 +441,8 @@ function RegistroCompras() {
                                                     rows={'1'}
                                                     cols={'5'}
                                                     onChange={(e) => {
-                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'stock')
+                                                        let cantidad = `${producto.medida}-${e.target.value}`;
+                                                        modificandoProductosSeleccionados(producto.id_compra, cantidad, 'stock')
                                                     }}
                                                 >
                                                 </textarea>

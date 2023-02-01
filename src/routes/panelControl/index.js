@@ -35,7 +35,16 @@ function PanelControl() {
     const [venta, setVenta] = useState(0);
     const [producto, setProducto] = useState(0);
     const [compras, setCompras] = useState(0);
-    const [clientes, setClientes] = React.useState(0)
+    const [clientes, setClientes] = React.useState(0);
+    const [ventasSemanales, setVentasSemanales] = React.useState([
+        { name: 'Lunes', Ventas: 20 },
+        { name: 'Martes', Ventas: 100 },
+        { name: 'Miercoles', Ventas: 100 },
+        { name: 'Jueves', Ventas: 380 },
+        { name: 'Viernes', Ventas: 100 },
+        { name: 'Sabado', Ventas: 98 },
+        { name: 'Domingo', Ventas: 130 },
+    ])
 
     //funciones
 
@@ -238,13 +247,7 @@ function PanelControl() {
                         >
                             <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Ventas diarias</h1>
                             <RechartsLineal
-                                datos={[
-                                    { name: 'Lunes', Ventas: 20 },
-                                    { name: 'Martes', Ventas: 100 },
-                                    { name: 'Miercoles', Ventas: 100 },
-                                    { name: 'Jueves', Ventas: 380 },
-                                    { name: 'Viernes', Ventas: 100 },
-                                ]}
+                                datos={ventasSemanales}
 
                                 dataKey={[
                                     {

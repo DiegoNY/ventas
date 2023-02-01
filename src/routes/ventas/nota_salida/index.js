@@ -17,80 +17,61 @@ function NotaSalida() {
                     h-screen
                     grid
                     grid-cols-12
-                    grid-rows-6
                     mx-auto
                     w-full
                 '
             >
                 <div
                     className='
-                        //bg-red-200
-                        col-span-6
-                        row-span-6
+                        col-span-12
                         flex
                         flex-col
+                        h-1
                     '
                 >
-                    <div>
-                        <Titulo
-                            title='Nota salida '
-                            navegacion='ventas'
-                            iconoEmoji='📝'
-                        />
-                    </div>
+                    <Titulo
+                        title='Nota salida '
+                        navegacion='ventas'
+                        iconoEmoji='📝'
+                    />
 
 
                 </div>
                 <div
                     className='
-                        //bg-yellow-200
-                        col-span-6
+                        //bg-red-200
+                        col-span-12
                         row-span-6
                         flex
                         flex-col
+                        w-full
                     '
                 >
 
+                    <h1 className='text-2xl mx-auto' >Estas realizando una nota de credito</h1>
                     <div
                         className='
                             flex
-                            justify-end
+                            h-full
+                            mx-auto
+                            mb-2
+                            bg-green-400
                         '
                     >
-                        <input
+                        <div
                             className='
-                                    border
-                                    rounded-sm
-                                    mt-8
-                                    mr-9
-                                    w-1/2
-                                    px-1
-                                    h-8
-                                '
-
-                            onChange={(e) => {
-
-                                // SearchVentas(e.target.value);
-                            }}
-                        />
-
-                    </div>
-
-                    <div>
-                        <TablaTalwindCss
-                            headers={[
-                                { name: '#' },
-                                { name: 'Descripcion' },
-                                { name: 'Lote' },
-                                { name: 'F.Vencimiento' },
-                                { name: 'Cantidad' },
-                                { name: 'P.Compra unitario' },
-                                { name: 'P.Venta' },
-                                { name: 'Total' },
-                            ]}
+                                w-1/2
+                            '
                         >
-
-                        </TablaTalwindCss>
+                            ss
+                        </div>
+                        <div
+                            className='
+                                w-1/2
+                            '
+                        >
+                            ss
+                        </div>
                     </div>
                 </div>
 

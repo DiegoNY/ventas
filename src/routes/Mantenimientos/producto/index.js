@@ -377,7 +377,7 @@ function MantenimientoProducto() {
 
                                         </tr>
 
-                                        <tr
+                                        {/* <tr
                                             className='
                                                 ml-4 
                                                 mt-1
@@ -415,7 +415,7 @@ function MantenimientoProducto() {
                                             </td>
 
 
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                             <td className='font-sans'>
 

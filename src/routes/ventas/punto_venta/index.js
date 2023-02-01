@@ -45,9 +45,9 @@ function PuntoVenta() {
         igv: 0,
         identificacion: '00000000',
         cliente: 'CLIENTES VARIOS',
-        tipo_impresion: '',
-        tipo_moneda: '',
-        forma_pago: '',
+        tipo_impresion: 'TICKET',
+        tipo_moneda: 'SOLES',
+        forma_pago: 'EFECTIVO',
 
     });
     const [tipoDocumento, setTipoDocumento] = React.useState([]);
