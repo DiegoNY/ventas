@@ -55,60 +55,83 @@ function MainUser() {
                     className='
                         text-lg
                         mt-2
-                        text-center
                         p-1
                         text-slate-800
+                        w-1/2
+
+                        
                     '
                 >
 
-                    <div >
+                    <div
+                        className='ml-14'
+                    >
                         <i className="fi fi-rr-moon-stars text-orange-400 text-sm mr-1"></i>
                         {tiempo}
                     </div>
                 </div>
                 <div
-                    className='text-center mt-3 mx-2 cursor-pointer '
+                    className='
+                    flex 
+                    justify-end
+                    w-1/2
+                    '
                 >
-                    <i
-                        className='
+                    <div
+                        className='text-center mt-3 mx-2 cursor-pointer '
+                    >
+                        <i
+                            className='
                          fi fi-rr-bell
-                         hover:text-gray-700
+                         text-orange-500
+                         hover:text-orange-300
                         '
+                        >
+                        </i>
+                    </div>
+                    <div
+                        className='text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-sm '
+                        onClick={() => setMostrarInformacion(!mostrarInformacion)}
                     >
-                    </i>
-                </div>
-                <div
-                    className='text-center p-2 cursor-pointer text-slate-900 hover:bg-gray-100 '
-                    onClick={() => setMostrarInformacion(!mostrarInformacion)}
-                >
-                    <h1 className='mt-1 '>Historial de ventas recientes</h1>
+                        <h1 className='mt-1 '>Historial de ventas recientes</h1>
 
 
-                </div>
+                    </div>
 
 
-                <div
-                    className="h-100 col-start-12 hover:bg-slate-100 w-full"
-                    onClick={() => setMostrar(!mostrar)}
-                >
-
-                    <a
-                        href='#'
+                    <div
+                        className="h-100 col-start-12 hover:bg-slate-100 mr-3 cursor-pointer flex rounded-sm text-center mt-1 mb-5"
+                        onClick={() => setMostrar(!mostrar)}
                     >
+
+
 
                         {!auth.loading &&
                             <span
-                                className=" text-slate-800"
+                                className="ml-2 mt-2 text-slate-800 "
                             >
                                 {auth.user.nombre}
                             </span>
 
                         }
 
-                    </a>
+
+
+                    </div>
+
                     {!!mostrar &&
                         <div
-                            className="dropdown-menu dropdown-menu-right menu-user"
+                            className=" 
+                          bg-white
+                            border
+                            z-10
+                            absolute
+                            rounded-xl
+                            mr-2
+                            grid
+                            mt-16
+                            w-40
+                        "
                             onMouseLeave={() => setMostrar(!mostrar)}
 
                         >
@@ -128,45 +151,46 @@ function MainUser() {
                             </a>
                         </div>}
 
-                </div>
 
-
-
-
-                {!!mostrarInformacion &&
-                    <div div
-                        className='
+                    {!!mostrarInformacion &&
+                        <div div
+                            className='
                             bg-white
-                            border-2
+                            border
                             z-10
                             absolute
                             historial-venta-container
                             rounded-xl
+                            mt-16
                             mr-14
                             grid
                             scroll-historial
                         '
-                        onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
-                    >
-                        {ventasRecientes?.map(venta => {
-                            console.log(venta);
-                            return (
+                            onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
+                        >
+                            {ventasRecientes?.map(venta => {
+                                console.log(venta);
+                                return (
 
-                                <CardVentasRecientes
-                                    usuario={venta.usuario}
-                                    hora={venta.hora}
-                                    total={venta.venta.total}
-                                />
+                                    <CardVentasRecientes
+                                        usuario={venta.usuario}
+                                        hora={venta.hora}
+                                        total={venta.venta.total}
+                                    />
 
-                            )
-                        })}
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
-                        <CardVentasRecientes />
+                                )
+                            })}
+                            <CardVentasRecientes />
+                            <CardVentasRecientes />
+                            <CardVentasRecientes />
+                            <CardVentasRecientes />
 
-                    </div>
-                }
+                        </div>
+                    }
+
+                </div>
+
+
 
 
             </>

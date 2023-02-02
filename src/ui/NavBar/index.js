@@ -6,7 +6,7 @@ function NavBar({ children }) {
     return (
         <>
             {/* style={{background:'#002A8D'}} */}
-            <div className='navbar  navbar-light grid grid-cols-12  h-16 ' >
+            <div className=' bg-white border-b flex   h-16 ' >
 
 
                 {children}

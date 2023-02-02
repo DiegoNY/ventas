@@ -162,8 +162,8 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight font-sans '>PANEL CONTROL</h1>
-                        <p className='font-normal text-sm ml-2 '>Bienvenido a tu panel control</p>
+                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-blue-900 tracking-tight  '>PANEL CONTROL</h1>
+                        <p className='font-normal text-sm ml-2 text-blue-700'>Bienvenido a tu panel control</p>
                     </div>
                 </div>
 
