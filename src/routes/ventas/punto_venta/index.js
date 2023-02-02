@@ -27,13 +27,11 @@ import { DataGrid, esES } from '@mui/x-data-grid';
 
 
 function PuntoVenta() {
-    //Estados
-
     const auth = useAuth();
     const navigation = useNavigate();
-    console.log(auth);
-
     if (!auth.user) navigation('/');
+
+    //Estados
 
     const [venta, setVenta] = React.useState({
 
@@ -90,95 +88,6 @@ function PuntoVenta() {
         })
     }
 
-    //Informacion para la tabla Datagrid 
-
-    const columns = [
-        {
-            field: 'codigo_barras',
-            headerName: 'Codigo',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-
-        },
-        {
-            field: 'descripcion',
-            headerName: 'Producto',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-
-        },
-        {
-            field: 'lote',
-            headerName: 'Laboratorio',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-
-        },
-        {
-            field: 'fecha_vencimiento',
-            headerName: 'Fecha vencimiento',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.2,
-
-        },
-        {
-            field: 'cantidad',
-            headerName: 'Cantidad',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-            renderCell: (params) => {
-                // console.log(params)
-                return (
-                    <textarea
-                        cols={'8'}
-                        defaultValue={params.row?.cantidad_comprada}
-                        rows={'1'}
-                        onChange={(e) => {
-                            // console.log(producto);
-                            // if (e.target.value > producto.cantidad) console.log("La cantidad solicitadad no esta disponible");
-                            ModificadorTotalCantidad(params.row.id_compra, e.target.value);
-
-                        }}
-
-                    ></textarea>
-                )
-            }
-
-        },
-        {
-            field: 'precio',
-            headerName: 'Precio',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-            renderCell: (params) => {
-                // console.log(params)
-                return (
-                    <textarea
-                        defaultValue={params.row?.precio}
-                        cols={'8'}
-                        rows={'1'}
-                        onChange={(e) => {
-
-                            ModificarTotalPrecio(params.row?.id_compra, e.target.value);
-
-                        }}
-
-                    ></textarea>
-                )
-            }
-
-        },
-        {
-            field: 'total',
-            headerName: 'Total',
-            headerClassName: 'font-bold text-xs',
-            flex: 0.1,
-
-        },
-
-    ]
-
-
     //Funciones 
 
 
@@ -191,17 +100,26 @@ function PuntoVenta() {
         })
 
     }
-
+    /**
+     * Recibe la cantidad de compra junto a el tipo de medida en string 🥐
+     * y un objeto con las cantidades de medidas disponibles esto incluye precio 
+     * cantidad y  el tipo de medida encuentra la cantidad comprada y retorna un 
+     * objeto con la informacion de la cantidad comprada.
+     * @param {*} cantidad string  separado por ( - )  incluye el tipo de medida y cantidad MEDIDA-CANTIDAD 🍥
+     * @param {*} cantidadesMedida Objeto contiene medida , cantidad , 
+     * precio  { EJEMPLO : { MEDIDA:'EJMP',CANTIDAD:10,PRECIO:2.60 } } 👓
+     * @returns objeto con informacion de compra 🎯
+     */
     const obtenerCantidadCompra = (cantidad, cantidadesMedida) => {
         const cantidad_comprada_String = cantidad.toUpperCase();
         const cantidad_comprada_Array = cantidad_comprada_String.split('-');
         const cantidad_comprada = cantidad_comprada_Array[1];
         const MEDIDA = cantidad_comprada_Array[0];
 
-        console.log(cantidad_comprada_String);
-        console.log(cantidad_comprada_Array);
-        console.log(cantidadesMedida);
-        console.log(cantidad_comprada);
+        // console.log(cantidad_comprada_String);
+        // console.log(cantidad_comprada_Array);
+        // console.log(cantidadesMedida);
+        // console.log(cantidad_comprada);
 
 
         if (MEDIDA == cantidadesMedida.CAJA.MEDIDA) {
@@ -264,7 +182,14 @@ function PuntoVenta() {
 
         venta.total = total;
     }
-
+    /**
+     * Funcion que cambia el valor del total segun la cantidad ingresada por el 
+     * usuario 
+     * @param {*} id string con el id de compra del producto 
+     * @param {*} cantidad  string separado por ( - )  que contenga la MEDIDA y la CANTIDAD 
+     * ejemplo MEDIDA-CANTIDAD
+     * @returns  la medida que esta en uso 
+     */
     const ModificadorTotalCantidad = (id, cantidad) => {
         let MEDIDA = '';
 
@@ -276,6 +201,7 @@ function PuntoVenta() {
 
                 producto.cantidad = cantidad;
 
+                //Tipos de medida 
                 const cantidad_medida_precio = {
                     CAJA: {
                         MEDIDA: 'C',
@@ -293,11 +219,12 @@ function PuntoVenta() {
                         PRECIO: Number(producto?.precio_venta)
                     },
                 }
+                // Obteniendo CANTIDAD_COMPRADA esto es un objeto que contiene cantidad, 
+                // cantidad_comprada , medida.
 
                 const cantidad_comprada = obtenerCantidadCompra(cantidad, cantidad_medida_precio)
                 const total = obtenerTotalCompraProducto(cantidad_comprada, cantidad_medida_precio);
                 MEDIDA = cantidad_comprada?.MEDIDA;
-                // const precio = obtenerPrecioCompraMedida(MEDIDA);
 
                 if (cantidad_comprada.CANTIDAD > producto.stock) {
 
@@ -1576,7 +1503,9 @@ s                                                '
                                                         defaultValue={producto.cantidad_comprada}
                                                         rows={'1'}
                                                         onChange={(e) => {
-
+                                                            //La funcion modificarTotalCantidad recibe un string  como cantidad
+                                                            // este string tiene que estar separado por ( - ) 
+                                                            // para poder funcionar.
                                                             let cantidad = `${producto.medida}-${e.target.value}`;
 
                                                             ModificadorTotalCantidad(producto.id_compra, cantidad);

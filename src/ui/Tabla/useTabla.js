@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-function TablaTalwindCss(props) {
+const TablaTalwindCss = React.memo((props) => {
 
     return (
         <>
             <div
-                className='
+                className={`
                     mx-1
                     relative rounded-xl overflow-auto
-                    shadow-sm overflow-hidden my-8
-                '
+                    shadow-sm overflow-hidden ${props.marginY || 'my-8'} 
+                `}
             >
 
                 <div
@@ -42,7 +42,7 @@ function TablaTalwindCss(props) {
                                 </div>
                             </div>
                             <div className="table-row-group">
-                                
+
                                 {props.children}
 
 
@@ -57,5 +57,6 @@ function TablaTalwindCss(props) {
         </>
     )
 }
+)
 
 export { TablaTalwindCss }

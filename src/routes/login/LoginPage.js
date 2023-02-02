@@ -8,6 +8,8 @@ import './login.css';
 function Login() {
 
     const auth = useAuth();
+    const navigation = useNavigate();
+    if(auth.user) navigation('/home');
     /**
      * Estados 
      */

@@ -1,0 +1,11 @@
+.contenedor-tabla {
+
+    width: 90vh;
+    overflow-y: scroll;
+    height: 60vh;
+
+}
+.contenedor-productos{
+    overflow-y: scroll;
+    max-height: 300px;
+}

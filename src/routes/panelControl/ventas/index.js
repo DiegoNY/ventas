@@ -18,7 +18,7 @@ function Tabventa() {
         obtenerInformacionRecienteVentas();
     }, [])
 
-    console.log(informacionVentaProductos);
+    // console.log(informacionVentaProductos);
 
     return (
         <>
