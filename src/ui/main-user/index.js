@@ -56,7 +56,7 @@ function MainUser() {
                         text-lg
                         mt-2
                         p-1
-                        text-slate-800
+                        text-slate-900
                         w-1/2
 
                         
@@ -100,18 +100,18 @@ function MainUser() {
 
 
                     <div
-                        className="h-100 col-start-12 hover:bg-slate-100 mr-3 cursor-pointer flex rounded-sm text-center mt-1 mb-5"
+                        className="text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-md"
                         onClick={() => setMostrar(!mostrar)}
                     >
 
 
 
                         {!auth.loading &&
-                            <span
-                                className="ml-2 mt-2 text-slate-800 "
+                            <h1
+                                className="mx-2 mt-1 text-slate-800 "
                             >
                                 {auth.user.nombre}
-                            </span>
+                            </h1>
 
                         }
 

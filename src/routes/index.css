@@ -7,3 +7,8 @@
     margin-top: 75px;
 }
 
+
+textarea:focus {
+    outline: none;
+}
+

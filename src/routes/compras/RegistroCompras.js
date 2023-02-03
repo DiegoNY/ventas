@@ -12,6 +12,8 @@ import { TablaRow } from '../../ui/Tabla/tableRow';
 import { SaveData } from '../useCRUD';
 import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router';
+import { Layout } from '../../ui/Layouts';
+import { Footer } from '../../ui/Layouts/Footer';
 
 function RegistroCompras() {
     //Usuario autenticado ? 
@@ -54,7 +56,7 @@ function RegistroCompras() {
 
     const [formaPagoCredito, setFormaPagoCredito] = React.useState(false);
 
-    const [loading, setLoading] = React.useState(false);
+    const [buscador, setBuscador] = React.useState(false);
 
 
     //variables
@@ -240,123 +242,111 @@ function RegistroCompras() {
 
     return (
         < >
-            <div className='grid sm:grid grid-cols-12 gap-1 layout-registro  grid-rows-6'>
-
+            <Layout
+                title='Estas registrando una nueva compra'
+                onClick={() => {
+                    setBuscador(false);
+                }}
+            >
                 <div
                     className='
-                         
-                        h-full 
-                        //bg-indigo-500 
-                        row-span-5 
-                        col-span-9 
-                        col-start-1 
-                        row-start-1
-                        ml-3
-                        border-none
-                        grid
-                        grid-cols-12
-                        grid-rows-6
-                    '
+                                flex
+                                flex-col
+                                mr-6
+                                rounded-xl
+                              bg-slate-100
+                                mb-3
+                                px-2 
+                            '
                 >
                     <div
-                        className='
-                            col-start-1
-                            col-span-6
-                        '
+                        className='mt-2 flex justify-between'
+
                     >
-                        <Titulo
-                            title='Compras '
-                            navegacion=' Registro'
+
+                        <input
+                            className='border border-slate-100 w-96 ml-1 rounded-sm py-1 px-1'
+                            placeholder='Busca un producto'
+                            // value={searchValue}
+                            onChange={(e) => {
+                                setSearchProducto(e.target.value)
+                                setSearch(true);
+
+                            }}
+                            onClick={(event) => {
+                                setBuscador(true)
+
+                                event.stopPropagation();
+                            }}
+                            type={'text'}
                         />
+
+                        <h1 className='text-right  font-black mr-2 text-blue-800'>Selecciona los productos </h1>
                     </div>
-
-                    <div
+                    {!!buscador && <div
                         className='
-                            row-start-2 
-                            col-span-12
-                            row-span-6
-                            mx-3
-                            //bg-orange-500
-                            flex
-                            flex-col
-                        '
+                                    bg-white
+                                    border 
+                                    absolute 
+                                    z-10 
+                                    mt-11 
+                                    mx-1  
+                                    flex 
+                                    flex-col 
+                                    px-1 
+                                    rounded-sm
+                                    contenedor-productos
+
+                                '
+                        onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                        }}
                     >
-                        <div
-                            className='
-                                mb-2
-                                flex
-                            '
-                        >
 
-                            <input
-                                type={'text'}
-                                placeholder={'Busca un producto ... '}
-                                className='
-                                    form-control
-                                '
-                                onFocus={() => setSearch(!search)}
-                                onChange={(e) => {
-                                    setSearchProducto(e.target.value)
-                                    setSearch(true);
-                                }}
-                            />
-
-
-                            <button
-                                className='
-                                    mx-2
-                                '
-                            >
-                                Agregar
-                            </button>
-
-                            {/**Todos los productos cargados */}
-
-                            {search &&
+                        {searchProductos?.map((producto, index) => {
+                            return (
                                 <div
-                                    className={`
-                                        form-control
-                                        h-20
-                                        overflow-y-auto
-                                        px-1
-                                        p-1
-                                        absolute
-                                        z-40
-                                        mt-5
-                                        w-auto
-
-                                    `}
-                                    onMouseLeave={() => setSearch(!search)}
-
-                                >
-
-                                    {searchProductos.map(producto => {
-
-                                        return (
-                                            <>
-                                                <div
-                                                    className='
-                                                     p-2
-                                                     hover:bg-gray-100
-                                                    '
-                                                    onClick={() => obteniendoProductoSeleccionado(producto)}
-                                                >
-                                                    {producto.descripcion} ({producto.id_laboratorio})
-                                                </div>
-                                            </>
-                                        )
-
-                                    })
-
+                                    key={index}
+                                    className={
+                                        `
+                                                w-full 
+                                                flex 
+                                                p-1 
+                                                mb-1 
+                                                ${index == 0 && 'mt-1'}
+                                                hover:bg-sky-100
+                                                cursor-pointer
+                                                text-slate-600
+                                                `
                                     }
+                                    onClick={(event) => {
+
+                                        obteniendoProductoSeleccionado(producto)
+
+                                        event.stopPropagation();
+                                        event.preventDefault();
+
+                                    }}
+                                >
+                                    {producto.descripcion} ({producto.id_laboratorio})
 
                                 </div>
-                            }
+                            )
+                        })}
 
 
 
-                        </div>
 
+                    </div>}
+                    <div
+                        className='
+                                    contenedor-tabla
+                                    mt-2
+                                    rounded-2xl
+                                '
+                    >
                         <TablaTalwindCss
                             headers={[
                                 { name: '#' },
@@ -371,6 +361,8 @@ function RegistroCompras() {
                                 { name: 'Descuento 03' },
                                 { name: 'Total' },
                             ]}
+
+                            marginY={'my-0 bg-white '}
                         >
                             <TablaRow>
 
@@ -408,10 +400,14 @@ function RegistroCompras() {
                                             }}
 
                                         >
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+                                            >
                                                 {producto.id_compra}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+                                            >
                                                 {producto.descripcion}
                                             </TableCell>
                                             <TableCell>
@@ -424,7 +420,10 @@ function RegistroCompras() {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <ProductoSeleccionado
                                                     input={true}
                                                     value={producto?.fecha_vencimiento}
@@ -435,7 +434,10 @@ function RegistroCompras() {
                                                 />
 
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <textarea
                                                     className=' uppercase'
                                                     rows={'1'}
@@ -447,7 +449,10 @@ function RegistroCompras() {
                                                 >
                                                 </textarea>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <ProductoSeleccionado
                                                     rows={'1'}
                                                     cols={'5'}
@@ -459,6 +464,8 @@ function RegistroCompras() {
                                                 />
                                             </TableCell>
                                             <TableCell
+                                                className='text-xs'
+
                                             >
                                                 <div
                                                     className='
@@ -500,7 +507,10 @@ function RegistroCompras() {
                                                 </div>
 
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <ProductoSeleccionado
                                                     rows={'1'}
                                                     cols={'5'}
@@ -511,7 +521,10 @@ function RegistroCompras() {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <ProductoSeleccionado
                                                     rows={'1'}
                                                     cols={'5'}
@@ -521,7 +534,10 @@ function RegistroCompras() {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                className='text-xs'
+
+                                            >
                                                 <ProductoSeleccionado
                                                     rows={'1'}
                                                     cols={'5'}
@@ -543,128 +559,31 @@ function RegistroCompras() {
                     </div>
 
 
+
                 </div>
 
                 <div
                     className='
-                    
-                        border-none
-                        h-full
-                        //bg-orange-500
-                        sm:col-span-3
-                        sm:row-span-5
-                        sm:col-start-10
-                        sm:row-start-1
-                        sm:mr-5
-                        grid 
-                        grid-cols-6
-                        grid-rows-6
+                        flex
+                        w-full
                     '
                 >
                     <div
                         className='
-                            bg-red-500
-                            col-span-6
-                            mx-2
-                            my-2
-                        '
-                    >
-
-                    </div>
-                    <div
-                        className='
-                            //bg-indigo-500
-                            row-start-2
-                            row-span-4
-                            col-span-6
-                            mx-2
-                            flex 
+                            flex
                             flex-col
-                            p-2
                         '
                     >
-                        <span className='text-sm font-semibold font-sans'>Tipo de documento</span>
+                        <p className='mb-1  text-blue-800 font-light font-sans'>Por favor completa los siguientes datos :</p>
+                        <h1 className='font-black text-blue-800'>¿Que tipo de documento registraras?</h1>
                         <select
-                            className='
-                             form-control
-                             form-control-sm
-                             text-xs
-                             h-4
-                            '
+                            type={'text'}
+                            className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
+                            placeholder='Nombre del solicitante ...'
                             onChange={(e) => {
-
-                                let tipodocumento = e.target.value;
-                                if (e.target.value == 'B001-') tipodocumento = 'BOLETA';
-                                if (e.target.value == 'F001-') tipodocumento = 'FACTURA';
-
-                                setListaCompra({
-                                    ...listaCompra,
-                                    numero_documento: e.target.value,
-                                    tipo_documento: tipodocumento,
-                                })
 
                             }}
                         >
-                            <option>SELECCIONE</option>
-                            <option className='text-xs' value={'B001-'}>BOLETA</option>
-                            <option className='text-xs' value={'F001-'} >FACTURA</option>
-                            <option className='text-xs' value={'GUIA REMISION'}>GUIA REMISION</option>
-                            <option className='text-xs' value={'PROFORMA'}>PROFORMA </option>
-                        </select>
-                        <br />
-                        <span className='text-sm font-semibold font-sans'> N° Documento</span>
-                        <input
-                            className='
-                             mt-1
-                             form-control
-                             form-control-sm
-                             h-4
-                            '
-                            value={listaCompra?.numero_documento}
-                            onChange={(e) => {
-                                setListaCompra({
-                                    ...listaCompra,
-                                    numero_documento: e.target.value,
-                                })
-
-
-                            }}
-                        />
-                        <br />
-                        <span className='text-sm font-semibold font-sans'>Fecha de documento</span>
-                        <input
-                            className='
-                             form-control
-                             form-control-sm
-                             h-4
-                          '
-                            type={'date'}
-                            value={listaCompra?.fecha_documento}
-                            onChange={(e) => {
-                                setListaCompra({
-                                    ...listaCompra,
-                                    fecha_documento: e.target.value,
-                                })
-                            }}
-                        />
-                        <br />
-                        <span className='text-sm font-semibold font-sans'>Proveedor</span>
-                        <select
-                            className='
-                             form-control
-                             form-control-sm
-                             h-4
-                            '
-                            onChange={(e) => {
-                                setListaCompra(
-                                    {
-                                        ...listaCompra,
-                                        proveedor: e.target.value,
-                                    }
-                                )
-                            }}
-                        >
-
                             <option>SELECCIONE</option>
                             {proveedores.map(proveedor => {
                                 return (<option value={`${proveedor.abreviatura}-${proveedor.ruc}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
@@ -672,7 +591,54 @@ function RegistroCompras() {
                             })}
                         </select>
                         <br />
-                        <span className='text-sm font-semibold font-sans'>Forma de pago</span>
+                        <h1 className='font-black text-blue-800 flex' >Ingresa el numero del documento
+                            <i
+                                className='text-orange-500 ml-1 cursor-pointer'
+
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                </svg>
+                            </i>
+
+                        </h1>
+
+                        <input
+                            type={'text'}
+                            className='mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 focus:border-blue-600 '
+                            placeholder='B00-00000000 ... '
+                            onChange={(e) => {
+
+                            }}
+
+                        />
+                        <br />
+                        <h1 className='font-black text-blue-800' >¿Cuando se realizo? </h1>
+                        <input
+                            type={'date'}
+                            className='mx-2 rounded-sm text-center mt-1 border-y border-x p-1 focus:border-2 focus:border-blue-600 '
+                            onChange={(e) => {
+
+                            }}
+                        />
+                        <br />
+                        <h1 className='font-black text-blue-800'>¿Quien es el proveedor?</h1>
+                        <select
+                            type={'text'}
+                            className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
+                            placeholder='Nombre del solicitante ...'
+                            onChange={(e) => {
+
+                            }}
+                        >
+                            <option>SELECCIONE</option>
+                            {proveedores.map(proveedor => {
+                                return (<option value={`${proveedor.abreviatura}-${proveedor.ruc}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
+
+                            })}
+                        </select>
+                        <br />
+                        <h1 className='font-black text-blue-800'>Selecciona la forma de pago</h1>
                         <div
                             className='flex flex-row'
                         >
@@ -722,21 +688,36 @@ function RegistroCompras() {
 
 
                         </div>
+                        <br />
+                        <div
+                            className='
+                                    
+                                flex
+                                justify-between
+                            '
+                        >
 
+
+
+                            <p className='font-black ' >Subtotal : <span className='font-normal'>{listaCompra.subtotal}</span></p>
+                            <p className='font-black '>igv : <span className='font-normal'>{listaCompra.igv}</span></p>
+                            <p className='font-black '>Total : <span className='font-normal'>{listaCompra.total}</span></p>
+
+                        </div>
                         <div
                             className='
                               //bg-indigo-500
+                              mt-1
                               flex
-                              justify-between
-                              mt-3
                             '
                         >
-                            <span className='ml-1 text-lg font-semibold'>Efectivo :
-                                <span className='font-normal' >
+                            <span className='mr-1  font-semibold'>Efectivo :
+                                <span className='font-normal ' >
 
                                     <input
+                                        type='text'
                                         disabled={formaPagoCredito}
-                                        className='h-5 text-sm w-14'
+                                        className='h-5 text-sm w-9'
                                         value={listaCompra?.efectivo}
                                         onChange={(e) => {
                                             setListaCompra({
@@ -750,52 +731,43 @@ function RegistroCompras() {
 
                                 </span>
                             </span>
-                            <span className='ml-1 text-lg font-semibold'>Vuelto : <span className='font-normal'> {listaCompra.vuelto || 0}</span> </span>
+                            <span className='  font-semibold'>Vuelto : <span className='font-normal'> {listaCompra.vuelto || 0}</span> </span>
+                        </div>
+                        <br />
+                        <div
+                            className='
+                                flex
+                                justify-end
+                            '
+                        >
+                            <button
+                                className={`
+                                         
+                                bg-orange-500
+                                h-10
+                                w-1/2
+                                ml-16
+                                rounded-xl
+                                text-white
+                                text-uppercase
+                                text-xs	
+                                font-semibold
+                                        `}
+
+                                onClick={() => {
+                                    saveListaCompra();
+                                }}
+                            >
+                                Registrar compra
+                            </button>
+
                         </div>
 
                     </div>
-
                 </div>
+              
+            </Layout>
 
-                <div className='row-start-6 //bg-indigo-500 col-span-12 mb-0 grid grid-cols-4'>
-                    <div className='//bg-indigo-500 col-span-3 flex'>
-                        <span className='sm:ml-20  text-slate-700 text-lg font-semibold w-full text-center mt-4'>Subtotal :  <span className='text-lg font-normal'>{listaCompra.subtotal}</span></span>
-                        <span className=' text-lg text-slate-700 w-full  text-center font-semibold mt-4'>IGV : <span className='text-lg font-normal'>{listaCompra.igv}</span></span>
-                        <span className=' text-lg text-slate-700 w-full  font-semibold mt-4'>Total : <span className='text-lg font-normal'>{listaCompra.total}</span> </span>
-                    </div>
-
-                    <div
-                        className='
-                            //bg-indigo-500
-                            w-full
-                            h-full
-                            flex flex-col
-                            mt-3
-                        '
-                    >
-                        <button
-                            className='
-                               bg-orange-500
-                               h-10
-                               w-1/2
-                               ml-16
-                               rounded-xl
-                               text-white
-                               text-uppercase
-                               text-xs	
-                               font-semibold
-                            '
-                            onClick={() => {
-                                saveListaCompra();
-                            }}
-                        >
-                            registrar compra
-                        </button>
-                    </div>
-                </div>
-
-
-            </div>
         </>
     )
 }

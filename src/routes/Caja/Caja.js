@@ -189,53 +189,57 @@ function Caja() {
                                         '
                                     >
                                         <span
-                                            className='
-                                                ml-20
-                                            '
+
                                         >
                                             Dni
                                         </span>
-                                        <input
-                                            className=' 
-                                                h-20 
+                                        <div
+                                            className='
+                                                flex
+                                            '
+                                        >
+                                            <input
+                                                className=' 
+                                                h-14    
                                                 rounded-xl 
                                                 px-4  
-                                                mx-20 
                                                 bg-slate-200 
                                                 text-slate-500
                                                 text-lg
+                                                mr-2
                                             '
-                                            disabled
-                                            value={auth?.user?.dni}
-                                        />
+                                                disabled
+                                                value={auth?.user?.dni}
+                                            />
+                                            <div
+                                                className='
+                                                    mt-1
+                                                    text-2xl
+                                                    flex
+                                                    justify-center
+                                                '
+                                            >
+                                                S/ <textarea
+                                                    cols={6}
+                                                    rows={1}
+                                                    defaultValue={50}
+                                                    onChange={(e) => {
+                                                        setApertura({
+                                                            ...apertura,
+                                                            dinero_apertura: e.target.value
+                                                        })
+                                                    }}
+                                                    className='
+                                                        border-none
+                                                    '
+                                                ></textarea>
+                                            </div>
+                                        </div>
+
 
                                     </div>
 
-                                    <div
-                                        className='
-                                            
-                                            flex
-                                            justify-center
-                                            text-5xl
-                                            mt-5
- 
-                                        '
-                                    >
-                                        S/ <textarea
-                                            cols={6}
-                                            rows={1}
-                                            defaultValue={50}
-                                            onChange={(e) => {
-                                                setApertura({
-                                                    ...apertura,
-                                                    dinero_apertura: e.target.value
-                                                })
-                                            }}
-                                            className='
-                                                border-none
-                                            '
-                                        ></textarea>
-                                    </div>
+
                                 </div>
 
                                 <div
@@ -253,12 +257,12 @@ function Caja() {
                                             
                                             mx-2
                                             mt-2
-                                            bg-indigo-500
+                                            bg-orange-500
                                             h-10
                                             rounded-xl
                                             w-25
                                             text-white
-                                            hover:bg-green-700
+                                            hover:bg-orange-600
  
                                         '
                                         onClick={sendingMoneyDay}

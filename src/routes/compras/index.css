@@ -1,3 +1,32 @@
-.layout-registro{
+.layout-registro {
     height: 90vh;
+}
+
+.contenedor-tabla {
+
+    width: 134vh;
+    overflow-y: scroll;
+    height: 64vh;
+
+}
+
+.contenedor-productos {
+    overflow-y: scroll;
+    max-height: 300px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="date"]:focus {
+    outline: none;
+}
+
+select:focus {
+    outline: none;
+}
+
+textarea:focus {
+    outline: none;
 }

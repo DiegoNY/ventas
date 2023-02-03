@@ -183,6 +183,7 @@ function PanelControl() {
                         numero={clientes}
                         informacion={'Clientes registrados'}
                         navigation={'/mantenimiento-cliente'}
+                        // color='bg-red-300'
                     >
                         <RechartsPie />
                     </CardInformacion>

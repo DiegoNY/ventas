@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 
-function CardInformacion({ icono, numero, informacion, children, navigation }) {
+function CardInformacion({ icono, numero, informacion, children, navigation, color }) {
     const navigate = useNavigate();
     return (
         <>
             <div
-                className='bg-slate-700 flex text-white mx-2 rounded-sm mb-auto '
+                className={` ${color || 'bg-slate-700'} flex text-white mx-2 rounded-sm mb-auto `}
                 onClick={() => {
                     navigate(navigation)
                 }}
