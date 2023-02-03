@@ -350,7 +350,7 @@ function MantenimientoMoneda() {
 
 
                                     >
-                                        Laboratorio Proveedor  +
+                                        Nueva moneda  +
                                     </button>
 
 
