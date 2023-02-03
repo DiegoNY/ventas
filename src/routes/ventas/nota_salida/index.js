@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
-import { urlAPI } from '../../../config';
+import { socket, urlAPI } from '../../../config';
 import { TablaRow } from '../../../ui/Tabla/tableRow';
 import { TablaTalwindCss } from '../../../ui/Tabla/useTabla';
-import { Titulo } from '../../../ui/titulos-vistas';
-import { BuscadorProductos } from '../../BuscadorProductos';
 import { getData } from '../../useFetch';
 import { TableCell } from '../../../ui/Tabla/tableCell'
 import './index.css'
 import { Informacion } from '../../../ui/Error';
 import simbolo_alerta_warning from '../punto_venta/img/simbolo-alerta-warning.png';
+import { generarSerieVenta } from '../punto_venta/useSerie';
+import { SaveData } from '../../useCRUD';
 
 
 
@@ -27,9 +27,13 @@ function NotaSalida() {
     const [informacionMotivo, setInformacionMotivo] = useState(true);
     const [ids_notasalida, setIdNotaSalida] = useState(0);
     const [error, setError] = useState(false);
+    const [numeroDocumento, setNumeroDocumento] = useState('');
     const [notaSalida, setNotaSalida] = useState(
 
         {
+            correlativo: '000000001',
+            serie: 'N01',
+            numeroDocumento: 'N01-00000001',
             usuario: auth?.user?._id,
             productos: [],
             solicitante: '',
@@ -129,10 +133,23 @@ function NotaSalida() {
                     })
 
                 }
+
+                producto.stock_saliente = Number(CANTIDAD_SALIENTE.CANTIDAD);
+
             }
         })
 
 
+    }
+
+    const emitirNotaSalida = async () => {
+        const response = await SaveData(`${urlAPI.Nota_salida.url}`, notaSalida);
+        console.log(response);
+        if (response.error) {
+            setError({
+                SaveData: response.body,
+            });
+        }
     }
 
     // console.log(searchtProductos);
@@ -141,7 +158,7 @@ function NotaSalida() {
 
         const obtenerInformacionProductos = async () => {
 
-            const productosObtenidos = await getData(`${urlAPI.Producto.url}`);
+            const productosObtenidos = await getData(`${urlAPI.Producto.url}?ventas=true`);
             setProductos(productosObtenidos);
 
         }
@@ -150,11 +167,35 @@ function NotaSalida() {
 
     }, [])
 
+    useEffect(() => {
+
+        const obtenerSerie = (informacion) => {
+
+            console.log(informacion);
+            const serieGenerada = generarSerieVenta(informacion.numeroNotaSalida)
+
+            setNotaSalida({
+                ...notaSalida,
+                serie: serieGenerada.tipo_documento,
+                correlativo: serieGenerada.serie,
+                numeroDocumento: `${serieGenerada.tipo_documento}-${serieGenerada.serie}`
+            })
+        }
+
+        socket.on('serie_nota_salida', obtenerSerie)
+
+        return () => {
+
+            socket.off('serie_nota_salida', obtenerSerie);
+
+        }
+
+    }, [])
 
     return (
         <>
             <div
-                className='
+                className=' 
                     h-screen
                     grid
                     grid-cols-12
@@ -251,7 +292,6 @@ function NotaSalida() {
                                                 `
                                                 w-full 
                                                 flex 
-                                                bg-slate-100 
                                                 p-1 
                                                 mb-1 
                                                 ${index == 0 && 'mt-1'}
@@ -306,6 +346,7 @@ function NotaSalida() {
 
                                     {notaSalida?.productos?.map((producto, index) => {
 
+                                        producto.medida = 'U';
 
                                         return (
                                             <>
@@ -403,7 +444,7 @@ function NotaSalida() {
                                     flex-col
                                 '
                             >
-                                <h1 className='flex justify-end text-blue-800 font-black'>N01-00000000</h1>
+                                <h1 className='flex justify-end text-blue-800 font-black'>{notaSalida.numeroDocumento}</h1>
                                 <p className='mb-1  text-blue-800 font-light font-sans'>Por favor completa los siguientes datos :</p>
                                 <h1 className='font-black text-blue-800'>Datos del solicitante</h1>
                                 <input
@@ -490,13 +531,15 @@ function NotaSalida() {
                                          rounded-xl
                                          w-24
                                          p-1
-                                         ${!!notaSalida.solicitante && !!notaSalida.motivo && !!notaSalida.fecha && 'bg-orange-500 text-white'}
+                                         bg-orange-500 
+                                         text-white
                                          
                                         `}
 
-                                        disabled={true}
+
                                         onClick={() => {
                                             console.log(notaSalida)
+                                            emitirNotaSalida();
                                         }}
                                     >
                                         Emitir 🖨
@@ -555,17 +598,27 @@ function NotaSalida() {
                             text-center
                         '
                     >
-                        <h1 className='text-lg text-slate-700 font-semibold'>
-                            La cantidad solicita del producto
-                            <span className='text-dark'> {error?.producto} </span>
-                            con codigo <span className='text-dark'> {error?.codigo} </span>no esta disponible
-                        </h1>
+                        {!error.SaveData &&
+                            <>
+                                <h1 className='text-lg text-slate-700 font-semibold'>
+                                    La cantidad solicita del producto
+                                    <span className='text-dark'> {error?.producto} </span>
+                                    con codigo <span className='text-dark'> {error?.codigo} </span>no esta disponible
+                                </h1>
 
 
-                        <div className='flex justify-start ml-3 mt-1 text-lg'>Stock disponible :</div>
-                        <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
-                        <h1 className='flex text-sm ml-20  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
-                        <h1 className='flex text-sm ml-20  mt-1' >Stock general : {error.stock} unidades</h1>
+                                <div className='flex justify-start ml-3 mt-1 text-lg'>Stock disponible :</div>
+                                <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
+                                <h1 className='flex text-sm ml-20  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
+                                <h1 className='flex text-sm ml-20  mt-1' >Stock general : {error.stock} unidades</h1>
+
+                            </>
+                        }
+                        {error.SaveData &&
+
+                            <h1 className='text-lg text-slate-700 font-semibold' >{error.SaveData}</h1>
+
+                        }
 
 
                     </div>

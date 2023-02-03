@@ -128,7 +128,7 @@ function Caja() {
                                     justify-center
                                 '
                             >
-                                <h1 className='text-2xl font-black text-slate-600  mt-4'>Hola  {auth?.user?.nombre} 🖐, para continuar registra el monto que hay en caja 😃</h1>
+                                <h1 className='text-2xl font-black text-slate-600  mt-4'>Hola  {auth?.user?.nombre} 🖐, para continuar registra el monto que hay en caja </h1>
                             </div>
 
                             <div

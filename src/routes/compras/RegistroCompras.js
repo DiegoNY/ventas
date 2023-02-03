@@ -26,6 +26,20 @@ function RegistroCompras() {
     const [productos, setProductos] = React.useState([{}]);
     const [searchProducto, setSearchProducto] = React.useState('');
     const [proveedores, setProveedores] = React.useState([]);
+    const [tiposDocumentos, setTipoDocumentos] = React.useState([
+        {
+            id: '',
+            name: 'BOLETA',
+        },
+        {
+            id: '',
+            name: 'FACTURA',
+        },
+        {
+            id: '',
+            name: 'PROFORMA',
+        }
+    ])
     const [listaCompra, setListaCompra] = React.useState({
         productos: [
 
@@ -585,8 +599,8 @@ function RegistroCompras() {
                             }}
                         >
                             <option>SELECCIONE</option>
-                            {proveedores.map(proveedor => {
-                                return (<option value={`${proveedor.abreviatura}-${proveedor.ruc}`}>{`${proveedor.abreviatura} - ${proveedor.nombre}`}</option>)
+                            {tiposDocumentos.map(tipo => {
+                                return (<option value={tipo.name}>{tipo.name}</option>)
 
                             })}
                         </select>
@@ -608,7 +622,10 @@ function RegistroCompras() {
                             className='mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 focus:border-blue-600 '
                             placeholder='B00-00000000 ... '
                             onChange={(e) => {
-
+                                setListaCompra({
+                                    ...listaCompra,
+                                    numero_documento: e.target.value,
+                                })
                             }}
 
                         />
@@ -765,7 +782,7 @@ function RegistroCompras() {
 
                     </div>
                 </div>
-              
+
             </Layout>
 
         </>

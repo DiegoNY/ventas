@@ -1,10 +1,10 @@
 import { io } from "socket.io-client";
-const socket = io('http://localhost:8080/');
+const socket = io('http://192.168.1.43:8080/');
 
 
 // Archivo de Configuracion 🔩🔩🔩
 const hostAPI = 'http://192.168.1.43:8000';
-const hostAPIV2 = 'http://localhost:8080';
+const hostAPIV2 = 'http://192.168.1.43:8080';
 
 const urlAPI = {
 
@@ -62,6 +62,9 @@ const urlAPI = {
     },
     Numeros_ventas: {
         url: `${hostAPIV2}/api/v2/serie_ventas`
+    },
+    Nota_salida : {
+        url: `${hostAPIV2}/api/v2/nota_salida`
     }
 
 

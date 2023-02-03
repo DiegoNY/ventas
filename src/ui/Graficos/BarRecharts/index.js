@@ -32,7 +32,7 @@ const dataPrueba = [
 ];
 
 
-function RechartsBar({ data, fill, fill_2, dataKey, height, width }) {
+function RechartsBar({ data, fill, fill_2, dataKey, height, width, name }) {
 
     return (
         <ResponsiveContainer width={"100%"}  aspect={2}>
@@ -48,7 +48,7 @@ function RechartsBar({ data, fill, fill_2, dataKey, height, width }) {
                     bottom: 5,
                 }}
             >
-                <XAxis dataKey="name" tick={<CustomizedXAxisTick className="text-xs text-center " />} tickLine={true} />
+                <XAxis dataKey={name || "name"} tick={<CustomizedXAxisTick className="text-xs text-center " />} tickLine={true} />
                 <YAxis tick={<CustomizedYAxisTick className="text-xs text-center " />} tickLine={false} />
 
                 <Tooltip />

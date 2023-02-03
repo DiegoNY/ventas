@@ -12,7 +12,9 @@ const SaveData = async (urlApi, data, formData = false) => {
 
 
     const response = await postData(urlApi, data, formData)
-    Save();
+
+    if (!response.error) Save();
+    
     return response;
 
 }

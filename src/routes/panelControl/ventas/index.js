@@ -8,16 +8,29 @@ function Tabventa() {
 
     const [ventas, setVentas] = useState([])
     const [informacionVentaProductos, setInformacionVentaProducto] = useState([]);
+    const [cantidadMostrar, setCantidadMostrar] = useState(9);
+    const [productosStockBajo, setProductoStockBajo] = useState([]);
 
     useEffect(() => {
         const obtenerInformacionRecienteVentas = async () => {
-            const ventasData = await getData(`${urlAPI.Venta.url}?recientes=9`);
+            const ventasData = await getData(`${urlAPI.Venta.url}?recientes=${cantidadMostrar}`);
             setVentas(ventasData);
         }
 
         obtenerInformacionRecienteVentas();
-    }, [])
+    }, [cantidadMostrar])
 
+    useEffect(() => {
+
+        const dataProductosStockBajo= async () => {
+            const productosData = await getData(`${urlAPI.Producto.url}?stockBajo=4`);
+            
+            setProductoStockBajo(productosData)
+        }
+
+        dataProductosStockBajo();
+
+    }, [])
     // console.log(informacionVentaProductos);
 
     return (
@@ -65,6 +78,7 @@ function Tabventa() {
                                 cursor-pointer
                                 hover:text-sky-300
                             '
+                            onClick={() => setCantidadMostrar(cantidadMostrar + 9)}
                         >
                             ver mas
                         </p>

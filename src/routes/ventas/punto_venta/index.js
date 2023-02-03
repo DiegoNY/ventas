@@ -22,7 +22,6 @@ import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
 import { useAuth } from '../../../auth/auth';
 import { useNavigate } from 'react-router';
-import { DataGrid, esES } from '@mui/x-data-grid';
 
 
 

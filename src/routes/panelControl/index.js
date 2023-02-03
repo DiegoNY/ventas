@@ -36,14 +36,15 @@ function PanelControl() {
     const [producto, setProducto] = useState(0);
     const [compras, setCompras] = useState(0);
     const [clientes, setClientes] = React.useState(0);
+    const [productosStockBajo, setProductoStockBajo] = useState([]);
     const [ventasSemanales, setVentasSemanales] = React.useState([
-        { name: 'Lunes', Ventas: 20 },
-        { name: 'Martes', Ventas: 100 },
-        { name: 'Miercoles', Ventas: 100 },
-        { name: 'Jueves', Ventas: 380 },
-        { name: 'Viernes', Ventas: 100 },
-        { name: 'Sabado', Ventas: 98 },
-        { name: 'Domingo', Ventas: 130 },
+        { name: 'Lunes', Ventas: 0 },
+        { name: 'Martes', Ventas: 0 },
+        { name: 'Miercoles', Ventas: 0 },
+        { name: 'Jueves', Ventas: 0 },
+        { name: 'Viernes', Ventas: 0 },
+        { name: 'Sabado', Ventas: 0 },
+        { name: 'Domingo', Ventas: 0 },
     ])
 
     //funciones
@@ -128,6 +129,91 @@ function PanelControl() {
 
     }, [])
 
+
+
+    useEffect(() => {
+
+        const dataProductosStockBajo = async () => {
+            const productosData = await getData(`${urlAPI.Producto.url}?stockBajo=4`);
+            // console.log(productosData);
+            setProductoStockBajo(productosData)
+
+
+        }
+
+        dataProductosStockBajo();
+
+    }, [])
+
+    useEffect(() => {
+        //ventas por semana debes enviar desde hasta que fecha quieres ver 
+        const dataVentasSemanales = async () => {
+
+            // Obtenemos la fecha actual
+            const hoy = new Date();
+            // Obtenemos el número del día de la semana (0 es domingo y 6 es sábado)
+            const diaDeLaSemana = hoy.getDay();
+            // Calculamos la diferencia entre la fecha actual y el día de hace una semana
+            // Si hoy es domingo, restamos 6 días para obtener el día de hace una semana
+            // Si no, restamos la diferencia y sumamos 1 para obtener el lunes de la semana pasada
+            const diferencia = hoy.getDate() - diaDeLaSemana + (diaDeLaSemana === 0 ? -6 : 0);
+
+            // Establecemos la fecha calculada en la fecha actual y la guardamos en una nueva variable
+            const fechaDomingoPasado = new Date(hoy.setDate(diferencia));
+            // Mostramos el resultado en la consola
+            const formateandoFechaInicio = `${fechaDomingoPasado.getFullYear().toString()}-${fechaDomingoPasado.getMonth() + 1}-${fechaDomingoPasado.getDate()}`;
+            let date = new Date(formateandoFechaInicio);
+            // Sumar 6 días a la fecha
+            date.setDate(date.getDate() + 6);
+            // Mostrar la fecha resultante
+            let formateandoFechaFin = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+            //Fecha del dia Domingo que es cuando inicia la semana  
+            const fechaInicioSemana = formateandoFechaInicio;
+            const fechaFinSemana = formateandoFechaFin;
+
+            const dataVentas = await getData(`${urlAPI.Venta.url}?diarias={"desde":"${fechaInicioSemana}", "hasta":"${fechaFinSemana}"}`);
+            const ventas = [];
+
+            //Se ingresan las ventas obtenidas desde la bd y tambien ventas hardcore para poder colocarlas en 0 
+            // se les agrega una propiedad name para poder compararlas por el nombre
+
+            dataVentas[0].resultado.map(venta => {
+                ventas.push({ ...venta, name: venta._id });
+            })
+            ventas.push(...ventasSemanales);
+
+            //Se coloca en 0 las ventas que no tengan valores 
+
+            let resultado = {};
+
+            ventas.forEach(venta => {
+                if (resultado[venta.name]) {
+                    resultado[venta.name] += venta.Ventas || venta.totalVentas || 0
+                } else {
+                    resultado[venta.name] = venta.Ventas || venta.totalVentas || 0;
+                }
+            });
+
+
+            let resultArray = [];
+            for (let key in resultado) {
+                resultArray.push({ name: key, Ventas: resultado[key] });
+            }
+
+            resultArray.sort((a, b) => {
+                let dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+                return dias.indexOf(a.name) - dias.indexOf(b.name);
+            });
+
+            // console.log(resultArray);
+            setVentasSemanales(resultArray);
+
+
+        }
+
+        dataVentasSemanales();
+    }, [])
     return (
 
         <>
@@ -183,7 +269,7 @@ function PanelControl() {
                         numero={clientes}
                         informacion={'Clientes registrados'}
                         navigation={'/mantenimiento-cliente'}
-                        // color='bg-red-300'
+                    // color='bg-red-300'
                     >
                         <RechartsPie />
                     </CardInformacion>
@@ -246,7 +332,7 @@ function PanelControl() {
                             className='mx-auto  w-full  '
                             style={{ height: '150px' }}
                         >
-                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Ventas diarias</h1>
+                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Ventas de esta semana</h1>
                             <RechartsLineal
                                 datos={ventasSemanales}
 
@@ -280,7 +366,14 @@ function PanelControl() {
                             '
                         >
                             <RechartsBar
-
+                                data={productosStockBajo || []}
+                                dataKey={[
+                                    {
+                                        name: 'stock',
+                                        fill: '#fca5a5',
+                                    }
+                                ]}
+                                name='descripcion'
                             />
                         </div>
 
