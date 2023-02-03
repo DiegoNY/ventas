@@ -5,6 +5,8 @@ import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router-dom';
 import { SaveData } from '../useCRUD';
 import { urlAPI } from '../../config';
+import { Layout } from '../../ui/Layouts';
+import { Footer } from '../../ui/Layouts/Footer';
 
 
 function Caja() {
@@ -277,6 +279,14 @@ function Caja() {
                         </div>
 
                     </div>
+                    <div
+                        className='flex w-full text-slate-400 justify-center mb-1 row-start-7 col-span-12'
+                    >
+                        www.rcingenierossac.com
+                    </div>
+                    <Footer>
+
+                    </Footer>
                 </div>
 
 
