@@ -19,14 +19,14 @@ function Tabcompra() {
         <>
             <div
                 className='
-                    bg-slate-700
+                    border
                     mx-2
                     rounded-sm
                 '
             >
-                <h1 className='text-white  ml-3 mt-2 mb-1 font-semibold'>Compras recientes</h1>
+                <h1 className='text-slate-500  ml-3 mt-2 mb-1 '>Compras recientes</h1>
                 <div
-                    className='scroll-content-card'
+                    className='scroll-content-card rounded-xl bg-sky-100'
                 >
                     {compras.map((compra, index) => {
                         let numeroCorrelativoArray = compra?.numero_documento?.split('-');

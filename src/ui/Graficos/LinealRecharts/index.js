@@ -46,7 +46,7 @@ const data = [
 
 ];
 
-function RechartsLineal({ datos, dataKey, aspect, height }) {
+function RechartsLineal({ datos, dataKey, aspect, height, fill }) {
 
     return (
         <>
@@ -62,8 +62,8 @@ function RechartsLineal({ datos, dataKey, aspect, height }) {
                         bottom: 5,
                     }}
                 >
-                    <XAxis dataKey="name" tick={<CustomizedXAxisTick className="text-xs text-center " />} tickLine={false} />
-                    <YAxis tick={<CustomizedYAxisTick className="text-xs text-center " />} tickLine={false} />
+                    <XAxis dataKey="name" tick={<CustomizedXAxisTick className="text-xs text-center " fill={fill} />} tickLine={false} />
+                    <YAxis tick={<CustomizedYAxisTick className="text-xs text-center  " fill={fill} />} tickLine={false} />
                     <Tooltip contentStyle={{ borderWidth: 1 }} />
                     {dataKey?.map(dataKey => {
                         return <Line type="monotone" dataKey={dataKey.name} stroke={dataKey.stroke} dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />

@@ -14,6 +14,7 @@ import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router';
 import { Layout } from '../../ui/Layouts';
 import { Footer } from '../../ui/Layouts/Footer';
+import { validarSerie } from '../useValidaciones';
 
 function RegistroCompras() {
     //Usuario autenticado ? 
@@ -69,9 +70,26 @@ function RegistroCompras() {
     });
 
     const [formaPagoCredito, setFormaPagoCredito] = React.useState(false);
-
     const [buscador, setBuscador] = React.useState(false);
+    const [erroresFormulario, setErroresFormulario] = React.useState({
+        NUMERO_DOCUMENTO: {
+            error: false
+        },
+        FECHA_REALIZACION: {
+            error: false
+        },
+        PROVEEDOR: {
+            error: false
+        },
+        TIPO_DOCUENTO: {
+            error: false,
+        },
+        FORMA_PAGO: {
 
+        }
+    });
+
+    const [tipoCompra, setTipoCompra] = React.useState('');
 
     //variables
 
@@ -393,6 +411,11 @@ function RegistroCompras() {
 
                                             tabIndex={index}
                                             onClick={(event) => {
+                                                let medida = '';
+                                                if (producto.medida == 'C') medida = ' caja';
+                                                if (producto.medida == 'T') medida = ' tableta';
+                                                if (producto.medida == 'U') medida = ' unidad';
+                                                setTipoCompra(producto.descripcion + ' esta siendo comprado por' + medida)
                                                 event.preventDefault();
                                             }}
 
@@ -401,14 +424,17 @@ function RegistroCompras() {
                                                 //Eventes para cambiar el tipo de medida
                                                 if (event.key == 't') {
                                                     producto.medida = 'T';
+                                                    setTipoCompra(producto.descripcion + ' esta siendo comprado por tableta')
                                                 }
 
                                                 if (event.key == 'c') {
                                                     producto.medida = 'C';
+                                                    setTipoCompra(producto.descripcion + ' esta siendo comprado por caja')
                                                 }
 
                                                 if (event.key == 'u') {
                                                     producto.medida = 'U';
+                                                    setTipoCompra(producto.descripcion + ' esta siendo comprado por unidad')
                                                 }
 
                                             }}
@@ -563,6 +589,7 @@ function RegistroCompras() {
                                                 />
                                             </TableCell>
                                             <ProductoSeleccionado total={producto.total} />
+
                                         </TablaRow>
                                     </>
                                 )
@@ -572,7 +599,7 @@ function RegistroCompras() {
                         </TablaTalwindCss>
                     </div>
 
-
+                    <h1 className='text-slate-600 ml-2 mt-1'>{tipoCompra}</h1>
 
                 </div>
 
@@ -619,13 +646,26 @@ function RegistroCompras() {
 
                         <input
                             type={'text'}
-                            className='mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 focus:border-blue-600 '
+                            className={`mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 ${!!erroresFormulario?.NUMERO_DOCUMENTO?.error && 'border-2 border-red-500' || ' focus:border-blue-600'}  `}
                             placeholder='B00-00000000 ... '
                             onChange={(e) => {
-                                setListaCompra({
-                                    ...listaCompra,
-                                    numero_documento: e.target.value,
-                                })
+                                let formatoCorrecto = validarSerie(e.target.value);
+
+                                if (!formatoCorrecto) setErroresFormulario({
+                                    ...erroresFormulario,
+                                    NUMERO_DOCUMENTO: {
+                                        error: true
+                                    }
+                                });
+
+                                if (!!formatoCorrecto) {
+                                    setErroresFormulario(false);
+                                    setListaCompra({
+                                        ...listaCompra,
+                                        numero_documento: e.target.value,
+                                    })
+                                }
+
                             }}
 
                         />

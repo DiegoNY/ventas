@@ -58,7 +58,8 @@ function App() {
                   <Route
                     path='/caja'
                     element={<Caja />}
-                  />
+                  >
+                  </Route>
 
                   <Route
                     path='/mantenimiento-tipo-documento'
@@ -119,7 +120,7 @@ function App() {
                   />
                   <Route
                     path='*'
-                    element={<Caja />}
+                    element={<PanelControl />}
 
                   />
 

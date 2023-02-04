@@ -102,7 +102,7 @@ function Main() {
                                             onClickBlur={() => setBlur(19)}
                                         />
                                         <ItemMenu
-                                            link='caja-cierre'
+                                            link='caja?cierre'
                                             name="Cierre"
                                             icono="ICONO"
                                             blur={blur == 17 && 'backdrop-blur-sm bg-white/10'}

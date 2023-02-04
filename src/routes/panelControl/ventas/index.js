@@ -37,16 +37,16 @@ function Tabventa() {
         <>
             <div
                 className='
-                    bg-slate-700
+                    border
                     rounded-sm
                     row-span-4
                     mb-2
                     mr-2
                 '
             >
-                <h1 className='text-white  ml-3 mt-2 mb-1 font-semibold'>Ventas recientes</h1>
+                <h1 className='text-slate-500  ml-3 mt-2 mb-1 '>Ventas recientes</h1>
                 <div
-                    className='scroll-content'
+                    className='scroll-content bg-sky-100 rounded-xl mx-1'
                 >
                     {ventas.map((venta, index) => {
                         let numero = Number(venta?.correlativo);

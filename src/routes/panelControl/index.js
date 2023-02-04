@@ -37,6 +37,7 @@ function PanelControl() {
     const [compras, setCompras] = useState(0);
     const [clientes, setClientes] = React.useState(0);
     const [productosStockBajo, setProductoStockBajo] = useState([]);
+    const [informacionVentaSemana, setInformacionVentaSemana] = useState(false);
     const [ventasSemanales, setVentasSemanales] = React.useState([
         { name: 'Lunes', Ventas: 0 },
         { name: 'Martes', Ventas: 0 },
@@ -173,6 +174,8 @@ function PanelControl() {
             const fechaFinSemana = formateandoFechaFin;
 
             const dataVentas = await getData(`${urlAPI.Venta.url}?diarias={"desde":"${fechaInicioSemana}", "hasta":"${fechaFinSemana}"}`);
+
+            console.log(dataVentas);
             const ventas = [];
 
             //Se ingresan las ventas obtenidas desde la bd y tambien ventas hardcore para poder colocarlas en 0 
@@ -206,7 +209,7 @@ function PanelControl() {
                 return dias.indexOf(a.name) - dias.indexOf(b.name);
             });
 
-            // console.log(resultArray);
+            console.log(resultArray);
             setVentasSemanales(resultArray);
 
 
@@ -221,7 +224,8 @@ function PanelControl() {
             <div
                 className='
                     grid
-                    grid-cols-12
+                    grid-cols-8
+                    sm:grid-cols-12
                     h-screen
                     mx-auto
                     w-full
@@ -248,8 +252,8 @@ function PanelControl() {
                             flex-col
                         '
                     >
-                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-blue-900 tracking-tight  '>PANEL CONTROL</h1>
-                        <p className='font-normal text-sm ml-2 text-blue-700'>Bienvenido a tu panel control</p>
+                        <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>PANEL CONTROL</h1>
+                        <p className='font-normal text-sm ml-2 text-slate-500'>Bienvenido a tu panel control</p>
                     </div>
                 </div>
 
@@ -269,39 +273,74 @@ function PanelControl() {
                         numero={clientes}
                         informacion={'Clientes registrados'}
                         navigation={'/mantenimiento-cliente'}
-                    // color='bg-red-300'
+                        color='bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 cursor-pointer hover:shadow-lg'
                     >
-                        <RechartsPie />
+                        <div
+                            className='
+                                w-full
+                                text-center
+                                text-3xl
+                            '
+                        >
+
+                            {clientes}
+                        </div>
                     </CardInformacion>
                     <CardInformacion
                         icono={icono_ventas}
                         numero={venta}
                         informacion='Ventas realizadas '
                         navigation={'/venta-punto_venta'}
+                        color='bg-gradient-to-r from-indigo-300 to-purple-400 cursor-pointer hover:shadow-lg'
                     >
-                        <RechartsPie
-                            fill={'#82ca9d'}
-                        />
+                        <div
+                            className='
+                                w-full
+                                text-center
+                                text-3xl
+                            '
+                        >
+
+                            {venta}
+                        </div>
                     </CardInformacion>
                     <CardInformacion
                         icono={icono_producto}
                         numero={producto}
                         informacion='Productos registrados'
-                        navigation={'/mantenimiento-producto'}
+                        navigation='/mantenimiento-producto'
+                        color='bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 cursor-pointer hover:shadow-lg'
 
                     >
-                        <RechartsPie />
+                        <div
+                            className='
+                                w-full
+                                text-center
+                                text-3xl
+                            '
+                        >
+
+                            {producto}
+                        </div>
                     </CardInformacion>
                     <CardInformacion
                         icono={icono_carrito_compras}
                         numero={compras}
                         informacion='Compras realizadas'
-                        navigation={'/compras-registro_compras'}
+                        navigation='/compras-registro_compras'
+                        color=' bg-gradient-to-r from-indigo-300 to-purple-400 cursor-pointer hover:shadow-lg hover:'
 
                     >
-                        <RechartsPie
-                            fill={'#82ca9d'}
-                        />
+                        <div
+                            className='
+                                w-full
+                                text-center
+                                text-3xl
+                            '
+                        >
+
+                            {compras}
+                        </div>
                     </CardInformacion>
 
 
@@ -311,14 +350,16 @@ function PanelControl() {
                         col-span-12
                         row-span-6
                         //bg-green-600
-                        grid
+                        flex
+                        sm:grid
                         grid-cols-3
 
                     '
                 >
+
                     <div
                         className='
-                            bg-slate-700
+                            border
                             col-span-2
                             row-span-4
                             flex
@@ -332,10 +373,45 @@ function PanelControl() {
                             className='mx-auto  w-full  '
                             style={{ height: '150px' }}
                         >
-                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Ventas de esta semana</h1>
+                            <div
+                                className='flex'
+                            >
+                                <h1 className=' text-slate-500 mt-2 ml-2 mb-4 font-medium'>Ventas de esta semana</h1>
+                                <i
+                                    className='text-orange-500 ml-1 mt-2 cursor-pointer'
+                                    onPointerEnter={() => setInformacionVentaSemana(true)}
+                                    onMouseLeave={() => setInformacionVentaSemana(false)}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                    </svg>
+                                </i>
+                                {!!informacionVentaSemana &&
+                                    <div
+                                        className='
+                                            absolute
+                                            z-10 mt-10
+                                            border
+                                            flex
+                                            w-32
+                                            ml-24
+                                            text-xs
+                                            bg-white
+                                            py-1
+                                            px-1
+
+                                        '
+                                    >
+                                        El grafico muestra las ventas que se an realizado o se realizaran
+                                    </div>
+                                }
+
+                            </div>
+
+
                             <RechartsLineal
                                 datos={ventasSemanales}
-
+                                fill='#697F92'
                                 dataKey={[
                                     {
                                         name: 'Ventas',
@@ -352,13 +428,13 @@ function PanelControl() {
                     <div
                         className='
                             rounded-sm
-                            bg-slate-700
+                            border
                             mx-2
                             flex
                             flex-col
                         '
                     >
-                        <h1 className='text-white ml-2 my-2 font-semibold'>Productos con stock mas bajo</h1>
+                        <h1 className='text-slate-500 ml-2 my-2'>Productos con stock mas bajo</h1>
                         <div
                             className='
                                 w-full
@@ -370,7 +446,7 @@ function PanelControl() {
                                 dataKey={[
                                     {
                                         name: 'stock',
-                                        fill: '#fca5a5',
+                                        fill: '#FB923C',
                                     }
                                 ]}
                                 name='descripcion'
@@ -382,13 +458,13 @@ function PanelControl() {
                     <Tabcompra />
                     <div
                         className='
-                            bg-slate-700
+                            border
                             ml-1
                             mr-2
                             rounded-sm
                         '
                     >
-                        <h1 className='text-white mt-2 ml-2 mb-1 font-semibold'>Tipo de clientes</h1>
+                        <h1 className='text-slate-500 mt-2 ml-2 mb-1 '>Tipo de clientes</h1>
                         <div
                             className=''
                         >
@@ -410,7 +486,6 @@ function PanelControl() {
                                 <div
                                     className='
                                     flex
-                                    text-white
                                     w-full
                                     justify-center
                                     text
@@ -418,7 +493,7 @@ function PanelControl() {
                                     italic  
                                   '
                                 >
-                                    <p className='mx-2 text-green-300'>RUC</p> <p className='mx-2 text-yellow-200'>DNI</p> <p className='mx-2 text-indigo-300'>VARIOS</p>
+                                    <p className='mx-2 '>RUC</p> <p className='mx-2 '>DNI</p> <p className='mx-2 '>VARIOS</p>
                                 </div>
                             </div>
 

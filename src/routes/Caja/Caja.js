@@ -5,8 +5,8 @@ import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router-dom';
 import { SaveData } from '../useCRUD';
 import { urlAPI } from '../../config';
-import { Layout } from '../../ui/Layouts';
 import { Footer } from '../../ui/Layouts/Footer';
+import { useLocation } from 'react-router-dom';
 
 
 function Caja() {
@@ -28,7 +28,6 @@ function Caja() {
         error
     } = useLocalStorage('BOX_V1', []);
 
-
     const [apertura, setApertura] = React.useState({
 
         dinero_apertura: 120,
@@ -38,6 +37,11 @@ function Caja() {
         fecha_apertura: '23/01/2023'
 
     });
+    const [cierreState, setCierre] = React.useState(false);
+
+    //Obteniendo informacion de cierre
+    const location = useLocation();
+
 
 
     const sendingMoneyDay = async () => {
@@ -78,6 +82,14 @@ function Caja() {
 
     }, []);
 
+    useEffect(() => {
+        if (location.search == '?cierre') {
+            setCierre(true);
+        } else {
+            setCierre(false);
+        }
+
+    }, [location])
     return (
 
         <React.Fragment>
@@ -128,7 +140,11 @@ function Caja() {
                                     justify-center
                                 '
                             >
-                                <h1 className='text-2xl font-black text-slate-600  mt-4'>Hola  {auth?.user?.nombre} 🖐, para continuar registra el monto que hay en caja </h1>
+                                <h1 className='text-2xl font-black text-slate-600  mt-4'>
+                                    {!cierreState && `Hola  ${auth?.user?.nombre} 🖐, para continuar registra el monto que hay en caja `}
+
+                                    {!!cierreState && 'Para poder continuar debes registrar el cierre de caja'}
+                                </h1>
                             </div>
 
                             <div
@@ -269,7 +285,8 @@ function Caja() {
                                         '
                                         onClick={sendingMoneyDay}
                                     >
-                                        aperturar
+                                        {!cierreState && ' aperturar'}
+                                        {!!cierreState && ' registrar cierre'}
                                     </button>
                                 </div>
 

@@ -8,16 +8,18 @@ function CardCompra({ numero, fecha, total, proveedor }) {
                 className='
                     mt-1
                     mx-2
-                    bg-slate-600
+                    border
                     mb-auto
                     rounded-sm
+                    bg-white
                 '
             >
                 <div
                     className='
                         flex
                         justify-between 
-                        text-white
+                        text-slate-400
+                        hover:text-slate-600
                         text-xs
                     '
                 >
@@ -28,7 +30,7 @@ function CardCompra({ numero, fecha, total, proveedor }) {
                         {proveedor || 'Proveedor'}
                     </span>
 
-                    <div className='mt-2 mb-1 mr-1  text-white flex flex-col text-xs '>
+                    <div className='mt-2 mb-1 mr-1   flex flex-col text-xs '>
                         <p className='mr-10'>S/ {total || 'S/ 14.50'}</p>
                         <span className='mt-2 ml-10 text-xs'>{fecha || '12-12-2023'}</span>
                     </div>

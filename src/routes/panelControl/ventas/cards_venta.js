@@ -8,16 +8,20 @@ function Cardventa({ numero, fecha, codigo, total, onClick }) {
                 className='
                     mt-1
                     mx-2
-                    bg-slate-600
+                    border
                     mb-auto
                     rounded-sm
+                    bg-white
+                    cursor-pointer
+                    
                 '
             >
                 <div
                     className='
                         flex
                         justify-between 
-                        text-white
+                        text-slate-500
+                        hover:text-slate-900
                         text-xs
                     '
                 >
@@ -30,7 +34,7 @@ function Cardventa({ numero, fecha, codigo, total, onClick }) {
                     <span className='mt-2'>
                        S/ {total || '120'}
                     </span>
-                    <div className='mt-2 mb-1 mr-1  text-white flex flex-col text-xs '>
+                    <div className='mt-2 mb-1 mr-1   flex flex-col text-xs '>
                         <span
                             className='cursor-pointer hover:'
                             onClick={onClick}

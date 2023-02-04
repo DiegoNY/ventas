@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TablaRow({ children, tabIndex, onClick, onFocus,onKeyDown }) {
+function TablaRow({ children, tabIndex, onClick, onFocus,onKeyDown,onMouseLeave }) {
 
     return (
         <>
@@ -10,6 +10,7 @@ function TablaRow({ children, tabIndex, onClick, onFocus,onKeyDown }) {
                 onFocus={onFocus}
                 onClick={onClick}
                 onKeyDown={onKeyDown}
+                onMouseLeave={onMouseLeave}
 
             >
                 {children}
