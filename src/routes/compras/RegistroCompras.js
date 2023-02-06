@@ -27,6 +27,7 @@ function RegistroCompras() {
     const [productos, setProductos] = React.useState([{}]);
     const [searchProducto, setSearchProducto] = React.useState('');
     const [proveedores, setProveedores] = React.useState([]);
+    const [formaPago, setFormaPago] = React.useState(true);
     const [tiposDocumentos, setTipoDocumentos] = React.useState([
         {
             id: '',
@@ -705,6 +706,7 @@ function RegistroCompras() {
                                 <input
                                     type={'checkbox'}
                                     value={'EFECTIVO'}
+                                    checked={formaPago}
                                     className='
                                         mr-1
                                     '
@@ -714,6 +716,7 @@ function RegistroCompras() {
                                             ...listaCompra,
                                             forma_pago: e.target.value,
                                         })
+                                        setFormaPago(!formaPago)
                                         setFormaPagoCredito(false);
 
                                     }}
@@ -728,6 +731,7 @@ function RegistroCompras() {
                                 <input
                                     type={'checkbox'}
                                     value={'CREDITO'}
+                                    checked={!formaPago}
                                     className='
                                      mr-1
                                     '
@@ -736,7 +740,11 @@ function RegistroCompras() {
                                             ...listaCompra,
                                             forma_pago: e.target.value,
                                         })
+                                        setFormaPago(!formaPago)
                                         setFormaPagoCredito(true);
+                                    }}
+                                    onClick={() => {
+                                        setFormaPago(!formaPago);
                                     }}
                                 />
                                 <span className='text-xs'>Credito</span>

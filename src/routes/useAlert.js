@@ -33,9 +33,15 @@ function Delete(message = 'Estas seguro de eliminar esta informacion ?') {
 
 }
 
-function Edit(message) {
+function Informacion(message = 'Error') {
     //swal edit 🍟
+
+    Swal.fire(
+        '',
+        `${message}`,
+        'error'
+    )
 }
 
 
-export { Save, Delete, Edit }
+export { Save, Delete, Informacion }

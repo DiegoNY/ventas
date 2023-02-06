@@ -22,7 +22,10 @@ import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
 import { useAuth } from '../../../auth/auth';
 import { useNavigate } from 'react-router';
-
+import { imprimirPDF, imprimirTicket } from '../../useImpresion';
+import { useLocalStorage } from '../../useLocalStorage';
+import { useReactToPrint } from 'react-to-print';
+import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
 
 
 function PuntoVenta() {
@@ -57,11 +60,23 @@ function PuntoVenta() {
     const [searchProducto, setSearchProducto] = React.useState('');
 
     const [cliente, setCliente] = React.useState({});
-    const [loading, setLoading] = React.useState();
-    const [correlativo, setSerieComplementaria] = React.useState('0000030');
+    const [loadings, setLoading] = React.useState();
+
+    const [impresion, setImpresion] = React.useState(true);
+    const [moneda, setMoneda] = React.useState(true);
+    const [formaPago, setFormaPago] = React.useState(true);
+
+    const {
+        item: moneyInBox,
+        saveItem: saveMoneyInBox,
+        loading,
+    } = useLocalStorage('BOX_V1', []);
+
+    const [informacionUsuario, setInformacionUsuario] = React.useState({});
+    const [nuevaVenta, setNuevaVenta] = React.useState();
     const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
-    const [idProductoEnfocado, setIdProductoEnfocado] = React.useState(0);
+    const componentRef = React.useRef();
 
 
 
@@ -381,9 +396,15 @@ function PuntoVenta() {
 
     }
 
+    /**
+     * Guarda los datos de la venta e imprime la venta 
+     */
     const emitirVenta = async () => {
         const response = await SaveData(`${urlAPI.Venta.url}`, venta);
-        console.log(response);
+
+        if (!response[0].error) {
+            response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket(response[0].body) : imprimirPDF(response[0].body);
+        }
 
     }
 
@@ -437,7 +458,7 @@ function PuntoVenta() {
         if (serie == ultimoNumeroIngresado?.serie) {
 
             const informacionSerie = generarSerieVenta(ultimoNumeroIngresado.numero);
-            setSerieComplementaria(informacionSerie.serie);
+            // setSerieComplementaria(informacionSerie.serie);
 
             setVenta({
                 ...venta,
@@ -463,8 +484,6 @@ function PuntoVenta() {
     const actualizarStockProductosEnCarrito = (productosVendidos) => {
 
         productosVendidos?.map(productoVenta => {
-            // console.log(productoVenta);
-            // console.log('Producto ventas');
 
             venta.productos.map(productoCarrito => {
 
@@ -494,34 +513,26 @@ function PuntoVenta() {
 
     const limpiarVenta = () => {
 
+        console.log(venta);
+
+        setVenta({
+            ...venta,
+            tipo_documento: '',
+            productos: [],
+            total: 0,
+            subtotal: 0,
+            igv: 0,
+            identificacion: '00000000',
+            cliente: 'CLIENTES VARIOS',
+            tipo_impresion: 'TICKET',
+            tipo_moneda: 'SOLES',
+            forma_pago: 'EFECTIVO',
+        })
+
     }
-    //Funcion para imprimir pdf 
-    const printComponent = () => {
-        const printWindow = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
-        printWindow.document.write(`
-          <html>
-            <head>
-              <style>
-                /* Estilos para la hoja de impresión */
-              </style>
-            </head>
-            <body>
-              <div>
-                <MyComponent />
-                Imprimir esto 👀
-              </div>
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    };
 
 
     //Obtencion de data Necesaria
-
     //obtiene los tipos de documentos y actualiza el valor global
     useEffect(() => {
 
@@ -598,10 +609,85 @@ function PuntoVenta() {
 
     }, [venta])
 
+    useEffect(() => {
+        if (!auth.loading) setVenta({ ...venta, usuario: auth?.user?._id })
+    }, [auth])
 
+    useEffect(() => {
+
+
+        if (!loading) {
+
+
+            const InformacionCantidadVentas = async () => {
+                const CantidadVentas = await getData(`${urlAPI.Venta.url}?usuario=${auth.user._id}`)
+                return CantidadVentas.length;
+            }
+
+            InformacionCantidadVentas()
+                .then(cantidad => {
+                    setInformacionUsuario({
+                        ...informacionUsuario,
+                        apertura_caja: moneyInBox.dinero_apertura,
+                        cantidad_ventas: cantidad,
+                    })
+                });
+
+        }
+
+
+    }, [moneyInBox])
+
+    useEffect(() => {
+        if (!loading) {
+            const informacionUsuarios = (informacion) => {
+                if (auth.user._id == informacion._id) {
+                    console.log('Modificar cantidad de venta');
+
+                    console.log(informacionUsuario);
+                    setInformacionUsuario({
+                        ...informacionUsuario,
+                        cantidad_ventas: informacionUsuario.cantidad_ventas + 1,
+                    })
+
+                    setNuevaVenta(informacion._id);
+
+                    console.log(informacionUsuario);
+
+                }
+            }
+            socket.on('ventas_recientes', informacionUsuarios);
+
+            return () => {
+
+                socket.off('ventas_recientes', informacionUsuarios)
+
+            }
+        }
+
+    }, [nuevaVenta, moneyInBox, informacionUsuario])
+
+    const handlePrints = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'impresion',
+        onAfterPrint: () => alert('Print succes')
+    })
 
     return (
         <>
+            {/**Impresion */}
+            <div
+                className='hidden'
+            >
+                <div
+                    ref={componentRef}
+
+                >
+
+                    <ImprimirTicket />
+                </div>
+            </div>
+
             <div
                 className='
                     grid
@@ -865,7 +951,7 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'TICKET'}
-                                                checked={true}
+                                                checked={impresion}
                                                 className='
                                                  mr-1
                                                  mb-3
@@ -873,6 +959,7 @@ function PuntoVenta() {
                                                 onChange={(e) => {
                                                     let ticket = e.target.value;
                                                     setVenta({ ...venta, tipo_impresion: ticket })
+                                                    setImpresion(!impresion);
                                                 }}
                                             />
                                             <span
@@ -907,13 +994,19 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'PDF'}
+                                                checked={!impresion}
                                                 className='
                                                 mr-1
                                                 mb-3
                                             '
                                                 onChange={(e) => {
-                                                    let pdf = e.target.value(e)
+                                                    let pdf = e.target.value
                                                     setVenta({ ...venta, tipo_impresion: pdf })
+                                                    setImpresion(!impresion)
+                                                }}
+
+                                                onClick={() => {
+                                                    setImpresion(!impresion);
                                                 }}
                                             />
                                             <span
@@ -982,7 +1075,7 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'SOLES'}
-                                                checked={true}
+                                                checked={moneda}
                                                 className='
                                                  mr-1
                                                  mb-3
@@ -990,6 +1083,7 @@ function PuntoVenta() {
                                                 onChange={(e) => {
                                                     let soles = e.target.value;
                                                     setVenta({ ...venta, tipo_moneda: soles })
+                                                    setMoneda(!moneda)
                                                 }}
                                             />
                                             <span
@@ -1023,6 +1117,7 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'DOLARES'}
+                                                checked={!moneda}
                                                 className='
                                                 mr-1
                                                 mb-3
@@ -1030,6 +1125,7 @@ function PuntoVenta() {
                                                 onChange={(e) => {
                                                     let dorales = e.target.value;
                                                     setVenta({ ...venta, tipo_moneda: dorales })
+                                                    setMoneda(!moneda)
                                                 }}
                                             />
                                             <span
@@ -1087,13 +1183,14 @@ function PuntoVenta() {
                                             <input
                                                 type={'checkbox'}
                                                 value={'EFECTIVO'}
-                                                checked={true}
+                                                checked={formaPago}
                                                 className='
                                                  mr-1
                                                  mb-3
                                                 '
                                                 onChange={(e) => {
                                                     let formapago = e.target.value;
+                                                    setFormaPago(!formaPago)
                                                     setVenta({ ...venta, forma_pago: formapago })
                                                 }}
                                             />
@@ -1127,11 +1224,15 @@ s                                                '
                                             <input
                                                 type={'checkbox'}
                                                 value={'CREDITO'}
+                                                checked={!formaPago}
                                                 className='
                                                 mr-1
                                                 mb-3
                                             '
                                                 onChange={(e) => {
+
+                                                    setFormaPago(!formaPago);
+                                                    setVenta({ ...venta, forma_pago: e.target.value })
 
                                                 }}
                                             />
@@ -1240,7 +1341,10 @@ s                                                '
                                     hover:border-b-2 
                                     hover:border-b-slate-400 
                                 '
-                                onClick={limpiarVenta}
+                                onClick={() => {
+                                    handlePrints();
+                                    limpiarVenta();
+                                }}
                             >
                                 Cancelar venta
                             </h1>
@@ -1307,12 +1411,12 @@ s                                                '
                                 <div
                                     className='mx-1'
                                 >
-                                    <p className='font-medium italic '>Cantidad : <span className='text-sm font-normal not-italic'>00</span></p>
-                                    <p className='font-medium italic'>Dinero recaudado: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
+                                    <p className='font-medium italic '>Cantidad : <span className='text-sm font-normal not-italic'>{informacionUsuario.cantidad_ventas || '00'}</span></p>
+                                    <p className='font-medium italic'>Dinero recaudado: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.dinero_recaudado || '00'}</span></p>
                                 </div>
                                 <div>
-                                    <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
-                                    <p className='ml-2 font-medium italic'>Apertura caja: <span className='text-sm font-normal not-italic'>S/ 00</span></p>
+                                    <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.gastos || '00'}</span></p>
+                                    <p className='ml-2 font-medium italic'>Apertura caja: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.apertura_caja}</span></p>
                                 </div>
 
                             </div>

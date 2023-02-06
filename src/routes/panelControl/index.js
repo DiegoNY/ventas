@@ -17,7 +17,7 @@ import { RechartsPie } from '../../ui/Graficos/PieRecharts';
 import { CardCompra } from './compras/card_compras';
 import { Tabventa } from './ventas';
 import { Tabcompra } from './compras';
-import { getSunday } from './useFechasGrafico';
+import { getAfterSunday, getSunday } from './useFechasGrafico';
 
 
 function PanelControl() {
@@ -119,11 +119,13 @@ function PanelControl() {
             // se obtiene el inicio de semana restando la fecha del domingo en 7 
             // la semana inicia todos los domingos 🐱‍🏍 
 
-            const fechaInicioSemana = sunday.getDay() - 7;
+
+            const fechaInicioSemana = getAfterSunday(currentDate);
             const fechaFinSemana = sunday;
 
+            //TODO : validar que la api no retorne los datos del domingo anterior stres 🦘
+            
             const dataVentas = await getData(`${urlAPI.Venta.url}?diarias={"desde":"${fechaInicioSemana}", "hasta":"${fechaFinSemana}"}`);
-
             const ventas = [];
 
             // Se ingresan las ventas obtenidas desde la bd y tambien ventas hardcore para poder colocarlas en 0 
@@ -224,7 +226,7 @@ function PanelControl() {
                         numero={clientes}
                         informacion={'Clientes registrados'}
                         navigation={'/mantenimiento-cliente'}
-                        color='bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 cursor-pointer hover:shadow-lg'
+                        color='bg-blue-700 cursor-pointer hover:shadow-lg'
                     >
                         <div
                             className='
@@ -242,7 +244,7 @@ function PanelControl() {
                         numero={venta}
                         informacion='Ventas realizadas '
                         navigation={'/venta-punto_venta'}
-                        color='bg-gradient-to-r from-indigo-300 to-purple-400 cursor-pointer hover:shadow-lg'
+                        color='bg-green-600 cursor-pointer hover:shadow-lg'
                     >
                         <div
                             className='
@@ -260,7 +262,7 @@ function PanelControl() {
                         numero={producto}
                         informacion='Productos registrados'
                         navigation='/mantenimiento-producto'
-                        color='bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 cursor-pointer hover:shadow-lg'
+                        color='bg-orange-500 cursor-pointer hover:shadow-lg'
 
                     >
                         <div
@@ -279,7 +281,7 @@ function PanelControl() {
                         numero={compras}
                         informacion='Compras realizadas'
                         navigation='/compras-registro_compras'
-                        color=' bg-gradient-to-r from-indigo-300 to-purple-400 cursor-pointer hover:shadow-lg hover:'
+                        color=' bg-sky-400 cursor-pointer hover:shadow-lg hover:'
 
                     >
                         <div

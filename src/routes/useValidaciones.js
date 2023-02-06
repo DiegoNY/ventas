@@ -1,5 +1,5 @@
 const validarSerie = (string) => {
-    const pattern = /^[a-zA-Z][0-9]{2}-[0-9]{8}$/;
+    const pattern = /^[a-zA-Z][a-zA-Z0-9-]{3}-[0-9]{8}$/;
     return pattern.test(string);
 }
 

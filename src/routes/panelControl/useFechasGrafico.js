@@ -9,10 +9,27 @@ function getSunday(date) {
         return date;
     }
     const day = date.getDay();
-    const diff = date.getDate() + (7 - day) + (day > 0 ? 7 : 0);
+    const diff = date.getDate() + (7 - day) + (day > 0 ? 7 : 0) - (day == 1 ? + 7 : 0);
     return new Date(date.setDate(diff));
+}
+
+/**
+ * Recibe una fecha y le resta 7 dias returna la fecha encontrada 
+ * 📅
+ * @param {*} fechaParam la fecha  
+ * @returns 
+ */
+
+function getAfterSunday(fechaParam) {
+    let fecha = new Date(fechaParam);
+    let sieteDiasMilisegundos = 1000 * 60 * 60 * 24 * 7;
+    let resta = fecha.getTime() - sieteDiasMilisegundos;
+
+    return new Date(resta);
+
 }
 
 export {
     getSunday,
+    getAfterSunday,
 }

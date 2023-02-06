@@ -1,5 +1,5 @@
 
-import { Save } from "./useAlert";
+import { Informacion, Save } from "./useAlert";
 import { destroyData, postData, updateData } from "./useFetch";
 
 /**
@@ -14,7 +14,12 @@ const SaveData = async (urlApi, data, formData = false) => {
     const response = await postData(urlApi, data, formData)
 
     if (!response.error) Save();
-    
+
+    if (response.error) {
+
+        if (response.body == 'LLAVE DUPLICADA') Informacion('Selecciona una serie si el problema persiste refresca la pagina')
+    };
+
     return response;
 
 }
