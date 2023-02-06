@@ -73,7 +73,7 @@ function Tabventa() {
                             className='
                                 my-2
                                 mr-2
-                                text-sky-100
+                                text-slate-400
                                 font-bold
                                 cursor-pointer
                                 hover:text-sky-300

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useLocalStorage } from '../useLocalStorage';
 import { useAuth } from '../../auth/auth';
@@ -28,12 +28,14 @@ function Caja() {
         error
     } = useLocalStorage('BOX_V1', []);
 
+    const [dineroApertura, setDineroApertura] = useState(0);
+    const [usuario, setUsuario] = useState({});
     const [apertura, setApertura] = React.useState({
 
-        dinero_apertura: 120,
-        punto_venta: '192.20.43.20',
-        usuario: "usuario",
-        dni: 75447008,
+        dinero_apertura: dineroApertura,
+        punto_venta: '',
+        usuario: usuario?.name,
+        dni: usuario?.dni,
         fecha_apertura: '23/01/2023'
 
     });
@@ -41,8 +43,6 @@ function Caja() {
 
     //Obteniendo informacion de cierre
     const location = useLocation();
-
-
 
     const sendingMoneyDay = async () => {
 
@@ -71,6 +71,7 @@ function Caja() {
                 setApertura({
                     ...apertura,
                     punto_venta: data.ip,
+                    dinero_apertura: moneyInBox.dinero_apertura
                 })
 
             } catch (e) {
@@ -80,16 +81,21 @@ function Caja() {
 
         getIP();
 
-    }, []);
+    }, [moneyInBox]);
 
     useEffect(() => {
+
         if (location.search == '?cierre') {
             setCierre(true);
         } else {
             setCierre(false);
         }
 
+
     }, [location])
+
+
+
     return (
 
         <React.Fragment>
@@ -240,7 +246,7 @@ function Caja() {
                                                 S/ <textarea
                                                     cols={6}
                                                     rows={1}
-                                                    defaultValue={50}
+                                                    defaultValue={apertura?.dinero_apertura}
                                                     onChange={(e) => {
                                                         setApertura({
                                                             ...apertura,

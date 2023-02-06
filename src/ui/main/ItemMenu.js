@@ -8,13 +8,13 @@ function ItemMenu(props) {
         <div >
 
             <ul
-                className={`nav nav-sidebar ${props.blur || ''}	`}
+                className={`nav nav-sidebar ${props.blur || ''} 	`}
                 data-nav-type="accordion"
                 id="navigationMenu"
                 onClick={props.onClickBlur}
             >
 
-                <li className="nav-item" >
+                <li className="nav-item " >
                     {props.link &&
                         <Link
                             className="nav-link"

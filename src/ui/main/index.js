@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../../auth/auth';
 import { ItemMenu } from './ItemMenu';
 import { SubMenuItem } from './SubMenuItem';
 import icono_menu from './img/icono-menu.svg'
+import { useLocalStorage } from '../../routes/useLocalStorage';
 
 
 function Main() {
@@ -12,14 +13,37 @@ function Main() {
     const [mostrarVentas, setMostrarVentas] = React.useState(false);
     const [mostrarCompras, setMostrarCompras] = React.useState(false);
     const [blur, setBlur] = React.useState(0);
-
+    const [mostrarApertura, setMostrarApertura] = React.useState(true);
+    const [usuario, setUsuario] = React.useState({});
+    const [loadings, setLoading] = React.useState(false);
     const auth = useAuth();
+
+    const {
+        item: moneyInBox,
+        loading,
+        error
+    } = useLocalStorage('BOX_V1', []);
+
+
+    useEffect(() => {
+
+        if (!loading) {
+            moneyInBox.dinero_apertura ? setMostrarApertura(false) : setMostrarApertura(true);
+        }
+
+    }, [moneyInBox])
+
+    useEffect(() => {
+
+        auth.loading ? setLoading(true) : setUsuario({ nombre: auth.user?.nombre, cargo: auth.user?.cargo });
+
+    }, [auth])
 
     if (auth.user) {
 
         return (
             <>
-                <div className={`sidebar sidebar-dark sidebar-main sidebar-expand-sm h-screen ${!comprimir && ' sidebar-main-resized '} `}>
+                <div className={`sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-screen ${!comprimir && ' sidebar-main-resized '} `}>
 
                     <div className="sidebar-content h-screen">
 
@@ -77,7 +101,7 @@ function Main() {
                             </div>
                         </div>
 
-                        <div className="sidebar-section">
+                        <div className="sidebar-section ">
 
                             <ItemMenu
                                 link='home'
@@ -94,20 +118,28 @@ function Main() {
                             >
                                 {!!mostrarSubMenuCaja &&
                                     <SubMenuItem>
-                                        <ItemMenu
-                                            link='caja'
-                                            name="Apertura"
-                                            icono="ICONO"
-                                            blur={blur == 19 && 'backdrop-blur-sm bg-white/10'}
-                                            onClickBlur={() => setBlur(19)}
-                                        />
-                                        <ItemMenu
-                                            link='caja?cierre'
-                                            name="Cierre"
-                                            icono="ICONO"
-                                            blur={blur == 17 && 'backdrop-blur-sm bg-white/10'}
-                                            onClickBlur={() => setBlur(17)}
-                                        />
+
+                                        {mostrarApertura &&
+                                            <ItemMenu
+                                                link='caja'
+                                                name="Apertura"
+                                                icono="ICONO"
+                                                blur={blur == 19 && 'backdrop-blur-sm bg-white/10'}
+                                                onClickBlur={() => setBlur(19)}
+                                            />
+                                        }
+
+                                        {!mostrarApertura &&
+                                            <ItemMenu
+                                                link='caja?cierre'
+                                                name="Cierre"
+                                                icono="ICONO"
+                                                blur={blur == 17 && 'backdrop-blur-sm bg-white/10'}
+                                                onClickBlur={() => setBlur(17)}
+                                            />
+                                        }
+
+
                                         <ItemMenu
                                             link='caja-reporte'
                                             name="Reporte"
