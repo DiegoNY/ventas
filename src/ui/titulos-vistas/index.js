@@ -17,17 +17,12 @@ function Titulo(props) {
                 <h3
                     className='
                            
-                           inline-block 
-                           text-2xl 
-                           sm:text-2xl 
-                           font-black 
-                           text-slate-900 
-                           tracking-tight 
+                    ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight 
                            
-                        '
+                    '
                 >
 
-                    <span className='font-sans' >{props.title}</span>
+                    <span  >{props.title} </span>
                     /
                     <span
                         className='

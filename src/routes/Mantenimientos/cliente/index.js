@@ -691,7 +691,7 @@ function MantenimientoCliente() {
                 </Modal>
                 {/* Titulo */}
                 <div className='
-                    col-span-12 row-span-2 sm:row-span-1 flex z-50
+                    col-span-12 row-span-2 sm:row-span-1 flex z-10
                 '>
                     <Titulo title={'Clientes '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
                     <div class="flex flex-row-reverse">

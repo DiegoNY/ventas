@@ -17,7 +17,7 @@ import { RechartsPie } from '../../ui/Graficos/PieRecharts';
 import { CardCompra } from './compras/card_compras';
 import { Tabventa } from './ventas';
 import { Tabcompra } from './compras';
-import { getAfterSunday, getSunday } from './useFechasGrafico';
+import { getAfterSunday, getMonday, getSunday } from './useFechasGrafico';
 
 
 function PanelControl() {
@@ -120,11 +120,9 @@ function PanelControl() {
             // la semana inicia todos los domingos 🐱‍🏍 
 
 
-            const fechaInicioSemana = getAfterSunday(currentDate);
+            const fechaInicioSemana = getMonday(sunday);
             const fechaFinSemana = sunday;
 
-            //TODO : validar que la api no retorne los datos del domingo anterior stres 🦘
-            
             const dataVentas = await getData(`${urlAPI.Venta.url}?diarias={"desde":"${fechaInicioSemana}", "hasta":"${fechaFinSemana}"}`);
             const ventas = [];
 
@@ -355,7 +353,7 @@ function PanelControl() {
 
                                         '
                                     >
-                                        El grafico muestra las ventas que se an realizado o se realizaran
+                                        El grafico muestra las ventas que se an realizado 
                                     </div>
                                 }
 

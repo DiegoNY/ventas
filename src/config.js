@@ -4,7 +4,7 @@ const socket = io('http://192.168.1.110:8080/');
 
 // Archivo de Configuracion 🔩🔩🔩
 const hostAPI = 'http://192.168.1.110:8000';
-const hostAPIV2 = 'http://192.168.1.110:8080';  
+const hostAPIV2 = 'http://192.168.1.110:8080';
 
 const urlAPI = {
 
@@ -63,7 +63,7 @@ const urlAPI = {
     Numeros_ventas: {
         url: `${hostAPIV2}/api/v2/serie_ventas`
     },
-    Nota_salida : {
+    Nota_salida: {
         url: `${hostAPIV2}/api/v2/nota_salida`
     }
 
@@ -71,9 +71,21 @@ const urlAPI = {
 }
 
 
+const EMPRESA = {
+    DIRECCION: 'Jr. Monitor Huáscar 290 Urb. San Ignacio - Barranco ',
+    TELEFONO: '01692 6092',
+    SERIE_NOTA_CREDITO: 'N01',
+    AUTORIZACION: '034-005-0006616',
+    LOGO_URL: '',
+    RUC:'20566487986',
+    NOMBRE :'NOMBRE LARGO DE EMPRESA'
+
+}
+
 
 export {
     hostAPI,
     urlAPI,
-    socket
+    socket,
+    EMPRESA
 }

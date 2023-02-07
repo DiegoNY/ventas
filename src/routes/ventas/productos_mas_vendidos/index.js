@@ -123,11 +123,11 @@ function ProductosMasVendidos() {
                         col-span-12
                         flex
                         justify-between
+                        mx-2
                     '
                 >
                     <div
                         className='
-                        mx-1
                         bg-slate-700
                         flex
                         flex-col

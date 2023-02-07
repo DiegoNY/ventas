@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
-import { socket, urlAPI } from '../../../config';
+import { EMPRESA, socket, urlAPI } from '../../../config';
 import { TablaRow } from '../../../ui/Tabla/tableRow';
 import { TablaTalwindCss } from '../../../ui/Tabla/useTabla';
 import { getData } from '../../useFetch';
@@ -190,6 +190,21 @@ function NotaSalida() {
 
         }
 
+    }, [])
+
+    useEffect(() => {
+        const obtenerCorrelativoNotaSalida = async () => {
+            const data = await getData(`${urlAPI.Numeros_ventas.url}?id=${EMPRESA.SERIE_NOTA_CREDITO}`);
+            const serieGenerada = generarSerieVenta(data[data.length - 1].numero);
+            setNotaSalida({
+                ...notaSalida,
+                serie: serieGenerada.tipo_documento,
+                correlativo: serieGenerada.serie,
+                numeroDocumento: `${serieGenerada.tipo_documento}-${serieGenerada.serie}`
+            })
+        }
+
+        obtenerCorrelativoNotaSalida();
     }, [])
 
     return (

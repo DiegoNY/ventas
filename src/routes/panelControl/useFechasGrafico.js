@@ -8,9 +8,11 @@ function getSunday(date) {
     if (date.getDay() == 0) {
         return date;
     }
-    const day = date.getDay();
-    const diff = date.getDate() + (7 - day) + (day > 0 ? 7 : 0) - (day == 1 ? + 7 : 0);
-    return new Date(date.setDate(diff));
+    const currentDay = date.getDay();
+    const daysUntilSunday = 7 - currentDay;
+    const nextSunday = new Date(date.getTime() + (daysUntilSunday * 24 * 60 * 60 * 1000));
+    return nextSunday;
+
 }
 
 /**
@@ -20,16 +22,15 @@ function getSunday(date) {
  * @returns 
  */
 
-function getAfterSunday(fechaParam) {
+function getMonday(fechaParam) {
     let fecha = new Date(fechaParam);
-    let sieteDiasMilisegundos = 1000 * 60 * 60 * 24 * 7;
+    let sieteDiasMilisegundos = 1000 * 60 * 60 * 24 * 6;
     let resta = fecha.getTime() - sieteDiasMilisegundos;
-
     return new Date(resta);
 
 }
 
 export {
     getSunday,
-    getAfterSunday,
+    getMonday,
 }

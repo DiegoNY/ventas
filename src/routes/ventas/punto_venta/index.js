@@ -22,7 +22,6 @@ import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
 import { useAuth } from '../../../auth/auth';
 import { useNavigate } from 'react-router';
-import { imprimirPDF, imprimirTicket } from '../../useImpresion';
 import { useLocalStorage } from '../../useLocalStorage';
 import { useReactToPrint } from 'react-to-print';
 import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
@@ -78,6 +77,19 @@ function PuntoVenta() {
     const [error, setError] = React.useState(false);
     const componentRef = React.useRef();
 
+    //impresion
+    const [informacionImpresion, setInformacionImpresion] = React.useState({});
+
+    const imprimirTicket = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'Ticket de venta',
+        onAfterPrint: () => console.log('Impreso uwu')
+    })
+    const imprimirPDF = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'Documento de venta',
+        onAfterPrint: () => console.log('Impreso uwu')
+    })
 
 
     //variables
@@ -284,6 +296,7 @@ function PuntoVenta() {
         venta.productos.map(producto => {
 
             if (producto.id_compra == id) {
+                producto.precio = valor
                 const total = producto.cantidad_comprada * valor
                 producto.total = total;
             }
@@ -400,10 +413,11 @@ function PuntoVenta() {
      * Guarda los datos de la venta e imprime la venta 
      */
     const emitirVenta = async () => {
+        setInformacionImpresion(venta);
         const response = await SaveData(`${urlAPI.Venta.url}`, venta);
 
         if (!response[0].error) {
-            response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket(response[0].body) : imprimirPDF(response[0].body);
+            response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket() : imprimirPDF();
         }
 
     }
@@ -513,7 +527,6 @@ function PuntoVenta() {
 
     const limpiarVenta = () => {
 
-        console.log(venta);
 
         setVenta({
             ...venta,
@@ -588,6 +601,12 @@ function PuntoVenta() {
                     numero_venta: `${informacionSerie.tipo_documento}-${informacionSerie.serie}`,
                     serie: informacionSerie.tipo_documento,
                     correlativo: informacionSerie.serie,
+                    productos: [],
+                    total: 0,
+                    subtotal: 0,
+                    igv: 0,
+                    identificacion: '00000000',
+                    cliente: 'CLIENTES VARIOS',
                 })
             }
 
@@ -667,11 +686,7 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
-    const handlePrints = useReactToPrint({
-        content: () => componentRef.current,
-        documentTitle: 'impresion',
-        onAfterPrint: () => alert('Print succes')
-    })
+
 
     return (
         <>
@@ -684,10 +699,18 @@ function PuntoVenta() {
 
                 >
 
-                    <ImprimirTicket />
+                    <ImprimirTicket
+                        data={
+                            {
+                                venta: informacionImpresion,
+                                qr: 'www.datos.com'
+                            }
+                        }
+                    />
                 </div>
             </div>
 
+            {/**Fin impresion */}
             <div
                 className='
                     grid
@@ -1342,7 +1365,6 @@ s                                                '
                                     hover:border-b-slate-400 
                                 '
                                 onClick={() => {
-                                    handlePrints();
                                     limpiarVenta();
                                 }}
                             >

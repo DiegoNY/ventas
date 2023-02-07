@@ -43,7 +43,7 @@ function Main() {
 
         return (
             <>
-                <div className={`sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-screen ${!comprimir && ' sidebar-main-resized '} `}>
+                <div className={`${!!comprimir && 'absolute z-50 sidebar-light  rounded-xl text-slate-800  h-screen'}   ${!comprimir && ' sidebar-main-resized sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-screen '} `}>
 
                     <div className="sidebar-content h-screen">
 
