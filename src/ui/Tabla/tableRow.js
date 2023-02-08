@@ -5,7 +5,7 @@ function TablaRow({ children, tabIndex, onClick, onFocus,onKeyDown,onMouseLeave 
     return (
         <>
             <div
-                className='table-row hover:bg-gray-200'
+                className='table-row hover:bg-sky-100'
                 tabIndex={tabIndex}
                 onFocus={onFocus}
                 onClick={onClick}

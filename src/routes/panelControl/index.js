@@ -366,7 +366,7 @@ function PanelControl() {
                                 dataKey={[
                                     {
                                         name: 'Ventas',
-                                        stroke: '#8884d8'
+                                        stroke: '#16A34A'
                                     }
                                 ]}
                             />
@@ -397,7 +397,7 @@ function PanelControl() {
                                 dataKey={[
                                     {
                                         name: 'stock',
-                                        fill: '#FB923C',
+                                        fill: '#F97316',
                                     }
                                 ]}
                                 name='descripcion'

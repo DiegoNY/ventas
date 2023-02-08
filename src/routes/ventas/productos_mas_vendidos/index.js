@@ -39,14 +39,10 @@ function ProductosMasVendidos() {
                     className='
                         col-span-12
                         //bg-green-200
-                        mb-auto
+                        mb-4
                     '
                 >
-                    <Titulo
-                        title='Productos mas vendidos'
-                        navegacion='ventas'
-                    />
-
+                    <h1 className='text-2xl mt-2 font-bold text-blue-400 ml-2'>Productos mas vendidos </h1>
                 </div>
                 <div
                     className='
@@ -58,7 +54,7 @@ function ProductosMasVendidos() {
                     <div
                         className='
                         mx-2
-                        bg-slate-700
+                        border
                         mb-2
                         flex
                         flex-col
@@ -68,33 +64,31 @@ function ProductosMasVendidos() {
                     '
                     >
 
-                        <h1 className='ml-2 font-semibold my-2' >Mes actual</h1>
-                        <RechartsBar fill={'#8884d8'} fill_2={'#82ca9d'} />
+                        <h1 className='ml-2 font-semibold my-2 text-slate-600' >Mes actual</h1>
+                        <RechartsBar fill={'#FACC15'} fill_2={'#84CC16'} />
                     </div>
                     <div
                         className='
                         mx-2
-                        bg-slate-700
+                        border
                         mb-auto
                         flex
                         flex-col
-                        text-white
                         rounded-sm
 
                     '
                     >
 
-                        <h1 className='ml-2 font-semibold my-2' >Mes pasado</h1>
-                        <RechartsBar fill={'#8884d8'} fill_2={'#82ca9d'} />
+                        <h1 className='ml-2 font-semibold my-2 text-slate-500' >Mes pasado</h1>
+                        <RechartsBar fill={'#4ADE80'} fill_2={'#22D3EE'} />
                     </div>
                     <div
                         className='
                         mx-2
-                        bg-slate-700
+                        border
                         mb-auto
                         flex
                         flex-col
-                        text-white
                         rounded-sm
 
                     '
@@ -107,14 +101,14 @@ function ProductosMasVendidos() {
                                 mr-1
                             '
                         >
-                            <h1 className=' font-semibold my-2' >Hace 3 meses</h1>
+                            <h1 className=' font-semibold my-2 text-slate-500' >Hace 3 meses</h1>
                             <button className='border my-1  text-xs w-36 flex justify-center   hover:' >
                                 <h1 className='mt-1'>Descargar reporte</h1>
                                 <img src={icono_descarga} className=' mt-1 h-4' />
                             </button>
 
                         </div>
-                        <RechartsBar fill={'#8884d8'} fill_2={'#82ca9d'} />
+                        <RechartsBar fill={'#2563EB'} fill_2={'#E11D48'} />
                     </div>
                 </div>
 
@@ -128,10 +122,9 @@ function ProductosMasVendidos() {
                 >
                     <div
                         className='
-                        bg-slate-700
+                        border
                         flex
                         flex-col
-                        text-white
                         rounded-sm
                         h-80
                         w-full  
@@ -143,8 +136,17 @@ function ProductosMasVendidos() {
                         <div
                             className='mx-auto  w-full  '
                         >
-                            <h1 className=' text-white mt-2 ml-2 mb-4 font-semibold'>Hace un año</h1>
-                            <RechartsLineal height={'77%'} />
+                            <h1 className=' mt-2 ml-2 mb-4 font-semibold text-slate-500'>Hace un año</h1>
+                            <RechartsLineal
+                                height={'77%'}
+                                fill='#697F92'
+                                dataKey={[
+                                    {
+                                        name: 'pv',
+                                        stroke: '#FB923C'
+                                    }
+                                ]}
+                            />
 
                         </div>
 

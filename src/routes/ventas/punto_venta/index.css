@@ -15,10 +15,26 @@
     height: 380px;
 }
 
-.container-derecha{
+.container-derecha {
     width: 700px;
 }
 
 .container-formulario-venta {
     width: 550px;
+}
+
+.contenedor-tablas {
+
+    width: 110vh;
+    overflow-y: scroll;
+    max-height: 62vh;
+
+}
+
+input[type="number"] {
+    border: none;
+
+}
+input[type="number"]:focus {
+    outline: none;
 }

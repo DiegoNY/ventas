@@ -30,7 +30,7 @@ const Layout = React.memo(({ onClick, children, title }) => {
                     {!!title &&
 
                         <>
-                            <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-800' >{title}</h1>
+                            <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-400' >{title}</h1>
                             <br />
 
                             <div

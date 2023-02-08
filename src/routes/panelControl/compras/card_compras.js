@@ -18,8 +18,8 @@ function CardCompra({ numero, fecha, total, proveedor }) {
                     className='
                         flex
                         justify-between 
-                        text-slate-400
-                        hover:text-slate-600
+                        text-slate-600
+                        hover:text-slate-700
                         text-xs
                     '
                 >

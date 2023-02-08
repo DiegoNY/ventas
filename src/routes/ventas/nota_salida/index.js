@@ -233,7 +233,7 @@ function NotaSalida() {
                     '
                 >
 
-                    <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-800' >Estas realizando una nota de salida</h1>
+                    <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-400' >Estas realizando una nota de salida</h1>
                     <br />
                     <div
                         className='
@@ -275,7 +275,7 @@ function NotaSalida() {
                                     type={'text'}
                                 />
 
-                                <h1 className='text-right  font-black mr-2 text-blue-800'>Selecciona los productos </h1>
+                                <h1 className='text-right  font-black mr-2 text-blue-500'>Selecciona los productos </h1>
                             </div>
                             {!!buscador && <div
                                 className='
@@ -459,9 +459,9 @@ function NotaSalida() {
                                     flex-col
                                 '
                             >
-                                <h1 className='flex justify-end text-blue-800 font-black'>{notaSalida.numeroDocumento}</h1>
-                                <p className='mb-1  text-blue-800 font-light font-sans'>Por favor completa los siguientes datos :</p>
-                                <h1 className='font-black text-blue-800'>Datos del solicitante</h1>
+                                <h1 className='flex justify-end text-slate-700 font-black'>{notaSalida.numeroDocumento}</h1>
+                                <p className='mb-1  text-slate-500 font-light font-sans'>Por favor completa los siguientes datos :</p>
+                                <h1 className='font-black text-slate-700'>Datos del solicitante</h1>
                                 <input
                                     type={'text'}
                                     className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
@@ -474,7 +474,7 @@ function NotaSalida() {
                                     }}
                                 />
                                 <br />
-                                <h1 className='font-black text-blue-800 flex' >Motivo
+                                <h1 className='font-black text-slate-700 flex' >Motivo
                                     <i
                                         className='text-orange-500 ml-1 cursor-pointer'
                                         onPointerEnter={() => setInformacionMotivo(false)}
@@ -518,7 +518,7 @@ function NotaSalida() {
 
                                 />
                                 <br />
-                                <h1 className='font-black text-blue-800' >¿Cuando se realizo ?</h1>
+                                <h1 className='font-black text-slate-700' >¿Cuando se realizo ?</h1>
                                 <input
                                     type={'date'}
                                     className='mx-2 rounded-sm text-center mt-1 border-y border-x p-1 focus:border-2 focus:border-blue-600 '

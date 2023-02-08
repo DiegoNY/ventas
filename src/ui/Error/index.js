@@ -5,9 +5,9 @@ function Informacion({ onClick, children, className }) {
     return (
         <div
             className='
+                        absolute
                          backdrop-blur-sm bg-white/30
-                         z-10
-                         fixed
+                         z-40
                          h-full
                          w-full
                          flex

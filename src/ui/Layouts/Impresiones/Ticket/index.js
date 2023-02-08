@@ -50,8 +50,6 @@ const ImprimirTicket = ({ data }) => {
 
     let hora = fecha.substring(13, 21);
     fecha = fecha.substring(0, 10);
-    console.log(hora);
-    console.log(fecha);
 
     if (data.venta.tipo_moneda == 'SOLES') moneda = 'SOLES';
     if (data.venta.tipo_moneda == 'DOLARES') moneda = 'DÓLARES AMERICANOS';
@@ -120,11 +118,12 @@ const ImprimirTicket = ({ data }) => {
                             <p >VENDEDOR</p>
                         </div>
                         <div
+                            className=''
                         >
                             <p >{fecha} {hora}</p>
-                            <p >Clientes varios</p>
-                            <p >000000000</p>
-                            <p>admin</p>
+                            <div >{data?.venta?.cliente}</div>
+                            <p >{data?.venta?.identificacion}</p>
+                            <p>{data?.venta?.vendedor || 'admin'}</p>
                         </div>
 
                     </div>

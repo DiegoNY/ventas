@@ -78,7 +78,8 @@ const EMPRESA = {
     AUTORIZACION: '034-005-0006616',
     LOGO_URL: '',
     RUC:'20566487986',
-    NOMBRE :'NOMBRE LARGO DE EMPRESA'
+    NOMBRE :'NOMBRE LARGO DE EMPRESA',
+    EMAIL: 'empresa@empresa.com.pe'
 
 }
 

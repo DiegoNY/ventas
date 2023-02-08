@@ -25,6 +25,8 @@ import { useNavigate } from 'react-router';
 import { useLocalStorage } from '../../useLocalStorage';
 import { useReactToPrint } from 'react-to-print';
 import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
+import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
+import { Layout } from '../../../ui/Layouts';
 
 
 function PuntoVenta() {
@@ -75,18 +77,19 @@ function PuntoVenta() {
     const [nuevaVenta, setNuevaVenta] = React.useState();
     const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
-    const componentRef = React.useRef();
+    const componenTicketRef = React.useRef();
+    const componentPdfRef = React.useRef();
 
     //impresion
     const [informacionImpresion, setInformacionImpresion] = React.useState({});
 
     const imprimirTicket = useReactToPrint({
-        content: () => componentRef.current,
+        content: () => componenTicketRef.current,
         documentTitle: 'Ticket de venta',
         onAfterPrint: () => console.log('Impreso uwu')
     })
     const imprimirPDF = useReactToPrint({
-        content: () => componentRef.current,
+        content: () => componentPdfRef.current,
         documentTitle: 'Documento de venta',
         onAfterPrint: () => console.log('Impreso uwu')
     })
@@ -686,7 +689,7 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
-
+    console.log(error);
 
     return (
         <>
@@ -695,7 +698,7 @@ function PuntoVenta() {
                 className='hidden'
             >
                 <div
-                    ref={componentRef}
+                    ref={componenTicketRef}
 
                 >
 
@@ -709,112 +712,167 @@ function PuntoVenta() {
                     />
                 </div>
             </div>
+            <div
+                className='hidden'
+            >
+                <div
+                    ref={componentPdfRef}
+
+                >
+
+                    <ImprimirPDF
+                        data={
+                            {
+                                venta: informacionImpresion,
+                                qr: 'www.datos.com'
+                            }
+                        }
+                    />
+
+                </div>
+            </div>
 
             {/**Fin impresion */}
-            <div
-                className='
-                    grid
-                    grid-cols-6 
-                    sm:grid-cols-12
-                    sm:grid-rows-6
-                    h-screen
-                    mx-auto
-                '
+            <Layout
+                onClick={() => setSearch(false)}
             >
-
                 <div
                     className='
-                        //bg-indigo-500
-                        col-span-6
-                        sm:col-span-5
-                        row-span-6
-                        grid
-                        grid-cols-12
-                        grid-rows-6
+                        flex
+                        justify-between
                         mx-auto
-                    '
+                 '
                 >
                     <div
                         className='
-                            //bg-yellow-500
-                            col-span-12
-                            my-2
-                            container-formulario-venta
+                            mr-72
+                            text-center
+                            flex
+                            justify-center
                         '
                     >
-
-                        <Titulo
-                            title={'Punto venta '} navegacion={'Ventas'} icono={'fi fi-rs-shop'}
-                        />
-
+                        <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-600'>Estas realizando una venta</h1>
                     </div>
 
                     <div
                         className='
-                            //bg-red-500
-                            col-span-12
-                            row-span-6
-                            mx-2
-                            grid
-                            grid-cols-12
-                            grid-rows-6
-                            w-full
+                            mx-auto
                         '
                     >
                         <div
                             className='
-                                //bg-yellow-300
-                                col-span-12
-                                mx-2
-                                grid
-                                content-center
-                            '
+                            //bg-red-100
+                            border
+                            rounded-xl
+                            col-span-12
+                            mx-3
+                            mt-2
+                            flex
+                            flex-col
+                            
+                        '
                         >
-                            <h1 className='ml-2  text-lg text-slate-800 font-black'>
-                                Datos necesarios 📝
-                            </h1>
-                        </div>
 
+                            <h1 className=' text-xl font-bold ml-2 mt-2 '>📄  Mis Ventas</h1>
+                            <div
+                                className='
+                                //bg-red-100
+                                h-full
+                                flex
+                                justify-between
+                            '
+                            >
+                                <div
+                                    className='
+                                    mx-20
+                                    flex
+                                    justify-center       
+                                '
+                                >
+                                    <div
+                                        className='mx-1'
+                                    >
+                                        <p className='font-medium italic '>Cantidad : <span className='text-sm font-normal not-italic'>{informacionUsuario.cantidad_ventas || '00'}</span></p>
+                                        <p className='font-medium italic'>Dinero recaudado: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.dinero_recaudado || '00'}</span></p>
+                                    </div>
+                                    <div>
+                                        <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.gastos || '00'}</span></p>
+                                        <p className='ml-2 font-medium italic'>Apertura caja: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.apertura_caja}</span></p>
+                                    </div>
+
+                                </div>
+                                <p
+                                    className='mt-3 mr-2 text-sm text-blue-800 font-bold cursor-pointer hover:text-sky-200'
+                                    onClick={() => setVermas(!verMas)}
+                                >Ver mas </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div
+                    className='
+                     mt-3
+                     flex
+                     justify-between
+                     h-full
+                     mx-5
+                     mb-2
+                    '
+                >
+
+                    <div
+                        className='
+                                 w-full
+                            '
+                    >
                         <div
                             className='
-                                //bg-red-200
-                                col-span-12
-                                row-span-4
-                                mx-2
-                                grid
-                                grid-rows-4
-                                grid-cols-4
-                               
+                                flex
+                                flex-col
+                                w-full
 
                             '
                         >
                             <div
                                 className='
-                                    //bg-indigo-500
-                                    col-span-4
-                                    mx-2
-                                    mt-2
                                     flex
-                                    
+                                    flex-col
+                                    ml-auto
+                                    mr-24
                                 '
                             >
-                                <div
-                                    className='
-                                        w-full
-                                        mr-2
-                                    '
-                                >
-                                    <h1
-                                        for="first-name"
-                                        class="block text-xs  text-gray-700"
-                                    >
-                                        Tipo de documento
-                                    </h1>
-                                    <select
-                                        type="text"
-                                        class="mt-1 form-control  font-mono block w-full rounded-md h-8 border-gray-300  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        onChange={(e) => {
+                                <p className='mb-1  text-slate-500 font-light font-sans'>Por favor selecciona las opciones correctas:</p>
+                                <h1 className='font-black text-slate-800 flex'>
+                                    Que serie usaras?
+                                    <i
+                                        className='text-orange-500 ml-1 cursor-pointer'
 
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                        </svg>
+                                    </i>
+                                </h1>
+                                <div
+                                    className='flex'
+                                >
+                                    <select
+                                        type={'text'}
+                                        className=' mt-1 
+                                    form-control  
+                                    block 
+                                    w-40 
+                                    rounded-md 
+                                    h-8 
+                                    border-gray-300 
+                                    focus:border-indigo-500 
+                                    focus:ring-indigo-500 
+                                    sm:text-sm 
+                                        text-center
+                                    '
+                                        placeholder='Nombre del solicitante ...'
+                                        onChange={(e) => {
 
                                             obtenerNumerosVentas(e.target.value);
 
@@ -837,130 +895,95 @@ function PuntoVenta() {
                                                 ({tp.serie})
                                             </option>
                                         })}
+
                                     </select>
+                                    <div className='flex w-full justify-end text-center mt-1 text-lg italic text-slate-700'> <h1>{venta.numero_venta}</h1></div>
                                 </div>
 
+                                <br />
+                                <h1 className='font-black text-slate-800 flex' >Busca al cliente
+                                    <i
+                                        className='text-orange-500 ml-1 cursor-pointer'
+
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                        </svg>
+                                    </i>
+
+                                </h1>
                                 <div
                                     className='
-                                        w-full
-                                    '
-                                >
-                                    <span
-                                        className="block text-xs  text-gray-700"
-                                    >
-                                        Dni / Ruc
-                                    </span>
-                                    <div
-                                        className='
                                             flex
                                         '
-                                    >
-                                        <input
-                                            type={'number'}
-                                            value={venta?.identificacion}
-                                            className="
+                                >
+                                    <input
+                                        type={'number'}
+                                        value={venta?.identificacion}
+                                        className="
                                             mt-1 
-                                            form-control  
                                             font-mono 
-                                            block 
-                                            w-full 
+                                            w-36 
                                             rounded-md 
                                             h-8 
+                                            sm:text-sm
+                                            text-xs
+                                            text-center
+                                        "
+                                        onChange={(e) => {
+                                            let identificacion = e.target.valueAsNumber;
+                                            let arrIdentificacion = String(identificacion).split('');
+                                            setVenta({ ...venta, identificacion: identificacion });
+
+                                            if (arrIdentificacion.length >= 8) {
+                                                obtenerInformacionClientesRegistrados(identificacion);
+                                            }
+
+                                        }}
+                                    />
+
+                                    <textarea
+                                        value={venta?.cliente}
+                                        type="text"
+                                        rows={2}
+                                        className="
+                                            ml-1
+                                            w-full 
+                                            text-center 
+                                            rounded-md 
                                             border-gray-300 
-                                            focus:border-indigo-500 
-                                            focus:ring-indigo-500 
                                             sm:text-sm
                                         "
-                                            onChange={(e) => {
-                                                let identificacion = e.target.valueAsNumber;
-                                                let arrIdentificacion = String(identificacion).split('');
-                                                setVenta({ ...venta, identificacion: identificacion });
 
-                                                if (arrIdentificacion.length >= 8) {
-                                                    obtenerInformacionClientesRegistrados(identificacion);
-                                                }
-
-                                            }}
-                                        />
-                                        <img
-                                            src={imagenagregarclientes}
-                                            className='
+                                    ></textarea>
+                                    <img
+                                        src={imagenagregarclientes}
+                                        className='
                                                 h-4
                                                 mt-2
                                                 ml-2
                                                 cursor-pointer
 
                                             '
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#cliente"
-                                        />
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div
-                                className='
-                                    //bg-indigo-400
-                                    col-span-4
-                                    mx-2
-                                    flex
-                                '
-                            >
-                                <div
-                                    className='
-                                        w-full
-                                    '
-                                >
-                                    <span
-                                        className="
-                                            block 
-                                            text-xs 
-                                            font-medium 
-                                            text-gray-700
-                                        "
-                                    >
-                                        Cliente
-                                    </span>
-
-                                    <input
-                                        value={venta?.cliente}
-                                        type="text"
-                                        className="
-                                            mt-1 
-                                            form-control  
-                                            block w-full 
-                                            h-8 
-                                            rounded-md 
-                                            border-gray-300 
-                                            focus:border-indigo-500 
-                                            focus:ring-indigo-500 
-                                            sm:text-sm
-                                        "
-
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cliente"
                                     />
-
                                 </div>
+                                <br />
                                 <div
-                                    className='flex flex-col justify-center'
+                                    className='flex'
                                 >
-                                    <span
-                                        className='
-                                            text-xs
-                                            ml-2
-                                            mb-0
-                                        '
-                                    >
-                                        Impresion
-                                    </span>
-                                    <div
-                                        className='
-                                            flex
-                                            
-                                        '
-                                    >
+                                    <div>
+
+                                        <h1 className='font-black text-slate-800' >Impresion </h1>
                                         <div
                                             className='
+                                            flex
+                                            w-1/2
+                                        '
+                                        >
+                                            <div
+                                                className='
                                             p-1 
                                             text-center 
                                             ml-2 
@@ -969,43 +992,43 @@ function PuntoVenta() {
                                             cursor-pointer 
                                             w-full
                                         '
-                                        >
+                                            >
 
-                                            <input
-                                                type={'checkbox'}
-                                                value={'TICKET'}
-                                                checked={impresion}
-                                                className='
+                                                <input
+                                                    type={'checkbox'}
+                                                    value={'TICKET'}
+                                                    checked={impresion}
+                                                    className='
                                                  mr-1
                                                  mb-3
                                                 '
-                                                onChange={(e) => {
-                                                    let ticket = e.target.value;
-                                                    setVenta({ ...venta, tipo_impresion: ticket })
-                                                    setImpresion(!impresion);
-                                                }}
-                                            />
-                                            <span
-                                                className='
+                                                    onChange={(e) => {
+                                                        let ticket = e.target.value;
+                                                        setVenta({ ...venta, tipo_impresion: ticket })
+                                                        setImpresion(!impresion);
+                                                    }}
+                                                />
+                                                <span
+                                                    className='
                                                 text-xs 
                                                 
                                             '
-                                            >
-                                                Ticket
-                                            </span>
+                                                >
+                                                    Ticket
+                                                </span>
 
-                                            <img
-                                                src={iconoticket}
-                                                className='
+                                                <img
+                                                    src={iconoticket}
+                                                    className='
                                                 ml-1
                                                  
                                                 h-3
                                             '
-                                            />
+                                                />
 
-                                        </div>
-                                        <div
-                                            className='
+                                            </div>
+                                            <div
+                                                className='
                                             p-1 
                                             text-center 
                                             ml-2 
@@ -1013,78 +1036,153 @@ function PuntoVenta() {
                                             cursor-pointer
                                             flex
                                         '
-                                        >
-                                            <input
-                                                type={'checkbox'}
-                                                value={'PDF'}
-                                                checked={!impresion}
-                                                className='
+                                            >
+                                                <input
+                                                    type={'checkbox'}
+                                                    value={'PDF'}
+                                                    checked={!impresion}
+                                                    className='
                                                 mr-1
                                                 mb-3
                                             '
-                                                onChange={(e) => {
-                                                    let pdf = e.target.value
-                                                    setVenta({ ...venta, tipo_impresion: pdf })
-                                                    setImpresion(!impresion)
-                                                }}
+                                                    onChange={(e) => {
+                                                        let pdf = e.target.value
+                                                        setVenta({ ...venta, tipo_impresion: pdf })
+                                                        setImpresion(!impresion)
+                                                    }}
 
-                                                onClick={() => {
-                                                    setImpresion(!impresion);
-                                                }}
-                                            />
-                                            <span
-                                                className='
+                                                    onClick={() => {
+                                                        setImpresion(!impresion);
+                                                    }}
+                                                />
+                                                <span
+                                                    className='
                                                 text-xs
                                                 
                                             '
-                                            >
-                                                PDF
-                                            </span>
-                                            <img
-                                                src={iconopdf}
-                                                className='
+                                                >
+                                                    PDF
+                                                </span>
+                                                <img
+                                                    src={iconopdf}
+                                                    className='
                                                 ml-1 
                                                 h-3
                                                 
                                             '
-                                            />
+                                                />
+                                            </div>
                                         </div>
+
                                     </div>
-
-
-
-                                </div>
-
-                            </div>
-                            <div
-                                className='
-                                    //bg-indigo-300
-                                    col-span-4
-                                    mx-2
-                                    flex
-                                
-                                '
-                            >
-                                <div
-                                    className='flex flex-col justify-center mr-3'
-                                >
-                                    <span
-                                        className='
-                                            text-xs
-                                            ml-2
-                                            mb-0
-                                        '
-                                    >
-                                        Moneda
-                                    </span>
-                                    <div
-                                        className='
+                                    <div>
+                                        <h1 className='font-black text-slate-800'> Forma de pago</h1>
+                                        <div
+                                            className='
                                             flex
                                             
                                         '
-                                    >
-                                        <div
-                                            className='
+                                        >
+                                            <div
+                                                className='
+                                            p-1 
+                                            text-center 
+                                            ml-2 
+                                            hover:text-gray-500 
+                                            flex
+                                            cursor-pointer 
+                                            w-full
+                                        '
+                                            >
+
+                                                <input
+                                                    type={'checkbox'}
+                                                    value={'EFECTIVO'}
+                                                    checked={formaPago}
+                                                    className='
+                                                 mr-1
+                                                 mb-3
+                                                '
+                                                    onChange={(e) => {
+                                                        let formapago = e.target.value;
+                                                        setFormaPago(!formaPago)
+                                                        setVenta({ ...venta, forma_pago: formapago })
+                                                    }}
+                                                />
+                                                <span
+                                                    className='
+                                                text-xs 
+s                                                '
+                                                >
+                                                    Efectivo
+                                                </span>
+
+                                                <img
+                                                    src={iconoMoneda}
+                                                    className='
+                                                ml-1
+                                                h-4
+                                            '
+                                                />
+
+                                            </div>
+                                            <div
+                                                className='
+                                            p-1 
+                                            text-center 
+                                            hover:text-gray-500 
+                                            cursor-pointer
+                                            flex
+                                        '
+                                            >
+                                                <input
+                                                    type={'checkbox'}
+                                                    value={'CREDITO'}
+                                                    checked={!formaPago}
+                                                    className='
+                                                mr-1
+                                                mb-3
+                                            '
+                                                    onChange={(e) => {
+
+                                                        setFormaPago(!formaPago);
+                                                        setVenta({ ...venta, forma_pago: e.target.value })
+
+                                                    }}
+                                                />
+                                                <span
+                                                    className='
+                                                text-xs
+                                                
+                                            '
+                                                >
+                                                    Credito
+                                                </span>
+                                                <img
+                                                    src={iconotarjeta}
+                                                    className='
+                                                ml-1 
+                                                h-3
+                                                
+                                            '
+                                                />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <br />
+                                <h1 className='font-black text-slate-800'>Escoge el tipo de moneda</h1>
+                                <div
+                                    className='
+                                            flex
+                                            w-1/2
+                                        '
+                                >
+                                    <div
+                                        className='
                                                 p-1 
                                                 text-center 
                                                 ml-2 
@@ -1093,149 +1191,42 @@ function PuntoVenta() {
                                                 cursor-pointer 
                                                 w-full
                                             '
-                                        >
+                                    >
 
-                                            <input
-                                                type={'checkbox'}
-                                                value={'SOLES'}
-                                                checked={moneda}
-                                                className='
+                                        <input
+                                            type={'checkbox'}
+                                            value={'SOLES'}
+                                            checked={moneda}
+                                            className='
                                                  mr-1
                                                  mb-3
                                                 '
-                                                onChange={(e) => {
-                                                    let soles = e.target.value;
-                                                    setVenta({ ...venta, tipo_moneda: soles })
-                                                    setMoneda(!moneda)
-                                                }}
-                                            />
-                                            <span
-                                                className='
+                                            onChange={(e) => {
+                                                let soles = e.target.value;
+                                                setVenta({ ...venta, tipo_moneda: soles })
+                                                setMoneda(!moneda)
+                                            }}
+                                        />
+                                        <span
+                                            className='
                                                 text-xs 
                                                 
                                             '
-                                            >
-                                                Soles
-                                            </span>
+                                        >
+                                            Soles
+                                        </span>
 
-                                            <img
-                                                src={iconosol}
-                                                className='
+                                        <img
+                                            src={iconosol}
+                                            className='
                                                 ml-1
                                                 h-4
                                             '
-                                            />
+                                        />
 
-                                        </div>
-                                        <div
-                                            className='
-                                            p-1 
-                                            text-center 
-                                            ml-2 
-                                            hover:text-gray-500 
-                                            cursor-pointer
-                                            flex
-                                        '
-                                        >
-                                            <input
-                                                type={'checkbox'}
-                                                value={'DOLARES'}
-                                                checked={!moneda}
-                                                className='
-                                                mr-1
-                                                mb-3
-                                            '
-                                                onChange={(e) => {
-                                                    let dorales = e.target.value;
-                                                    setVenta({ ...venta, tipo_moneda: dorales })
-                                                    setMoneda(!moneda)
-                                                }}
-                                            />
-                                            <span
-                                                className='
-                                                text-xs
-                                                
-                                            '
-                                            >
-                                                Dolares
-                                            </span>
-                                            <img
-                                                src={iconodolar}
-                                                className='
-                                                ml-1 
-                                                h-3
-                                                
-                                            '
-                                            />
-                                        </div>
                                     </div>
-
-
-
-                                </div>
-                                <div
-                                    className='flex flex-col justify-center'
-                                >
-                                    <span
-                                        className='
-                                            text-xs
-                                            ml-2
-                                            mb-0
-                                        '
-                                    >
-                                        Forma pago
-                                    </span>
                                     <div
                                         className='
-                                            flex
-                                            
-                                        '
-                                    >
-                                        <div
-                                            className='
-                                            p-1 
-                                            text-center 
-                                            ml-2 
-                                            hover:text-gray-500 
-                                            flex
-                                            cursor-pointer 
-                                            w-full
-                                        '
-                                        >
-
-                                            <input
-                                                type={'checkbox'}
-                                                value={'EFECTIVO'}
-                                                checked={formaPago}
-                                                className='
-                                                 mr-1
-                                                 mb-3
-                                                '
-                                                onChange={(e) => {
-                                                    let formapago = e.target.value;
-                                                    setFormaPago(!formaPago)
-                                                    setVenta({ ...venta, forma_pago: formapago })
-                                                }}
-                                            />
-                                            <span
-                                                className='
-                                                text-xs 
-s                                                '
-                                            >
-                                                Efectivo
-                                            </span>
-
-                                            <img
-                                                src={iconoMoneda}
-                                                className='
-                                                ml-1
-                                                h-4
-                                            '
-                                            />
-
-                                        </div>
-                                        <div
-                                            className='
                                             p-1 
                                             text-center 
                                             ml-2 
@@ -1243,317 +1234,211 @@ s                                                '
                                             cursor-pointer
                                             flex
                                         '
-                                        >
-                                            <input
-                                                type={'checkbox'}
-                                                value={'CREDITO'}
-                                                checked={!formaPago}
-                                                className='
+                                    >
+                                        <input
+                                            type={'checkbox'}
+                                            value={'DOLARES'}
+                                            checked={!moneda}
+                                            className='
                                                 mr-1
                                                 mb-3
                                             '
-                                                onChange={(e) => {
-
-                                                    setFormaPago(!formaPago);
-                                                    setVenta({ ...venta, forma_pago: e.target.value })
-
-                                                }}
-                                            />
-                                            <span
-                                                className='
+                                            onChange={(e) => {
+                                                let dorales = e.target.value;
+                                                setVenta({ ...venta, tipo_moneda: dorales })
+                                                setMoneda(!moneda)
+                                            }}
+                                        />
+                                        <span
+                                            className='
                                                 text-xs
                                                 
                                             '
-                                            >
-                                                Credito
-                                            </span>
-                                            <img
-                                                src={iconotarjeta}
-                                                className='
+                                        >
+                                            Dolares
+                                        </span>
+                                        <img
+                                            src={iconodolar}
+                                            className='
                                                 ml-1 
                                                 h-3
                                                 
                                             '
-                                            />
-                                        </div>
+                                        />
                                     </div>
+                                </div>
+
+                                <br />
+
+                                <div
+                                    className='
+                                    
+                                flex
+                                justify-between
+                            '
+                                >
 
 
+
+                                    {/* <p className='font-black ' >Subtotal : <span className='font-normal'>{listaCompra.subtotal}</span></p>
+                                <p className='font-black '>igv : <span className='font-normal'>{listaCompra.igv}</span></p>
+                                <p className='font-black '>Total : <span className='font-normal'>{listaCompra.total}</span></p> */}
 
                                 </div>
+                                <br />
+
+
                             </div>
                             <div
                                 className='
-                                    //bg-indigo-200
-                                    col-span-4
-                                    mt-2
-                                    mx-2
-                                    flex
-                                    justify-start
-                                '
-                            >
-                                <span
-                                    className='
-                                       text-lg
-                                       font-semibold
-                                       mx-2
-                                    '
-                                >
-                                    Subtotal :
-                                    <span
-                                        className='
-                                            font-normal
-                                        '
-                                    >
-                                        123
-                                    </span>
-                                </span>
-                                <span
-                                    className='
-                                        text-lg
-                                        font-semibold
-                                        mx-2
-                                    '
-                                >
-                                    IGV :
-                                    <span
-                                        className='
-                                            font-normal
-                                        '
-                                    >
-                                        6.00
-                                    </span>
-                                </span>
-                                <span
-                                    className='
-                                       text-lg
-                                       font-semibold
-                                       mx-2
-                                    '
-                                >
-                                    Total :
-                                    <span
-                                        className='
-                                            font-normal
-                                        '
-                                    >
-                                        {venta?.total}
-                                    </span>
-                                </span>
-                            </div>
-
-                        </div>
-
-                        <div
-                            className='
-                                //bg-indigo-200
-                                col-span-12
-                                mx-2
-                                my-3
                                 flex
                                 justify-end
                             '
-                        >
-                            <h1
-                                className='
-                                    mr-3 mt-1 
-                                    rounded-xl 
-                                    w-28 
-                                    text-center 
-                                    cursor-pointer 
-                                    hover:border-b-2 
-                                    hover:border-b-slate-400 
-                                '
-                                onClick={() => {
-                                    limpiarVenta();
-                                }}
                             >
-                                Cancelar venta
-                            </h1>
-
-                            <button
-                                className='
-                                bg-indigo-500
-                                rounded-xl	
-                                w-40
-                                h-9
-                                text-white
-                              '
-                                onClick={emitirVenta}
-                            >
-                                <p className='italic' >Emitir venta</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className='
-                        //bg-orange-500
-                        col-span-6
-                        sm:col-span-7
-                        sm:row-span-6
-                        grid
-                        grid-cols-12
-                        grid-rows-6
-                        mx-auto
-                        container-derecha
-                    '
-                >
-                    <div
-                        className='
-                            //bg-red-100
-                            border
-                            rounded-xl
-                            col-span-12
-                            mx-3
-                            mt-2
-                            flex
-                            flex-col
-                            
-                        '
-                    >
-
-                        <h1 className=' text-xl font-bold ml-2 mt-2 '>📄  Mis Ventas</h1>
-                        <div
-                            className='
-                                //bg-red-100
-                                h-full
-                                flex
-                                justify-between
-                            '
-                        >
-                            <div
-                                className='
-                                    mx-20
-                                    flex
-                                    justify-center       
-                                '
-                            >
-                                <div
-                                    className='mx-1'
-                                >
-                                    <p className='font-medium italic '>Cantidad : <span className='text-sm font-normal not-italic'>{informacionUsuario.cantidad_ventas || '00'}</span></p>
-                                    <p className='font-medium italic'>Dinero recaudado: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.dinero_recaudado || '00'}</span></p>
-                                </div>
-                                <div>
-                                    <p className='ml-2 font-medium italic'>Gastos realizados: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.gastos || '00'}</span></p>
-                                    <p className='ml-2 font-medium italic'>Apertura caja: <span className='text-sm font-normal not-italic'>S/ {informacionUsuario.apertura_caja}</span></p>
-                                </div>
-
-                            </div>
-                            <p
-                                className='mt-3 mr-2 text-sm text-sky-300 font-bold cursor-pointer hover:text-sky-500'
-                                onClick={() => setVermas(!verMas)}
-                            >Ver mas </p>
-                        </div>
-
-                    </div>
-                    <div
-                        className='
-                            col-span-12
-                            row-start-2
-                            row-span-5
-                            //bg-indigo-500
-                            grid
-                            grid-cols-6
-                            grid-rows-6
-                        '
-                    >
-                        <div
-                            className='
-                                //bg-red-500
-                                col-span-6
-                                my-2
-                                mx-1
-                                flex
-                                justify-between
-                            '
-                        >
-                            <input
-                                className='
-                                     w-1/2
-                                     h-8
-                                     mx-3
-                                     mt-4
-                                     form-control
-                                    '
-                                placeholder=' Busca un producto ... 💊'
-                                onFocus={() => setSearch(!search)}
-                                onChange={(e) => {
-                                    setSearchProducto(e.target.value)
-                                    setSearch(true);
-                                }}
-                            />
-                            {search &&
-                                <div
+                                <button
                                     className={`
-                                        form-control
-                                        h-20
-                                        overflow-y-auto
-                                        px-1
-                                        p-1
-                                        absolute
-                                        z-40
-                                        mt-5
-                                        ml-3
-                                        w-auto
+                                         
+                                h-10
+                                ml-auto
+                                px-2
+                                rounded-xl
+                                text-slate-400
+                                text-uppercase
+                                text-xs	
+                                font-semibold
+                                hover:border-b-2 
+                                hover:border-b-slate-400 
+                                        `}
 
-                                    `}
-                                    onMouseLeave={() => setSearch(!search)}
+                                    onClick={() => {
+                                        limpiarVenta();
+                                    }}
+                                >
+                                    cancelar venta
+                                </button>
+                                <button
+                                    className={`
+                                         
+                                bg-orange-500
+                                h-10
+                                px-2
+                                ml-2
+                                mr-10
+                                rounded-xl
+                                text-white
+                                text-uppercase
+                                text-xs	
+                                font-semibold
+                                        `}
+
+                                    onClick={emitirVenta}
 
                                 >
+                                    Emitir venta
+                                </button>
 
-                                    {searchProductos.map(producto => {
-
-                                        return (
-                                            <>
-                                                <div
-                                                    className='
-                                                     p-2
-                                                     hover:bg-gray-100
-                                                    '
-                                                    onClick={() => obteniendoProductoSeleccionado(producto)}
-                                                >
-                                                    {producto.descripcion} ( {producto.id_laboratorio} ) | STOCK : {producto.stock}
-                                                </div>
-                                            </>
-                                        )
-
-                                    })
-
-                                    }
-
-                                </div>
-                            }
-                            <div
-                                className='
-                                    text-xl 
-                                    font-semibold
-                                    italic
-                                    text-slate-400
-                                    proportional-nums
-                                    mt-4
-                                    mx-2
-                                '
-                            >
-                                {venta?.numero_venta}
                             </div>
                         </div>
+                    </div>
 
-                        <div
-                            className='
-                                //bg-yellow-400
-                                col-span-6
-                                row-span-5
-                                mx-3
-                                mb-2
+
+
+                    <div
+                        className='
                                 flex
                                 flex-col
-                                h-96
+                                rounded-xl
+                              bg-slate-100
+                                h-full
+                                mb-3
+                                px-2 
                             '
+                    >
+                        <div
+                            className='mt-2 flex justify-between'
+
                         >
 
+                            <input
+                                className='border border-slate-100 w-96 ml-1 rounded-sm py-1 px-1'
+                                // placeholder='Busca un producto'
+                                placeholder=' Busca un producto ... 💊'
+                                onClick={(e) => {
+                                    setSearch(true)
+                                    e.stopPropagation();
+                                }}
+                                onChange={(e) => {
+                                    setSearchProducto(e.target.value)
+                                }}
+                            />
+
+                            <h1 className='text-right  font-black mr-2 text-blue-800'>Selecciona los productos </h1>
+                        </div>
+                        {!!search && <div
+                            className='
+                                    bg-white
+                                    border 
+                                    absolute 
+                                    z-10 
+                                    mt-11 
+                                    mx-1  
+                                    flex 
+                                    flex-col 
+                                    px-1 
+                                    rounded-sm
+                                    contenedor-productos
+
+                                '
+                            onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+
+                            }}
+                        >
+
+                            {searchProductos?.map((producto, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={
+                                            `
+                                                w-full 
+                                                flex 
+                                                p-1 
+                                                mb-1 
+                                                ${index == 0 && 'mt-1'}
+                                                hover:bg-sky-100
+                                                cursor-pointer
+                                                text-slate-600
+                                                `
+                                        }
+                                        onClick={(event) => {
+
+                                            obteniendoProductoSeleccionado(producto)
+
+                                            event.stopPropagation();
+                                            event.preventDefault();
+
+                                        }}
+                                    >
+                                        {producto.descripcion} ({producto.id_laboratorio})
+
+                                    </div>
+                                )
+                            })}
+
+
+
+
+                        </div>}
+
+                        <div
+                            className='
+                                    contenedor-tablas
+                                    mt-2
+                                    rounded-2xl
+                                '
+                        >
                             <TablaTalwindCss
                                 headers={[
                                     { name: 'Codigo' },
@@ -1565,6 +1450,8 @@ s                                                '
                                     { name: 'Precio' },
                                     { name: 'Total' },
                                 ]}
+                                marginY={'my-0 bg-white'}
+
                             >
 
                                 {venta.productos.map((producto, index) => {
@@ -1666,17 +1553,13 @@ s                                                '
                                 }
 
                             </TablaTalwindCss>
-
-
                         </div>
 
-
-
-
+                        {/* <h1 className='text-slate-600 ml-2 mt-1'>{tipoCompra}</h1> */}
 
                     </div>
-                </div>
 
+                </div>
 
                 <Modal
                     id={'cliente'}
@@ -1991,9 +1874,7 @@ s                                                '
 
                 }
 
-            </div>
-
-
+            </Layout>
 
         </>
     );

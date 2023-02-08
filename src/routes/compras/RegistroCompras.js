@@ -300,7 +300,6 @@ function RegistroCompras() {
                         <input
                             className='border border-slate-100 w-96 ml-1 rounded-sm py-1 px-1'
                             placeholder='Busca un producto'
-                            // value={searchValue}
                             onChange={(e) => {
                                 setSearchProducto(e.target.value)
                                 setSearch(true);
@@ -314,7 +313,7 @@ function RegistroCompras() {
                             type={'text'}
                         />
 
-                        <h1 className='text-right  font-black mr-2 text-blue-800'>Selecciona los productos </h1>
+                        <h1 className='text-right  font-black mr-2 text-blue-500'>Selecciona los productos </h1>
                     </div>
                     {!!buscador && <div
                         className='
@@ -375,10 +374,10 @@ function RegistroCompras() {
                     </div>}
                     <div
                         className='
-                                    contenedor-tabla
-                                    mt-2
-                                    rounded-2xl
-                                '
+                            contenedor-tabla
+                            mt-2
+                            rounded-2xl
+                        '
                     >
                         <TablaTalwindCss
                             headers={[
@@ -616,8 +615,8 @@ function RegistroCompras() {
                             flex-col
                         '
                     >
-                        <p className='mb-1  text-blue-800 font-light font-sans'>Por favor completa los siguientes datos :</p>
-                        <h1 className='font-black text-blue-800'>¿Que tipo de documento registraras?</h1>
+                        <p className='mb-1  text-slate-500 font-light font-sans'>Por favor completa los siguientes datos :</p>
+                        <h1 className='font-black text-slate-800'>¿Que tipo de documento registraras?</h1>
                         <select
                             type={'text'}
                             className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
@@ -633,7 +632,7 @@ function RegistroCompras() {
                             })}
                         </select>
                         <br />
-                        <h1 className='font-black text-blue-800 flex' >Ingresa el numero del documento
+                        <h1 className='font-black text-slate-800 flex' >Ingresa el numero del documento
                             <i
                                 className='text-orange-500 ml-1 cursor-pointer'
 
@@ -671,22 +670,31 @@ function RegistroCompras() {
 
                         />
                         <br />
-                        <h1 className='font-black text-blue-800' >¿Cuando se realizo? </h1>
+                        <h1 className='font-black text-slate-800' >¿Cuando se realizo? </h1>
                         <input
                             type={'date'}
                             className='mx-2 rounded-sm text-center mt-1 border-y border-x p-1 focus:border-2 focus:border-blue-600 '
                             onChange={(e) => {
-
+                                setListaCompra({
+                                    ...listaCompra,
+                                    fecha_documento: e.target.value
+                                })
                             }}
                         />
                         <br />
-                        <h1 className='font-black text-blue-800'>¿Quien es el proveedor?</h1>
+                        <h1 className='font-black text-slate-800'>¿Quien es el proveedor?</h1>
                         <select
                             type={'text'}
                             className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
                             placeholder='Nombre del solicitante ...'
                             onChange={(e) => {
-
+                                let informacion = e.target.value;
+                                let proveedor = informacion.split('-');
+                                setListaCompra({
+                                    ...listaCompra,
+                                    proveedor: proveedor[0],
+                                    ruc_proveedor: proveedor[1],
+                                })
                             }}
                         >
                             <option>SELECCIONE</option>
@@ -696,7 +704,7 @@ function RegistroCompras() {
                             })}
                         </select>
                         <br />
-                        <h1 className='font-black text-blue-800'>Selecciona la forma de pago</h1>
+                        <h1 className='font-black text-slate-800'>Selecciona la forma de pago</h1>
                         <div
                             className='flex flex-row'
                         >
