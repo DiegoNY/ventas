@@ -26,7 +26,7 @@ function Tabcompra() {
             >
                 <h1 className='text-slate-500  ml-3 mt-2 mb-1 '>Compras recientes</h1>
                 <div
-                    className='scroll-content-card rounded-xl bg-sky-100'
+                    className='scroll-content-card rounded-xl bg-sky-200'
                 >
                     {compras.map((compra, index) => {
                         let numeroCorrelativoArray = compra?.numero_documento?.split('-');

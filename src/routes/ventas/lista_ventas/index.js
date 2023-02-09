@@ -15,6 +15,10 @@ import icono_pdf from './img/icono-pdf.svg';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
 
+import { useReactToPrint } from 'react-to-print';
+import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
+import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
+
 
 function CustomToolbar() {
 
@@ -37,35 +41,24 @@ function ListaVenta() {
     if (!auth.user) navigation('/');
 
 
-    const [ventas, setVentas] = useState([]);
     const [todasVentas, setTodasVentas] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [skip, setSkip] = useState(0);
-    const [limite, setLimite] = useState(12);
-    const [cambiarPagina, setCambiarPagina] = useState(false);
-    const [ventasBusqueda, setVentasBusqueda] = useState([]);
 
 
-    const SearchVentas = (valorBusqueda) => {
+    const componenTicketRef = React.useRef();
+    const componentPdfRef = React.useRef();
+    const [informacionImpresion, setInformacionImpresion] = useState({});
 
-        let ventasEncontradas = []
+    const imprimirTicket = useReactToPrint({
+        content: () => componenTicketRef.current,
+        documentTitle: 'Ticket de venta',
+        onAfterPrint: () => console.log('Print'),
+    })
+    const imprimirPDF = useReactToPrint({
+        content: () => componentPdfRef.current,
+        documentTitle: 'Documento de venta',
+        onAfterPrint: () => console.log('Impreso uwu')
+    })
 
-        if (!valorBusqueda.length >= 1) {
-
-            ventasEncontradas = valorBusqueda;
-
-        } else {
-            ventasEncontradas = todasVentas?.filter(venta => {
-                const ventaText = `${venta.numero_venta?.toLowerCase()}${venta.tipo_documento?.toLowerCase()}${venta.total}${venta.fecha_registro}${venta.cliente.toLowerCase()}`
-                const valorBusquedaFiltrado = valorBusqueda.toLowerCase();
-
-                return ventaText?.includes(valorBusquedaFiltrado)
-            })
-        }
-
-
-        setVentasBusqueda(ventasEncontradas)
-    }
 
 
     const columns = [
@@ -102,6 +95,16 @@ function ListaVenta() {
             headerName: 'Tipo documento',
             flex: 0.2,
             headerClassName: '',
+            renderCell: (params) => {
+                let tipoDocumento;
+                let serie = params.row.serie.split('');
+
+                if(serie[0] === 'B') tipoDocumento = 'BOLETA';
+                if(serie[0] === 'T') tipoDocumento = 'TICKET';
+                if(serie[0] === 'F') tipoDocumento = 'FACTURA';
+
+                return <p>{tipoDocumento}</p>
+            }
 
 
         },
@@ -142,16 +145,25 @@ function ListaVenta() {
                 return (
                     <div
                         className='flex justify-between w-full mx-2'
+                        onMouseEnter={() => {
+                            setInformacionImpresion(params.row)
+                        }}
                     >
                         <div
-                            className='flex font-semibold cursor-pointer'
+                            className='flex font-semibold text-xs text-lime-500 cursor-pointer'
+                            onClick={(e) => {
+                                imprimirTicket();
+                            }}
                         >
                             Ticket
                             <img src={icono_ticket} className='h-4 rotate-90' />
 
                         </div>
                         <div
-                            className='flex font-semibold  cursor-pointer'
+                            className='flex font-semibold text-xs text-orange-500 	 cursor-pointer'
+                            onClick={(e) => {
+                                imprimirPDF();
+                            }}
                         >
                             A4
                             <img src={icono_pdf} className=' h-4 ' />
@@ -199,6 +211,8 @@ function ListaVenta() {
                         >
                             <h1 className='mt-1 '>NC</h1>
                         </div>
+
+
                     </div>
                 )
             }
@@ -207,11 +221,11 @@ function ListaVenta() {
     ]
 
 
+
     useEffect(() => {
 
         const obtenerTodasVentas = async () => {
             const todasVentasData = await getData(`${urlAPI.Venta.url}`);
-            setTotal(todasVentasData.length)
             setTodasVentas(todasVentasData);
 
         }
@@ -220,18 +234,6 @@ function ListaVenta() {
 
 
     }, [])
-
-    useEffect(() => {
-
-        const obtenerDataVentas = async () => {
-
-            const ventaData = await getData(`${urlAPI.Venta.url}?skip=${skip}&limite=${limite}`);
-            setVentas(ventaData);
-        }
-
-        obtenerDataVentas();
-
-    }, [cambiarPagina])
 
 
     return (
@@ -260,21 +262,25 @@ function ListaVenta() {
                 >
                     <div
                         className='
-                        //bg-red-200
-                        col-span-4
-                        grid
-                        grid-cols-2
+                            //bg-red-200
+                            col-span-4
+                            flex
+                            flex-col
+                            justify-center
                     '
                     >
-                        <Titulo
-                            title='Lista de ventas '
-                            navegacion='Ventas'
-                            icono={'fi fi-rs-shop'}
-                        />
 
-
-
-
+                        <h1 className='
+                            ml-2 
+                            text-2xl 
+                            sm:text-2xl 
+                            font-extrabold 
+                            text-slate-900 
+                            tracking-tight  
+                        '>
+                            Ventas realizadas
+                        </h1>
+                        <p className='ml-2 font-normal text-sm  text-slate-500'>Recuerda que estas observando todas las ventas registradas </p>
                     </div>
 
 
@@ -296,6 +302,7 @@ function ListaVenta() {
                             }}
                             getRowId={(row) => row._id}
                             rows={todasVentas || []}
+                            density='compact'
                             columns={columns}
                             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                             initialState={
@@ -314,7 +321,49 @@ function ListaVenta() {
 
                 </div>
 
+                {/**Impresion */}
+                <div
+                    className='hidden'
+                >
+                    <div
+                        ref={componenTicketRef}
+
+                    >
+
+                        <ImprimirTicket
+                            data={
+                                {
+                                    venta: informacionImpresion,
+                                    qr: 'www.datos.com'
+                                }
+                            }
+                        />
+                    </div>
+                </div>
+                <div
+                    className='hidden'
+                >
+                    <div
+                        ref={componentPdfRef}
+
+                    >
+
+                        <ImprimirPDF
+                            data={
+                                {
+                                    venta: informacionImpresion,
+                                    qr: 'www.datos.com'
+                                }
+                            }
+                        />
+
+                    </div>
+                </div>
+
+                {/**Fin impresion */}
+
             </div>
+
 
         </>
     )

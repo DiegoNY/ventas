@@ -55,16 +55,18 @@ const ImprimirPDF = ({ data }) => {
     let DOCUMENTO;
     let documentoArray = data?.venta?.serie?.split('') || [];
 
+    DOCUMENTO = data?.venta?.tipo_documento;
+
     if (documentoArray[0] == 'B') DOCUMENTO = 'BOLETA DE VENTA';
     if (documentoArray[0] == 'F') DOCUMENTO = 'FACTURA';
     if (documentoArray[0] == 'T') DOCUMENTO = 'TICKET DE VENTA';
 
-    if (data.venta.tipo_moneda == 'SOLES') moneda = 'SOLES';
-    if (data.venta.tipo_moneda == 'DOLARES') moneda = 'DÓLARES AMERICANOS';
+    if (data?.venta?.tipo_moneda == 'SOLES') moneda = 'SOLES';
+    if (data?.venta?.tipo_moneda == 'DOLARES') moneda = 'DÓLARES AMERICANOS';
 
     if (Number.isInteger(totalVenta)) {
         dineroVenta = numberToName(totalVenta);
-        console.log(dineroVenta);
+        // console.log(dineroVenta);
         if (dineroVenta === 'uno') {
             dineroVenta = 'UN';
             if (moneda == 'SOLES') moneda = 'SOL';
@@ -193,9 +195,9 @@ const ImprimirPDF = ({ data }) => {
                                 <p className='font-bold'>FECHA EMISION  </p>
                             </div>
                             <div>
-                                <p>:  {data?.venta?.cliente}  </p>
+                                <p>:  {data?.venta?.cliente || data?.venta?.proveedor}  </p>
                                 <p>: {data?.venta?.direccion || '-'}</p>
-                                <p>:  {data?.venta?.identificacion} </p>
+                                <p>:  {data?.venta?.identificacion || data?.venta?.ruc_proveedor} </p>
                                 <p>: {data?.venta?.fecha_registro || fecha} </p>
                             </div>
 
@@ -387,7 +389,6 @@ const ImprimirPDF = ({ data }) => {
                             '
                         >
                             {data?.venta?.productos?.map((producto, index) => {
-                                console.log(producto);
                                 return (
                                     <div
                                         className={`
@@ -399,11 +400,11 @@ const ImprimirPDF = ({ data }) => {
                                         }
                                     >
                                         <div className='border-r border-black'> {producto.codigo_barras} </div>
-                                        <div className='border-r border-black'> {producto.cantidad_comprada} </div>
+                                        <div className='border-r border-black'> {producto.cantidad_comprada || producto?.stock_comprado} </div>
                                         <div className='border-r border-black col-span-2'> {producto.descripcion} </div>
                                         <div className='border-r border-black'> {producto.lote} </div>
                                         <div className='border-r border-black'> {producto.fecha_vencimiento} </div>
-                                        <div className='border-r border-black'> {producto.precio} </div>
+                                        <div className='border-r border-black'> {producto.precio || producto?.precio_compra} </div>
                                         <div className=''> {producto.total} </div>
 
                                     </div>

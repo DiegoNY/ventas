@@ -194,7 +194,7 @@ function NotaSalida() {
 
     useEffect(() => {
         const obtenerCorrelativoNotaSalida = async () => {
-            const data = await getData(`${urlAPI.Numeros_ventas.url}?id=${EMPRESA.SERIE_NOTA_CREDITO}`);
+            const data = await getData(`${urlAPI.Nota_salida.url}?serie=${EMPRESA.SERIE_NOTA_CREDITO}`);
             const serieGenerada = generarSerieVenta(data[data.length - 1].numero);
             setNotaSalida({
                 ...notaSalida,
@@ -233,7 +233,7 @@ function NotaSalida() {
                     '
                 >
 
-                    <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-400' >Estas realizando una nota de salida</h1>
+                    <h1 className='text-2xl mx-auto font-bold mt-3 text-sky-400' >Estas realizando una nota de salida</h1>
                     <br />
                     <div
                         className='
@@ -253,7 +253,7 @@ function NotaSalida() {
                                 flex-col
                                 mr-14
                                 rounded-xl
-                              bg-slate-100
+                              bg-sky-200
                                 mb-3
                                 px-2                                
                             '
@@ -275,7 +275,7 @@ function NotaSalida() {
                                     type={'text'}
                                 />
 
-                                <h1 className='text-right  font-black mr-2 text-blue-500'>Selecciona los productos </h1>
+                                <h1 className='text-right  font-black mr-2 text-slate-400'>Selecciona los productos </h1>
                             </div>
                             {!!buscador && <div
                                 className='

@@ -22,6 +22,8 @@ import { NotaSalida } from './ventas/nota_salida';
 import { ListadoSalida } from './ventas/listado_salida';
 import { RegistroCompras } from './compras/RegistroCompras';
 import { ListaCompra } from './compras/ListaCompras';
+import { RegistrarGastos } from './gastos/RegistrarGastos';
+import { ListaGastos } from './gastos/ListaGastos';
 function App() {
 
   // Rutas °° 🍅
@@ -122,6 +124,14 @@ function App() {
                     path='*'
                     element={<PanelControl />}
 
+                  />
+                  <Route
+                    path='/gastos'
+                    element={<RegistrarGastos />}
+                  />
+                  <Route
+                    path='/gastos-listado'
+                    element={<ListaGastos />}
                   />
 
                 </Routes>

@@ -46,7 +46,6 @@ const ImprimirTicket = ({ data }) => {
     let centimos = '00';
     let hoy = new Date();
     let fecha = hoy.toISOString();
-    console.log(fecha);
 
     let hora = fecha.substring(13, 21);
     fecha = fecha.substring(0, 10);
@@ -178,7 +177,7 @@ const ImprimirTicket = ({ data }) => {
                         className='my-2'
                     >
                         <QRCode
-                            value={data.qr}
+                            value={`productos comprados : ${data?.venta?.productos?.length} , total : ${data?.venta?.total} , fecha compra : ${fecha}`}
                             style={{ height: "120px", maxWidth: "100%", width: "100%" }}
                             viewBox={`0 0 120 120`}
 

@@ -533,7 +533,6 @@ function PuntoVenta() {
 
         setVenta({
             ...venta,
-            tipo_documento: '',
             productos: [],
             total: 0,
             subtotal: 0,
@@ -689,7 +688,6 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
-    console.log(error);
 
     return (
         <>
@@ -751,7 +749,7 @@ function PuntoVenta() {
                             justify-center
                         '
                     >
-                        <h1 className='text-2xl mx-auto font-bold mt-3 text-blue-600'>Estas realizando una venta</h1>
+                        <h1 className='text-2xl mx-auto font-bold mt-3 text-sky-400'>Estas realizando una venta</h1>
                     </div>
 
                     <div
@@ -802,7 +800,7 @@ function PuntoVenta() {
 
                                 </div>
                                 <p
-                                    className='mt-3 mr-2 text-sm text-blue-800 font-bold cursor-pointer hover:text-sky-200'
+                                    className='mt-3 mr-2 text-sm text-sky-400 font-bold cursor-pointer hover:text-sky-200'
                                     onClick={() => setVermas(!verMas)}
                                 >Ver mas </p>
                             </div>
@@ -869,15 +867,21 @@ function PuntoVenta() {
                                     focus:border-indigo-500 
                                     focus:ring-indigo-500 
                                     sm:text-sm 
+                                    text-xs
                                         text-center
                                     '
                                         placeholder='Nombre del solicitante ...'
                                         onChange={(e) => {
 
-                                            obtenerNumerosVentas(e.target.value);
+                                            let informacion = e.target.value
+                                            let informacionArray = informacion.split('-');
+
+                                            console.log(informacionArray);
+                                            obtenerNumerosVentas(informacionArray[0]);
 
                                             setVenta({
                                                 ...venta,
+                                                tipo_documento: informacionArray[1]
                                             })
 
                                         }}
@@ -885,7 +889,7 @@ function PuntoVenta() {
                                         <option>SELECCIONE</option>
                                         {tipoDocumento.map(tp => {
                                             return <option
-                                                value={`${tp.serie}`}
+                                                value={`${tp.serie}-${tp.nombre}`}
                                             >
                                                 {
                                                     tp.nombre == 'BOLETA ELECTRONICA' && 'BOLETA' ||
@@ -897,7 +901,7 @@ function PuntoVenta() {
                                         })}
 
                                     </select>
-                                    <div className='flex w-full justify-end text-center mt-1 text-lg italic text-slate-700'> <h1>{venta.numero_venta}</h1></div>
+                                    <div className='flex w-full justify-end text-center mt-1   text-slate-700'> <h1>{venta.numero_venta}</h1></div>
                                 </div>
 
                                 <br />
@@ -945,10 +949,11 @@ function PuntoVenta() {
                                     <textarea
                                         value={venta?.cliente}
                                         type="text"
-                                        rows={2}
+                                        rows={1}
                                         className="
                                             ml-1
                                             w-full 
+                                            py-2
                                             text-center 
                                             rounded-md 
                                             border-gray-300 
@@ -1348,7 +1353,7 @@ s                                                '
                                 flex
                                 flex-col
                                 rounded-xl
-                              bg-slate-100
+                              bg-sky-200
                                 h-full
                                 mb-3
                                 px-2 
@@ -1372,7 +1377,7 @@ s                                                '
                                 }}
                             />
 
-                            <h1 className='text-right  font-black mr-2 text-blue-800'>Selecciona los productos </h1>
+                            <h1 className='text-right  font-black mr-2 text-slate-400'>Selecciona los productos </h1>
                         </div>
                         {!!search && <div
                             className='

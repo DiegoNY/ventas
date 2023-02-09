@@ -46,7 +46,7 @@ function Tabventa() {
             >
                 <h1 className='text-slate-500  ml-3 mt-2 mb-1 '>Ventas recientes</h1>
                 <div
-                    className='scroll-content bg-sky-100 rounded-xl mx-1'
+                    className='scroll-content bg-sky-200 rounded-xl mx-1'
                 >
                     {ventas.map((venta, index) => {
                         let numero = Number(venta?.correlativo);

@@ -30,3 +30,23 @@ select:focus {
 textarea:focus {
     outline: none;
 }
+
+.config:hover {
+
+    animation: rotacion 1s;
+}
+
+.tabla-informacion {
+    overflow-y: scroll;
+    height: 32vh;
+}
+
+@keyframes rotacion {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -14,6 +14,7 @@ function Main() {
     const [mostrarCompras, setMostrarCompras] = React.useState(false);
     const [blur, setBlur] = React.useState(0);
     const [mostrarApertura, setMostrarApertura] = React.useState(true);
+    const [mostrarGastos, setMostrarGastos] = React.useState(false);
     const [usuario, setUsuario] = React.useState({});
     const [loadings, setLoading] = React.useState(false);
     const auth = useAuth();
@@ -286,6 +287,33 @@ function Main() {
                                         <ItemMenu
                                             name='Lista compra'
                                             link='compras-lista_compras'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
+                                    </SubMenuItem>
+                                }
+
+                            </ItemMenu>
+                            <ItemMenu
+                                name='Gastos'
+                                icono='fi fi-rr-shopping-cart-add'
+                                onClick={() => setMostrarGastos(!mostrarGastos)}
+
+                            >
+
+                                {!!mostrarGastos &&
+
+                                    <SubMenuItem>
+                                        <ItemMenu
+                                            name='Registrar gastos'
+                                            link='gastos'
+                                            blur={blur == 7 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(7)}
+                                        />
+
+                                        <ItemMenu
+                                            name='Lista compra'
+                                            link='gastos-listado'
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
                                         />

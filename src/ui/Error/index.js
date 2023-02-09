@@ -7,7 +7,7 @@ function Informacion({ onClick, children, className }) {
             className='
                         absolute
                          backdrop-blur-sm bg-white/30
-                         z-40
+                         z-50
                          h-full
                          w-full
                          flex

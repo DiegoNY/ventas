@@ -55,6 +55,7 @@ function RegistroCompras() {
         subtotal: 0,
         igv: 0,
         total: 0,
+        forma_pago: 'EFECTIVO',
 
     });
 
@@ -287,7 +288,7 @@ function RegistroCompras() {
                                 flex-col
                                 mr-6
                                 rounded-xl
-                              bg-slate-100
+                              bg-sky-200
                                 mb-3
                                 px-2 
                             '
@@ -313,7 +314,7 @@ function RegistroCompras() {
                             type={'text'}
                         />
 
-                        <h1 className='text-right  font-black mr-2 text-blue-500'>Selecciona los productos </h1>
+                        <h1 className='text-right  font-black mr-2 text-slate-400'>Selecciona los productos </h1>
                     </div>
                     {!!buscador && <div
                         className='
@@ -622,7 +623,10 @@ function RegistroCompras() {
                             className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
                             placeholder='Nombre del solicitante ...'
                             onChange={(e) => {
-
+                                setListaCompra({
+                                    ...listaCompra,
+                                    tipo_documento: e.target.value,
+                                })
                             }}
                         >
                             <option>SELECCIONE</option>
@@ -756,7 +760,7 @@ function RegistroCompras() {
                                     }}
                                 />
                                 <span className='text-xs'>Credito</span>
-                                <i class="fi fi-rs-credit-card ml-1"></i>
+                                <i class="fi fi-rs-credit-card ml-1 text-blue-700"></i>
                             </div>
 
 
