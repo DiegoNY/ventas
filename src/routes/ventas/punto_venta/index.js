@@ -59,6 +59,7 @@ function PuntoVenta() {
         id: 1
     });
     const [searchProducto, setSearchProducto] = React.useState('');
+    const [tipoCompra, setTipoCompra] = React.useState();
 
     const [cliente, setCliente] = React.useState({});
     const [loadings, setLoading] = React.useState();
@@ -544,6 +545,7 @@ function PuntoVenta() {
             forma_pago: 'EFECTIVO',
         })
 
+        setTipoCompra('');
     }
 
 
@@ -736,20 +738,45 @@ function PuntoVenta() {
             >
                 <div
                     className='
+                        
                         flex
-                        justify-between
-                        mx-auto
+                        justify-center
+                        items-center
+                        w-full
+
                  '
                 >
                     <div
                         className='
-                            mr-72
-                            text-center
-                            flex
-                            justify-center
+                            
+                            flex 
+                            justify-start
+                            w-1/2
+                            my-auto
+                            
                         '
                     >
-                        <h1 className='text-2xl mx-auto font-bold mt-3 text-sky-400'>Estas realizando una venta</h1>
+                        <div
+                            className='
+                            font-black
+                            text-lg
+                            h-full
+                            flex
+                            justify-start
+                            flex-col
+                            w-full
+                            
+                        '
+                        >
+                            <h1 className=' 
+                                  text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  ml-auto
+                                  mr-72
+                                '
+                            >Estas realizando una venta</h1>
+                            <p className='font-normal text-sm  text-slate-500 ml-auto
+                                  mr-96'>Estas en el punto de venta ...  ... </p>
+                        </div>
+
                     </div>
 
                     <div
@@ -876,7 +903,7 @@ function PuntoVenta() {
                                             let informacion = e.target.value
                                             let informacionArray = informacion.split('-');
 
-                                            console.log(informacionArray);
+                                            // console.log(informacionArray);
                                             obtenerNumerosVentas(informacionArray[0]);
 
                                             setVenta({
@@ -1467,6 +1494,11 @@ s                                                '
                                             <TablaRow TablaRow
                                                 tabIndex={index}
                                                 onClick={(event) => {
+                                                    let medida = '';
+                                                    if (producto.medida == 'C') medida = ' caja';
+                                                    if (producto.medida == 'T') medida = ' tableta';
+                                                    if (producto.medida == 'U') medida = ' unidad';
+                                                    setTipoCompra(producto.descripcion + ' esta siendo vendido por' + medida)
                                                     event.preventDefault();
                                                 }}
 
@@ -1475,14 +1507,20 @@ s                                                '
                                                     //Eventes para cambiar el tipo de medida
                                                     if (event.key == 't') {
                                                         producto.medida = 'T';
+                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por tableta')
+
                                                     }
 
                                                     if (event.key == 'c') {
                                                         producto.medida = 'C';
+                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por caja')
+
                                                     }
 
                                                     if (event.key == 'u') {
                                                         producto.medida = 'U';
+                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por unidad')
+
                                                     }
 
                                                 }}
@@ -1560,7 +1598,7 @@ s                                                '
                             </TablaTalwindCss>
                         </div>
 
-                        {/* <h1 className='text-slate-600 ml-2 mt-1'>{tipoCompra}</h1> */}
+                        <h1 className='text-slate-900 ml-2 mt-1'>{tipoCompra}</h1>
 
                     </div>
 

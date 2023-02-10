@@ -9,7 +9,7 @@ import { Footer } from '../../ui/Layouts/Footer';
 import { useLocation } from 'react-router-dom';
 
 
-function Caja() {
+function Caja({ cierre = false }) {
 
     const navigate = useNavigate();
     /**
@@ -39,7 +39,7 @@ function Caja() {
         fecha_apertura: '23/01/2023'
 
     });
-    const [cierreState, setCierre] = React.useState(false);
+    const [cierreState, setCierre] = React.useState(cierre);
 
     //Obteniendo informacion de cierre
     const location = useLocation();
@@ -85,11 +85,11 @@ function Caja() {
 
     useEffect(() => {
 
-        if (location.search == '?cierre') {
-            setCierre(true);
-        } else {
-            setCierre(false);
-        }
+        // if (location.search == '?cierre') {
+        //     setCierre(true);
+        // } else {
+        //     setCierre(false);
+        // }
 
 
     }, [location])

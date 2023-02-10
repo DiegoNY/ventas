@@ -23,7 +23,6 @@ function AuthProvider({ children }) {
 
     } = useLocalStorage('USER_V2');
 
-
     const login = async ({ username, password }) => {
 
         // console.log(username, password);

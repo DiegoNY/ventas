@@ -266,63 +266,71 @@ function ListaCompra() {
                         <div
                             className='
                                 bg-sky-200
-                                tabla-informacion
                                 mt-2 p-2
                                 rounded-xl
                             '
                         >
-                            <TablaTalwindCss
-                                headers={[
-                                    { name: 'Producto' },
-                                    { name: 'Lote' },
-                                    { name: 'Fecha vencimiento' },
-                                    { name: 'Cantidad' },
-                                    { name: 'Precio' },
-                                    { name: 'Total' },
-                                ]}
-                                marginY={'my-0 bg-white'}
+
+                            <div
+                                className='
+                                tabla-informacion
+                                    rounded-xl
+                                '
                             >
-                                {vermas?.productos.map((producto, index) => {
 
-                                    return (
-                                        <TablaRow>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.descripcion}
-                                            </TableCell>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.lote}
-                                            </TableCell>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.fecha_vencimiento}
-                                            </TableCell>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.stock_comprado}
-                                            </TableCell>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.precio_compra}
-                                            </TableCell>
-                                            <TableCell
-                                                className='text-xs'
-                                            >
-                                                {producto.total}
-                                            </TableCell>
-                                        </TablaRow>
-                                    )
-                                })
+                                <TablaTalwindCss
+                                    headers={[
+                                        { name: 'Producto' },
+                                        { name: 'Lote' },
+                                        { name: 'Fecha vencimiento' },
+                                        { name: 'Cantidad' },
+                                        { name: 'Precio' },
+                                        { name: 'Total' },
+                                    ]}
+                                    marginY={'my-0 bg-white'}
+                                >
+                                    {vermas?.productos.map((producto, index) => {
 
-                                }
+                                        return (
+                                            <TablaRow>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.descripcion}
+                                                </TableCell>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.lote}
+                                                </TableCell>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.fecha_vencimiento}
+                                                </TableCell>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.stock_comprado}
+                                                </TableCell>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.precio_compra}
+                                                </TableCell>
+                                                <TableCell
+                                                    className='text-xs'
+                                                >
+                                                    {producto.total}
+                                                </TableCell>
+                                            </TablaRow>
+                                        )
+                                    })
 
-                            </TablaTalwindCss>
+                                    }
+
+                                </TablaTalwindCss>
+                            </div>
 
                         </div>
 

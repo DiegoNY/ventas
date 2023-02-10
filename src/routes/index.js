@@ -24,7 +24,12 @@ import { RegistroCompras } from './compras/RegistroCompras';
 import { ListaCompra } from './compras/ListaCompras';
 import { RegistrarGastos } from './gastos/RegistrarGastos';
 import { ListaGastos } from './gastos/ListaGastos';
+import { useMain } from '../ui/main/useMain';
+
+
 function App() {
+
+  const comprimirs = useMain();
 
   // Rutas °° 🍅
 
@@ -39,11 +44,19 @@ function App() {
             <MainUser />
           </NavBar>
 
+
+
           <div className='page-content' >
 
             <Main />
 
-            <div className='content-wrapper '>
+            <div className='content-wrapper '
+
+              onClick={() => {
+                comprimirs.setComprimir(false);
+              }}
+
+            >
 
               <div className='content-inner h-screen	bg-white' id='scroll' >
 
@@ -60,6 +73,11 @@ function App() {
                   <Route
                     path='/caja'
                     element={<Caja />}
+                  >
+                  </Route>
+                  <Route
+                    path='/caja-cierre'
+                    element={<Caja cierre={true} />}
                   >
                   </Route>
 
@@ -141,6 +159,8 @@ function App() {
             </div>
 
           </div>
+
+
 
         </AuthProvider>
 

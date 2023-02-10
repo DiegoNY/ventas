@@ -693,7 +693,7 @@ function MantenimientoCliente() {
                 <div className='
                     col-span-12 row-span-2 sm:row-span-1 flex z-10
                 '>
-                    <Titulo title={'Clientes '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                    <Titulo title={'Clientes '} className={{ container: 'flex flex-col w-full px-4 my-2' }} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
                     <div class="flex flex-row-reverse">
                         <button
                             type="button"

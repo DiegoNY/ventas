@@ -558,7 +558,7 @@ function MantenimientoUsuario() {
 
             <div className='card'>
 
-                <Titulo title={'Usuario '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                <Titulo title={'Usuario '} className={{ container: 'flex flex-col w-full px-4 my-2' }} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
 
                 <div className='mx-3 mt-4'>
 

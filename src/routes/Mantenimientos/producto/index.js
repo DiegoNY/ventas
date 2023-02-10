@@ -1273,7 +1273,26 @@ function MantenimientoProducto() {
                     className='col-span-12 row-span-2 sm:row-span-1 flex z-10'
                 >
 
-                    <Titulo title={'Producto '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                    <div
+                        className='flex flex-col w-full ml-4 my-2'
+                    >
+                        <h1 className='
+                            mr-auto
+                            text-2xl 
+                            sm:text-2xl 
+                            font-extrabold 
+                            text-slate-900 
+                            tracking-tight 
+                        '
+                        >Productos registrados</h1>
+                        <p className='
+                            text-sm 
+                            font-normal 
+                            text-slate-500
+                        '
+                        >Para poder ingresar un producto debes de dar click sobre el boton </p>
+                    </div>
+
                     {/**Boton */}
                     <div class="flex flex-row-reverse">
                         <button

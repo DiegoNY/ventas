@@ -26,8 +26,25 @@ function getMonday(fechaParam) {
     let fecha = new Date(fechaParam);
     let sieteDiasMilisegundos = 1000 * 60 * 60 * 24 * 6;
     let resta = fecha.getTime() - sieteDiasMilisegundos;
-    return new Date(resta);
 
+    let lunes = new Date(resta);
+
+    const Lunes = obtenerFechaInicial(lunes)
+    return Lunes;
+
+}
+
+function obtenerFechaInicial(lunes) {
+    let fechaIncio = new Date(lunes);
+    let fechaIncioLocal = fechaIncio.toLocaleDateString();
+    const fechaFormateada = formatearFechas(fechaIncioLocal.replaceAll('/', '-'));
+
+    return fechaFormateada;
+}
+
+function formatearFechas(dateString) {
+    const dateArray = dateString.split('-');
+    return [dateArray[2], dateArray[1], dateArray[0]].join('-');
 }
 
 export {

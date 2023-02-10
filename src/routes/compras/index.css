@@ -38,7 +38,7 @@ textarea:focus {
 
 .tabla-informacion {
     overflow-y: scroll;
-    height: 32vh;
+    height: 29vh;
 }
 
 @keyframes rotacion {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
-import LineChart from '../../ui/Graficos/Lineal';
 import './index.css'
 import { getData } from '../useFetch';
 import { urlAPI } from '../../config';
@@ -11,13 +10,12 @@ import icono_producto from './img/icono-productos.svg';
 import icono_ventas from './img/icono-ventas.svg';
 import { CardInformacion } from './cardInformacion';
 import { RechartsLineal } from '../../ui/Graficos/LinealRecharts';
-import { Cardventa } from './ventas/cards_venta';
 import { RechartsBar } from '../../ui/Graficos/BarRecharts';
 import { RechartsPie } from '../../ui/Graficos/PieRecharts';
-import { CardCompra } from './compras/card_compras';
 import { Tabventa } from './ventas';
 import { Tabcompra } from './compras';
-import { getAfterSunday, getMonday, getSunday } from './useFechasGrafico';
+import { getMonday, getSunday } from './useFechasGrafico';
+
 
 
 function PanelControl() {
@@ -168,6 +166,8 @@ function PanelControl() {
 
         dataVentasSemanales();
     }, [])
+
+
     return (
 
         <>
@@ -181,6 +181,7 @@ function PanelControl() {
                     mx-auto
                     w-full
                 '
+
             >
                 <div
                     className='
@@ -353,7 +354,7 @@ function PanelControl() {
 
                                         '
                                     >
-                                        El grafico muestra las ventas que se an realizado 
+                                        El grafico muestra las ventas que se an realizado
                                     </div>
                                 }
 

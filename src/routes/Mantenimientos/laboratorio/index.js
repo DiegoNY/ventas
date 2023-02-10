@@ -370,7 +370,7 @@ function MantenimientoLaboratorio() {
 
             <div className='card'>
 
-                <Titulo title={'Laboratorio '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                <Titulo title={'Laboratorio '} className={{ container: 'flex flex-col w-full px-4 my-2' }} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
 
                 <div className='mx-3 mt-4'>
 

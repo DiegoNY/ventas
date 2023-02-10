@@ -65,8 +65,10 @@ const urlAPI = {
     },
     Nota_salida: {
         url: `${hostAPIV2}/api/v2/nota_salida`
+    },
+    Gastos: {
+        url: `${hostAPIV2}/api/v2/gastos`
     }
-
 
 }
 
@@ -77,8 +79,8 @@ const EMPRESA = {
     SERIE_NOTA_CREDITO: 'N01',
     AUTORIZACION: '034-005-0006616',
     LOGO_URL: '',
-    RUC:'20566487986',
-    NOMBRE :'NOMBRE LARGO DE EMPRESA',
+    RUC: '20566487986',
+    NOMBRE: 'NOMBRE LARGO DE EMPRESA',
     EMAIL: 'empresa@empresa.com.pe'
 
 }

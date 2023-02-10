@@ -4,9 +4,14 @@ import { ItemMenu } from './ItemMenu';
 import { SubMenuItem } from './SubMenuItem';
 import icono_menu from './img/icono-menu.svg'
 import { useLocalStorage } from '../../routes/useLocalStorage';
+import { useMain } from './useMain';
 
 
 function Main() {
+
+    const comprimirs = useMain();
+    // console.log(comprimirs);
+
     const [mostrar, setMostrar] = React.useState(false);
     const [comprimir, setComprimir] = React.useState(false);
     const [mostrarSubMenuCaja, setmostrarSubMenuCaja] = React.useState(false);
@@ -44,15 +49,16 @@ function Main() {
 
         return (
             <>
-                <div className={`${!!comprimir && 'absolute z-50 sidebar-light  rounded-xl text-slate-800  h-screen'}   ${!comprimir && ' sidebar-main-resized sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-screen '} `}>
 
-                    <div className="sidebar-content h-screen">
+                <div className={`${!!comprimirs.comprimir && 'absolute z-50 sidebar-light  rounded-xl text-slate-800  h-100'}   ${!comprimirs.comprimir && ' sidebar-main-resized sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-100 '} `}>
+
+                    <div className="sidebar-content h-100">
 
                         <div className="sidebar-section sidebar-user my-1">
                             <div className="sidebar-section-body">
                                 <div
                                     className="media"
-                                    onClick={() => setComprimir(!comprimir)}
+                                    onClick={() => comprimirs.setComprimir(!comprimirs.comprimir)}
                                 >
                                     <a href="#" className="mr-3">
                                         <img src="../img/hombre-de-negocios.png" className="rounded-circle sidebar-main-resize" alt="" />
@@ -102,7 +108,9 @@ function Main() {
                             </div>
                         </div>
 
-                        <div className="sidebar-section ">
+                        <div
+                            className="sidebar-section "
+                        >
 
                             <ItemMenu
                                 link='home'
@@ -115,7 +123,10 @@ function Main() {
                             <ItemMenu
                                 name="Caja"
                                 icono="fi fi-rr-briefcase"
-                                onClick={() => setmostrarSubMenuCaja(!mostrarSubMenuCaja)}
+                                onClick={() => {
+                                    setmostrarSubMenuCaja(!mostrarSubMenuCaja)
+                                    comprimirs.setComprimir(true)
+                                }}
                             >
                                 {!!mostrarSubMenuCaja &&
                                     <SubMenuItem>
@@ -132,7 +143,7 @@ function Main() {
 
                                         {!mostrarApertura &&
                                             <ItemMenu
-                                                link='caja?cierre'
+                                                link='caja-cierre'
                                                 name="Cierre"
                                                 icono="ICONO"
                                                 blur={blur == 17 && 'backdrop-blur-sm bg-white/10'}
@@ -157,7 +168,10 @@ function Main() {
                             <ItemMenu
                                 name={'Mantenimiento'}
                                 icono="fi fi-rr-settings"
-                                onClick={() => setMostrar(!mostrar)}
+                                onClick={() => {
+                                    setMostrar(!mostrar)
+                                    comprimirs.setComprimir(true)
+                                }}
 
                             >
                                 {!!mostrar &&
@@ -225,7 +239,11 @@ function Main() {
                             <ItemMenu
                                 name='Ventas'
                                 icono="fi fi-rs-shop"
-                                onClick={() => setMostrarVentas(!mostrarVentas)}
+                                onClick={() => {
+                                    setMostrarVentas(!mostrarVentas)
+                                    comprimirs.setComprimir(true)
+
+                                }}
                             >
                                 {!!mostrarVentas &&
                                     <SubMenuItem>
@@ -270,7 +288,11 @@ function Main() {
                             <ItemMenu
                                 name='Compras'
                                 icono='fi fi-rr-shopping-cart-add'
-                                onClick={() => setMostrarCompras(!mostrarCompras)}
+                                onClick={() => {
+                                    setMostrarCompras(!mostrarCompras)
+                                    comprimirs.setComprimir(true)
+
+                                }}
 
                             >
 
@@ -297,7 +319,11 @@ function Main() {
                             <ItemMenu
                                 name='Gastos'
                                 icono='fi fi-rr-shopping-cart-add'
-                                onClick={() => setMostrarGastos(!mostrarGastos)}
+                                onClick={() => {
+                                    setMostrarGastos(!mostrarGastos)
+                                    comprimirs.setComprimir(true)
+
+                                }}
 
                             >
 
@@ -312,7 +338,7 @@ function Main() {
                                         />
 
                                         <ItemMenu
-                                            name='Lista compra'
+                                            name='Lista gastos'
                                             link='gastos-listado'
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
@@ -328,15 +354,13 @@ function Main() {
 
                 </div>
 
+
             </>
         );
 
     }
 
 }
-
-const routes = [];
-
 
 
 export { Main };

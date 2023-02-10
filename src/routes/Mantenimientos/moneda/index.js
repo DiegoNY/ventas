@@ -317,10 +317,10 @@ function MantenimientoMoneda() {
 
             <div className='card'>
 
-                <Titulo title={'Moneda '} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
+                <Titulo title={'Moneda '} className={{ container: 'flex flex-col w-full px-4 my-2' }} navegacion={' Mantenimiento'} icono={'fi fi-rr-settings'} />
 
 
-                <div className='mx-3 mt-4'>
+                <div className='mx-3 mt-1'>
 
 
                     <Grid
