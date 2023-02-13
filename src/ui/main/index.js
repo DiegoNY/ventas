@@ -20,6 +20,7 @@ function Main() {
     const [blur, setBlur] = React.useState(0);
     const [mostrarApertura, setMostrarApertura] = React.useState(true);
     const [mostrarGastos, setMostrarGastos] = React.useState(false);
+    const [mostrarReportes, setMostrarReportes] = React.useState(false);
     const [usuario, setUsuario] = React.useState({});
     const [loadings, setLoading] = React.useState(false);
     const auth = useAuth();
@@ -61,7 +62,7 @@ function Main() {
                                     onClick={() => comprimirs.setComprimir(!comprimirs.comprimir)}
                                 >
                                     <a href="#" className="mr-3">
-                                        <img src="../img/hombre-de-negocios.png" className="rounded-circle sidebar-main-resize" alt="" />
+                                        <img src="http://192.168.1.110:8080/imagen/imagen-usuario-fake.jpg" className="rounded-circle sidebar-main-resize" alt="" />
                                     </a>
 
                                     <div className="media-body">
@@ -117,7 +118,11 @@ function Main() {
                                 name="Inicio"
                                 icono="fi fi-rs-shop"
                                 blur={blur == 18 && 'backdrop-blur-sm bg-white/10'}
-                                onClickBlur={() => setBlur(18)}
+                                onClickBlur={() => {
+                                    setBlur(18)
+                                    comprimirs.setComprimir(true)
+
+                                }}
                             />
 
                             <ItemMenu
@@ -340,6 +345,44 @@ function Main() {
                                         <ItemMenu
                                             name='Lista gastos'
                                             link='gastos-listado'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
+                                    </SubMenuItem>
+                                }
+
+                            </ItemMenu>
+                            <ItemMenu
+                                name='Reportes'
+                                icono='fi fi-rr-shopping-cart-add'
+                                onClick={() => {
+                                    setMostrarReportes(!mostrarReportes)
+                                    comprimirs.setComprimir(true)
+
+                                }}
+
+                            >
+
+                                {!!mostrarReportes &&
+
+                                    <SubMenuItem>
+                                        <ItemMenu
+                                            name='Ventas'
+                                            link='reporte-ventas'
+                                            blur={blur == 7 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(7)}
+                                        />
+
+                                        <ItemMenu
+                                            name='Ventas/Compras'
+                                            link='reporte-ventas-compras'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
+
+                                        <ItemMenu
+                                            name='Stock productos'
+                                            link='reporte-productos'
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
                                         />

@@ -417,7 +417,7 @@ function RegistroCompras() {
                                                 if (producto.medida == 'T') medida = ' tableta';
                                                 if (producto.medida == 'U') medida = ' unidad';
                                                 setTipoCompra(producto.descripcion + ' esta siendo comprado por' + medida)
-                                                event.preventDefault();
+                                                // event.preventDefault();
                                             }}
 
                                             onKeyDown={(event) => {

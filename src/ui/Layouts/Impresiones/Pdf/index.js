@@ -389,6 +389,13 @@ const ImprimirPDF = ({ data }) => {
                             '
                         >
                             {data?.venta?.productos?.map((producto, index) => {
+
+                                let UNIDA_MEDIDA;
+
+                                if (producto.medida == 'U') UNIDA_MEDIDA = 'UNIDAD';
+                                if (producto.medida == 'C') UNIDA_MEDIDA = 'CAJA';
+                                if (producto.medida == 'T') UNIDA_MEDIDA = 'TABLETA';
+
                                 return (
                                     <div
                                         className={`
@@ -401,7 +408,7 @@ const ImprimirPDF = ({ data }) => {
                                     >
                                         <div className='border-r border-black'> {producto.codigo_barras} </div>
                                         <div className='border-r border-black'> {producto.cantidad_comprada || producto?.stock_comprado} </div>
-                                        <div className='border-r border-black col-span-2'> {producto.descripcion} </div>
+                                        <div className='border-r border-black col-span-2'> {producto.descripcion} X {UNIDA_MEDIDA || 'undefined'}</div>
                                         <div className='border-r border-black'> {producto.lote} </div>
                                         <div className='border-r border-black'> {producto.fecha_vencimiento} </div>
                                         <div className='border-r border-black'> {producto.precio || producto?.precio_compra} </div>

@@ -25,6 +25,7 @@ import { ListaCompra } from './compras/ListaCompras';
 import { RegistrarGastos } from './gastos/RegistrarGastos';
 import { ListaGastos } from './gastos/ListaGastos';
 import { useMain } from '../ui/main/useMain';
+import { Reporteventas } from './reportes/ventas';
 
 
 function App() {
@@ -150,6 +151,18 @@ function App() {
                   <Route
                     path='/gastos-listado'
                     element={<ListaGastos />}
+                  />
+                  <Route
+                    path='/reporte-ventas'
+                    element={<Reporteventas />}
+                  />
+                  <Route
+                    path='/reporte-ventas-compras'
+                    element={<h1>Venta compras</h1>}
+                  />
+                  <Route
+                    path='/reporte-productos'
+                    element={<h1>Productos stock</h1>}
                   />
 
                 </Routes>

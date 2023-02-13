@@ -49,6 +49,8 @@ function PuntoVenta() {
         tipo_impresion: 'TICKET',
         tipo_moneda: 'SOLES',
         forma_pago: 'EFECTIVO',
+        cuotas: 0,
+        informacion_cuotas: [],
 
     });
     const [tipoDocumento, setTipoDocumento] = React.useState([]);
@@ -78,6 +80,8 @@ function PuntoVenta() {
     const [nuevaVenta, setNuevaVenta] = React.useState();
     const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [verCuotas, setVerCuotas] = React.useState(false);
+
     const componenTicketRef = React.useRef();
     const componentPdfRef = React.useRef();
 
@@ -530,8 +534,7 @@ function PuntoVenta() {
     }
 
     const limpiarVenta = () => {
-
-
+        console.log(venta);
         setVenta({
             ...venta,
             productos: [],
@@ -543,6 +546,8 @@ function PuntoVenta() {
             tipo_impresion: 'TICKET',
             tipo_moneda: 'SOLES',
             forma_pago: 'EFECTIVO',
+            cuotas: 0,
+            informacion_cuotas: [],
         })
 
         setTipoCompra('');
@@ -734,7 +739,10 @@ function PuntoVenta() {
 
             {/**Fin impresion */}
             <Layout
-                onClick={() => setSearch(false)}
+                onClick={() => {
+                    setSearch(false);
+                    setVerCuotas(false);
+                }}
             >
                 <div
                     className='
@@ -781,7 +789,8 @@ function PuntoVenta() {
 
                     <div
                         className='
-                            mx-auto
+                        w-1/2 mr-10
+
                         '
                     >
                         <div
@@ -804,6 +813,7 @@ function PuntoVenta() {
                                 //bg-red-100
                                 h-full
                                 flex
+                                py-1
                                 justify-between
                             '
                             >
@@ -903,7 +913,6 @@ function PuntoVenta() {
                                             let informacion = e.target.value
                                             let informacionArray = informacion.split('-');
 
-                                            // console.log(informacionArray);
                                             obtenerNumerosVentas(informacionArray[0]);
 
                                             setVenta({
@@ -1172,9 +1181,9 @@ s                                                '
                                                     value={'CREDITO'}
                                                     checked={!formaPago}
                                                     className='
-                                                mr-1
-                                                mb-3
-                                            '
+                                                        mr-1
+                                                        mb-3
+                                                    '
                                                     onChange={(e) => {
 
                                                         setFormaPago(!formaPago);
@@ -1203,6 +1212,125 @@ s                                                '
 
                                     </div>
                                 </div>
+                                {!formaPago &&
+                                    <div
+                                        className='
+                                            flex
+                                            flex-col
+                                        '
+                                    >
+                                        <div
+                                            className='
+                                                flex
+                                                flex-col
+                                            '
+                                        >
+                                            <h1 className='text-xs text-slate-800'>En cuantas cuotas se pagara ? </h1>
+                                            <div
+                                                className='flex'
+                                            >
+
+                                                <input
+                                                    type='text'
+                                                    value={venta?.cuotas}
+                                                    onChange={(e) => {
+                                                        setVerCuotas(true);
+                                                        setVenta({
+                                                            ...venta,
+                                                            cuotas: e.target.value,
+                                                            informacion_cuotas: Array.from({ length: e.target.value }, (_, index) => ({ id: index + 1, monto: '', fecha_pago: '' }))
+                                                        })
+                                                    }}
+                                                />
+                                                {venta.informacion_cuotas.length != 0 &&
+
+                                                    <div
+                                                        className='flex'
+
+                                                        onClick={(e) => {
+                                                            setVerCuotas(true);
+                                                            e.stopPropagation();
+                                                        }}
+
+                                                    >
+                                                        <p className='cursor-pointer ml-1 font-semibold text-salte-900 hover:text-sky-300'>ver cuotas </p>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" class="w-6 h-4 mt-1 cursor-pointer">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                                                        </svg>
+                                                    </div>
+
+                                                }
+
+
+                                            </div>
+
+                                        </div>
+                                        {!!verCuotas &&
+
+                                            <div
+                                                className='
+                                                    border
+                                                    py-2
+                                                    px-2
+                                                    rounded-xl
+                                                    mt-10
+                                                    absolute z-30
+                                                    bg-white
+                                                '
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                            >
+                                                <div
+                                                    className='
+                                                         grid
+                                                         grid-cols-2
+                                                         gap-3
+                                                     '
+                                                >
+                                                    {venta?.informacion_cuotas?.map((informacion_cuota, index) => {
+
+                                                        return (
+                                                            <div
+                                                                className='
+                                                                     flex
+                                                                     flex-col
+ 
+                                                                 '
+                                                            >
+                                                                <p className='text-xs'>Fecha de la {informacion_cuota.id}° cuota</p>
+                                                                <input
+                                                                    className='px-2 w-32'
+                                                                    type='date'
+                                                                    defaultValue={informacion_cuota?.fecha_pago}
+                                                                    onChange={(e) => {
+                                                                        informacion_cuota.fecha_pago = e.target.value;
+                                                                    }}
+                                                                />
+                                                                <input
+                                                                    type='text'
+                                                                    className='mt-1'
+                                                                    placeholder='Ingresa el monto'
+                                                                    defaultValue={informacion_cuota.monto}
+                                                                    onChange={(e) => {
+                                                                        informacion_cuota.monto = e.target.value;
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        )
+                                                    })}
+
+                                                </div>
+
+                                            </div>
+
+                                        }
+
+
+
+                                    </div>
+                                }
+
 
 
                                 <br />
@@ -1300,21 +1428,17 @@ s                                                '
                                     </div>
                                 </div>
 
-                                <br />
-
                                 <div
                                     className='
-                                    
-                                flex
-                                justify-between
-                            '
+                                        flex
+                                    '
                                 >
 
 
 
-                                    {/* <p className='font-black ' >Subtotal : <span className='font-normal'>{listaCompra.subtotal}</span></p>
-                                <p className='font-black '>igv : <span className='font-normal'>{listaCompra.igv}</span></p>
-                                <p className='font-black '>Total : <span className='font-normal'>{listaCompra.total}</span></p> */}
+                                    <p className='font-black mr-2' >Subtotal : <span className='font-normal'>{venta.subtotal}</span></p>
+                                    <p className='font-black mr-2'>igv : <span className='font-normal'>{venta.igv}</span></p>
+                                    <p className='font-black mr-2'>Total : <span className='font-normal'>{venta.total}</span></p>
 
                                 </div>
                                 <br />
