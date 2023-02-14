@@ -117,7 +117,6 @@ function PanelControl() {
             // se obtiene el inicio de semana restando la fecha del domingo en 7 
             // la semana inicia todos los domingos 🐱‍🏍 
 
-
             const fechaInicioSemana = getMonday(sunday);
             const fechaFinSemana = sunday;
 

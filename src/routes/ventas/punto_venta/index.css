@@ -35,6 +35,13 @@ input[type="number"] {
     border: none;
 
 }
+
 input[type="number"]:focus {
     outline: none;
+}
+
+input:focus {
+    border: 2px solid rgb(65, 125, 244);
+    border-radius: 2px;
+    padding: 0 0 0 2px;
 }

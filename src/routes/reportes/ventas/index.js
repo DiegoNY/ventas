@@ -5,6 +5,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import esLocale from '@fullcalendar/core/locales/es';
 
+import './index.css'
+
+
 import { Box } from '@mui/system';
 import { getData } from '../../useFetch';
 import { urlAPI } from '../../../config';
@@ -15,12 +18,19 @@ const Reporteventas = () => {
     useEffect(() => {
 
         const getDataVentas = async () => {
-            const data = await getData(`${urlAPI.Venta.url}`);
+            const data = await getData(`${urlAPI.Venta.url}?reporte=true`);
 
             let ventaArray = [];
             data?.map(venta => {
+                ventaArray.push(
+                    {
+                        id: venta._id,
+                        title: `Subtotal  : S/${venta?.subtotal} - IGV :  S/${venta?.igv} - TOTAL : S/ ${venta?.total}`,
+                        date: venta?._id,
+                        color: 'white',
+                        textColor: '#34D399'
+                    })
 
-                ventaArray.push({ id: venta._id, title: `${venta?.numero_venta} - S/ ${venta?.total}`, date: venta?.fecha_registro })
             })
 
             setVentas(ventaArray);
@@ -31,6 +41,26 @@ const Reporteventas = () => {
 
     }, [])
 
+    function renderEventContent(eventInfo) {
+        let total = eventInfo.event.title.split('-');
+        console.log(total);
+        return (
+            <>
+                <div
+                    className='
+                        h-full
+                        flex
+                        flex-col
+                        w-full
+                    '
+                >
+                    <div className='font-bold text-yellow-400 mx-auto'>{total[0]}</div>
+                    <div className='font-bold text-green-400 mx-auto'>{total[1] || 123}</div>
+                    <div className='font-bold text-indigo-400 mx-auto'>{total[2] || 123}</div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -88,7 +118,7 @@ const Reporteventas = () => {
                             editable='true'
                             events={ventas}
                             locale={esLocale}
-                            eventAdd
+                            eventContent={renderEventContent}
 
                         >
 

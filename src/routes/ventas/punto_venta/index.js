@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Titulo } from '../../../ui/titulos-vistas';
 import './index.css'
 import { getData } from '../../useFetch';
-import { hostAPI, socket, urlAPI } from '../../../config';
+import { hostAPI, IGV, socket, urlAPI } from '../../../config';
 import { Modal } from '../../../ui/modal';
 import iconoMoneda from './img/icono-monedas.svg';
 import iconoticket from './img/icono-ticket.svg';
@@ -80,6 +80,7 @@ function PuntoVenta() {
     const [nuevaVenta, setNuevaVenta] = React.useState();
     const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [errores, setErrores] = React.useState({})
     const [verCuotas, setVerCuotas] = React.useState(false);
 
     const componenTicketRef = React.useRef();
@@ -124,16 +125,6 @@ function PuntoVenta() {
 
     //Funciones 
 
-
-    //socket este activo debe enviar el id del producto 
-    const ActualizarStock = async (id, stock_vendido) => {
-
-        venta.productos.map(producto => {
-            if (producto._id = id)
-                producto.stock = producto.stock - stock_vendido;
-        })
-
-    }
     /**
      * Recibe la cantidad de compra junto a el tipo de medida en string 🥐
      * y un objeto con las cantidades de medidas disponibles esto incluye precio 
@@ -215,6 +206,7 @@ function PuntoVenta() {
         })
 
         venta.total = total;
+
     }
     /**
      * Funcion que cambia el valor del total segun la cantidad ingresada por el 
@@ -317,10 +309,22 @@ function PuntoVenta() {
         });
     }
 
+    useEffect(() => {
+        const ObtenerInformacionComplementariaVenta = () => {
+            let total = venta.total;
+            const igvVenta = (Number(total) * IGV) / 100;
+            const subTotal = total - igvVenta;
 
-    const ObtenerObtenerSubtotalIgv = () => {
+            setVenta({
+                ...venta,
+                igv: igvVenta,
+                subtotal: subTotal,
+            })
+        }
+        ObtenerInformacionComplementariaVenta();
+        
+    }, [venta.total])
 
-    }
 
     //Funciones complementarias
 
@@ -461,7 +465,7 @@ function PuntoVenta() {
      * solo se activa cuando selecciona el numero de serie
      * @param {*} serie 
      */
-    const obtenerNumerosVentas = async (serie) => {
+    const obtenerNumerosVentas = async (serie, tipoDocumento) => {
 
         const numeros_ventas = await getData(`${urlAPI.Numeros_ventas.url}`);
 
@@ -487,6 +491,7 @@ function PuntoVenta() {
                 numero_venta: `${informacionSerie.tipo_documento}-${informacionSerie.serie}`,
                 serie: informacionSerie.tipo_documento,
                 correlativo: informacionSerie.serie,
+                tipo_documento: tipoDocumento
             });
 
         } else {
@@ -496,6 +501,8 @@ function PuntoVenta() {
                 numero_venta: `${serie}-00000001`,
                 serie: serie,
                 correlativo: '00000001',
+                tipo_documento: tipoDocumento
+
             });
 
         }
@@ -551,6 +558,77 @@ function PuntoVenta() {
         })
 
         setTipoCompra('');
+    }
+
+    const actualizarFechaCuotas = (id, fechaMinima) => {
+        venta?.informacion_cuotas?.map((value, index) => {
+            if (!value?.fechaMinima) {
+
+                value.fechaMinima = fechaMinima;
+            }
+
+            if (value.id == id) {
+                value.fechaMinima = fechaMinima;
+                return;
+            }
+        })
+
+        return setVenta(
+            {
+                ...venta
+            }
+        )
+    }
+
+    const actualizarMontoCuotas = (id, monto) => {
+
+        const totalCuotas = venta?.informacion_cuotas?.reduce((acumulador, cuotas) => {
+            return acumulador + Number(cuotas.monto);
+        }, 0)
+
+        if (venta.total < totalCuotas) {
+
+            venta?.informacion_cuotas?.map((cuota, index) => {
+                if (cuota.id == id) {
+                    cuota.error = true;
+                    return;
+                }
+            })
+
+            setErrores({
+                ...errores,
+                informacionCuotas: true,
+            })
+
+        } else {
+
+            venta?.informacion_cuotas?.map((cuota, index) => {
+
+                cuota.error = false;
+
+                if (cuota.id == id) {
+                    cuota.monto = monto;
+                    return;
+                }
+
+
+                setErrores({
+                    ...errores,
+                    informacionCuotas: false,
+                })
+
+            })
+
+        }
+
+
+
+        return setVenta(
+            {
+                ...venta
+            }
+        )
+
     }
 
 
@@ -648,17 +726,21 @@ function PuntoVenta() {
 
 
             const InformacionCantidadVentas = async () => {
-                const CantidadVentas = await getData(`${urlAPI.Venta.url}?usuario=${auth.user._id}`)
-                return CantidadVentas.length;
+                const informacion = await getData(`${urlAPI.Venta.url}?usuario=${auth.user._id}`)
+                return informacion;
             }
 
             InformacionCantidadVentas()
-                .then(cantidad => {
+                .then(informacionUsuario => {
+
                     setInformacionUsuario({
                         ...informacionUsuario,
                         apertura_caja: moneyInBox.dinero_apertura,
-                        cantidad_ventas: cantidad,
+                        cantidad_ventas: informacionUsuario[0].cantidad,
+                        dinero_recaudado: informacionUsuario[0].cantidad_recaudada,
+                        gastos: informacionUsuario[0].gastos.total_dinero_gastos,
                     })
+
                 });
 
         }
@@ -895,30 +977,25 @@ function PuntoVenta() {
                                     <select
                                         type={'text'}
                                         className=' mt-1 
-                                    form-control  
-                                    block 
-                                    w-40 
-                                    rounded-md 
-                                    h-8 
-                                    border-gray-300 
-                                    focus:border-indigo-500 
-                                    focus:ring-indigo-500 
-                                    sm:text-sm 
-                                    text-xs
-                                        text-center
-                                    '
+                                            form-control  
+                                            block 
+                                            w-40 
+                                            rounded-md 
+                                            h-8 
+                                            border-gray-300 
+                                            focus:border-indigo-500 
+                                            focus:ring-indigo-500 
+                                            sm:text-sm 
+                                            text-xs
+                                            text-center
+                                        '
                                         placeholder='Nombre del solicitante ...'
                                         onChange={(e) => {
 
                                             let informacion = e.target.value
                                             let informacionArray = informacion.split('-');
 
-                                            obtenerNumerosVentas(informacionArray[0]);
-
-                                            setVenta({
-                                                ...venta,
-                                                tipo_documento: informacionArray[1]
-                                            })
+                                            obtenerNumerosVentas(informacionArray[0], informacionArray[1]);
 
                                         }}
                                     >
@@ -1234,11 +1311,38 @@ s                                                '
                                                     type='text'
                                                     value={venta?.cuotas}
                                                     onChange={(e) => {
+
+                                                        let hoy = new Date();
+
                                                         setVerCuotas(true);
                                                         setVenta({
                                                             ...venta,
                                                             cuotas: e.target.value,
-                                                            informacion_cuotas: Array.from({ length: e.target.value }, (_, index) => ({ id: index + 1, monto: '', fecha_pago: '' }))
+                                                            informacion_cuotas: Array.from(
+                                                                { length: e.target.value },
+                                                                (_, index) => {
+                                                                    if (index == 0) {
+
+                                                                        return (
+                                                                            {
+                                                                                id: index + 1,
+                                                                                monto: '',
+                                                                                fecha_pago: '',
+                                                                                fechaMinima: `${hoy.toISOString()}`.substring(0, 10)
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                    return (
+                                                                        {
+                                                                            id: index + 1,
+                                                                            monto: '',
+                                                                            fecha_pago: '',
+                                                                            fechaMinima: '',
+                                                                        }
+                                                                    )
+
+                                                                }
+                                                            )
                                                         })
                                                     }}
                                                 />
@@ -1281,6 +1385,53 @@ s                                                '
                                                     e.stopPropagation();
                                                 }}
                                             >
+                                                <h1 className='mb-1  text-slate-600 flex'>
+                                                    El total es <span className='font-semibold mx-1'>{venta?.total}</span>
+                                                    {!!errores.informacionCuotas &&
+                                                        <i
+                                                            className='text-orange-500  cursor-pointer'
+                                                            onMouseEnter={() => setErrores(
+                                                                {
+                                                                    ...errores,
+                                                                    mensajeCuotas: true,
+                                                                }
+                                                            )}
+                                                            onMouseLeave={() => setErrores(
+                                                                {
+                                                                    ...errores,
+                                                                    mensajeCuotas: false,
+                                                                }
+                                                            )}
+
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                                            </svg>
+                                                        </i>
+                                                    }
+                                                    {!!errores.mensajeCuotas &&
+                                                        <>
+                                                            <div
+                                                                className='
+                                                                    absolute
+                                                                    z-10 mt-4
+                                                                    border
+                                                                    flex
+                                                                    w-32
+                                                                    ml-10
+                                                                    text-xs
+                                                                    bg-white
+                                                                    py-1
+                                                                    px-1
+
+                                                                '
+                                                            >
+                                                                Recuerda que la suma de los montos no debe ser mayor al total de la venta
+                                                            </div>
+                                                        </>
+                                                    }
+
+                                                </h1>
                                                 <div
                                                     className='
                                                          grid
@@ -1302,18 +1453,22 @@ s                                                '
                                                                 <input
                                                                     className='px-2 w-32'
                                                                     type='date'
+                                                                    min={informacion_cuota.fechaMinima}
                                                                     defaultValue={informacion_cuota?.fecha_pago}
                                                                     onChange={(e) => {
                                                                         informacion_cuota.fecha_pago = e.target.value;
+                                                                        actualizarFechaCuotas(informacion_cuota.id + 1, e.target.value)
+
                                                                     }}
                                                                 />
                                                                 <input
                                                                     type='text'
-                                                                    className='mt-1'
+                                                                    className={`mt-1 ${informacion_cuota.error && 'border-y border-x border-red-500 rounded-sm focus:border-red-500' || ''}`}
                                                                     placeholder='Ingresa el monto'
                                                                     defaultValue={informacion_cuota.monto}
                                                                     onChange={(e) => {
                                                                         informacion_cuota.monto = e.target.value;
+                                                                        actualizarMontoCuotas(informacion_cuota.id, e.target.value);
                                                                     }}
                                                                 />
                                                             </div>
@@ -1622,7 +1777,7 @@ s                                                '
                                                     if (producto.medida == 'C') medida = ' caja';
                                                     if (producto.medida == 'T') medida = ' tableta';
                                                     if (producto.medida == 'U') medida = ' unidad';
-                                                    setTipoCompra(producto.descripcion + ' esta siendo vendido por' + medida)
+                                                    setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por' + medida)
                                                     event.preventDefault();
                                                 }}
 
@@ -1631,19 +1786,19 @@ s                                                '
                                                     //Eventes para cambiar el tipo de medida
                                                     if (event.key == 't') {
                                                         producto.medida = 'T';
-                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por tableta')
+                                                        setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por tableta')
 
                                                     }
 
                                                     if (event.key == 'c') {
                                                         producto.medida = 'C';
-                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por caja')
+                                                        setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por caja')
 
                                                     }
 
                                                     if (event.key == 'u') {
                                                         producto.medida = 'U';
-                                                        setTipoCompra(producto.descripcion + ' esta siendo vendido por unidad')
+                                                        setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por unidad')
 
                                                     }
 
@@ -1722,7 +1877,7 @@ s                                                '
                             </TablaTalwindCss>
                         </div>
 
-                        <h1 className='text-slate-900 ml-2 mt-1'>{tipoCompra}</h1>
+                        <h1 className='text-slate-900 ml-2 my-auto uppercase'>{tipoCompra}</h1>
 
                     </div>
 

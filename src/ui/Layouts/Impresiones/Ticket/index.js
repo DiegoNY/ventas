@@ -165,9 +165,9 @@ const ImprimirTicket = ({ data }) => {
                         </div>
                         <div
                         >
-                            <p >2.50</p>
-                            <p >1.90</p>
-                            <p >3.00</p>
+                            <p >{data?.venta?.subtotal}</p>
+                            <p >{data?.venta?.igv}</p>
+                            <p >{data?.venta?.total}</p>
                         </div>
                     </div>
                     ========================================

@@ -42,7 +42,7 @@ const RegistrarGastos = () => {
         setGastos({
             ...gastos,
             usuario: auth?.user?.nombre,
-            idUsuario: auth?.user?._id,
+            id_usuario: auth?.user?._id,
         })
     }, [auth.loading]);
 

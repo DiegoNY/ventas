@@ -650,7 +650,7 @@ function RegistroCompras() {
 
                         <input
                             type={'text'}
-                            className={`mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 ${!!erroresFormulario?.NUMERO_DOCUMENTO?.error && 'border-2 border-red-500' || ' focus:border-blue-600'}  `}
+                            className={`mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 ${!!erroresFormulario?.NUMERO_DOCUMENTO?.error && 'border-2 border-red-500 focus:border-red-500' || ' focus:border-blue-600'}  `}
                             placeholder='B00-00000000 ... '
                             onChange={(e) => {
                                 let formatoCorrecto = validarSerie(e.target.value);

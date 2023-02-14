@@ -26,6 +26,7 @@ import { RegistrarGastos } from './gastos/RegistrarGastos';
 import { ListaGastos } from './gastos/ListaGastos';
 import { useMain } from '../ui/main/useMain';
 import { Reporteventas } from './reportes/ventas';
+import { ReporteVentasCompras } from './reportes/ventasCompras';
 
 
 function App() {
@@ -158,7 +159,7 @@ function App() {
                   />
                   <Route
                     path='/reporte-ventas-compras'
-                    element={<h1>Venta compras</h1>}
+                    element={<ReporteVentasCompras />}
                   />
                   <Route
                     path='/reporte-productos'

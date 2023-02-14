@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import { ProductosMasVendidos } from "./routes/ventas/productos_mas_vendidos";
 const socket = io('http://192.168.1.110:8080/');
 
 
@@ -68,6 +69,9 @@ const urlAPI = {
     },
     Gastos: {
         url: `${hostAPIV2}/api/v2/gastos`
+    },
+    Productos_vendidos: {
+        url: `${hostAPIV2}/api/v2/productos_vendidos`
     }
 
 }
@@ -85,10 +89,13 @@ const EMPRESA = {
 
 }
 
+const IGV = 18;
+
 
 export {
     hostAPI,
     urlAPI,
     socket,
-    EMPRESA
+    EMPRESA,
+    IGV,
 }

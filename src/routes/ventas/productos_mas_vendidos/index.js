@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
+import { urlAPI } from '../../../config';
 import { RechartsBar } from '../../../ui/Graficos/BarRecharts';
 import { RechartsLineal } from '../../../ui/Graficos/LinealRecharts';
 import { Titulo } from '../../../ui/titulos-vistas';
+import { getData } from '../../useFetch';
 import icono_descarga from './img/icono-descarga.svg';
 
 function ProductosMasVendidos() {
@@ -21,10 +23,39 @@ function ProductosMasVendidos() {
             stock: 580,
             amt: 2400,
         },
-
-
-
     ];
+
+    const [haceTresMeese, setHaceTresMeses] = useState();
+    const [haceUnMes, setHaceUnMes] = useState();
+    const [mesActual, setMesActual] = useState();
+    const [haceUnAño, setHaceUnAño] = useState();
+
+    useEffect(() => {
+
+        const getDataHaceTresMeses = async () => {
+            const data = await getData(`${urlAPI.Productos_vendidos.url}?haceTresMeses=true`)
+            setHaceTresMeses(data);
+        }
+        const getDatahaceUnMes = async () => {
+            const data = await getData(`${urlAPI.Productos_vendidos.url}?mesPasado=true`)
+            setHaceUnMes(data);
+        }
+        const getDatamesActual = async () => {
+            const data = await getData(`${urlAPI.Productos_vendidos.url}?mesActual=true`)
+            setMesActual(data);
+        }
+        const getDatahaceUnAño = async () => {
+            const data = await getData(`${urlAPI.Productos_vendidos.url}?haceUnAño=true`)
+            setHaceUnAño(data);
+        }
+
+        getDataHaceTresMeses();
+        getDatahaceUnAño();
+        getDatamesActual();
+        getDatahaceUnMes();
+
+    }, [])
+
     return (
         <>
             <div
@@ -42,7 +73,8 @@ function ProductosMasVendidos() {
                         mb-4
                     '
                 >
-                    <h1 className='text-2xl mt-2 font-bold text-blue-400 ml-2'>Productos mas vendidos </h1>
+                    <h1 className='ml-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  mt-2'>Productos mas vendidos </h1>
+                    <p className='font-normal text-sm ml-2 text-slate-500'>estas observando los productos mas vendidos por fechas </p>
                 </div>
                 <div
                     className='
@@ -65,7 +97,19 @@ function ProductosMasVendidos() {
                     >
 
                         <h1 className='ml-2 font-semibold my-2 text-slate-600' >Mes actual</h1>
-                        <RechartsBar fill={'#FACC15'} fill_2={'#84CC16'} />
+                        <RechartsBar
+
+
+                            data={mesActual || []}
+                            dataKey={[
+                                {
+                                    name: 'cantidad',
+                                    fill: '#FACC15',
+                                },
+
+                            ]}
+                            name='nombre'
+                        />
                     </div>
                     <div
                         className='
@@ -80,7 +124,18 @@ function ProductosMasVendidos() {
                     >
 
                         <h1 className='ml-2 font-semibold my-2 text-slate-500' >Mes pasado</h1>
-                        <RechartsBar fill={'#4ADE80'} fill_2={'#22D3EE'} />
+                        <RechartsBar
+
+                            data={haceUnMes || []}
+                            dataKey={[
+                                {
+                                    name: 'cantidad',
+                                    fill: '#4ADE80',
+                                },
+
+                            ]}
+                            name='nombre'
+                        />
                     </div>
                     <div
                         className='
@@ -108,7 +163,19 @@ function ProductosMasVendidos() {
                             </button>
 
                         </div>
-                        <RechartsBar fill={'#2563EB'} fill_2={'#E11D48'} />
+                        <RechartsBar
+                            fill={'#2563EB'}
+                            fill_2={'#E11D48'}
+                            data={haceTresMeese || []}
+                            dataKey={[
+                                {
+                                    name: 'cantidad',
+                                    fill: '#2563EB',
+                                },
+
+                            ]}
+                            name='nombre'
+                        />
                     </div>
                 </div>
 
@@ -140,12 +207,18 @@ function ProductosMasVendidos() {
                             <RechartsLineal
                                 height={'77%'}
                                 fill='#697F92'
+                                datos={haceUnAño || []}
                                 dataKey={[
+
                                     {
-                                        name: 'pv',
-                                        stroke: '#FB923C'
-                                    }
+                                        name: 'cantidad',
+                                        stroke: '#FB923C',
+                                    },
+
                                 ]}
+                                nameX='nombre'
+                                fillX='#ffff'
+                                typeLine=''
                             />
 
                         </div>
