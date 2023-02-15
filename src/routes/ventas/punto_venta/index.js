@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Titulo } from '../../../ui/titulos-vistas';
 import './index.css'
 import { getData } from '../../useFetch';
 import { hostAPI, IGV, socket, urlAPI } from '../../../config';
@@ -17,7 +16,6 @@ import imagenagregarclientes from './img/icono-agregar-cliente.svg';
 import img_registro from '../../img/mantenimiento-img/img-registro-cliente.png';
 import { SaveData } from '../../useCRUD';
 import { generarSerieVenta } from './useSerie';
-import { Delete } from '../../useAlert';
 import simbolo_alerta_warning from './img/simbolo-alerta-warning.png';
 import { Informacion } from '../../../ui/Error';
 import { useAuth } from '../../../auth/auth';
@@ -309,6 +307,8 @@ function PuntoVenta() {
         });
     }
 
+    //Modificando el IGV y SUBTOTAL cada que el total de venta cambie 
+
     useEffect(() => {
         const ObtenerInformacionComplementariaVenta = () => {
             let total = venta.total;
@@ -322,7 +322,7 @@ function PuntoVenta() {
             })
         }
         ObtenerInformacionComplementariaVenta();
-        
+
     }, [venta.total])
 
 
@@ -657,7 +657,6 @@ function PuntoVenta() {
         const obtenerProductos = async () => {
 
             const data = await getData(`${urlAPI.Producto.url}?ventas=true`);
-            // console.log(data);
             setProductos(data);
         }
 
@@ -688,12 +687,6 @@ function PuntoVenta() {
                     numero_venta: `${informacionSerie.tipo_documento}-${informacionSerie.serie}`,
                     serie: informacionSerie.tipo_documento,
                     correlativo: informacionSerie.serie,
-                    productos: [],
-                    total: 0,
-                    subtotal: 0,
-                    igv: 0,
-                    identificacion: '00000000',
-                    cliente: 'CLIENTES VARIOS',
                 })
             }
 
@@ -751,18 +744,16 @@ function PuntoVenta() {
     useEffect(() => {
         if (!loading) {
             const informacionUsuarios = (informacion) => {
-                if (auth.user._id == informacion._id) {
-                    console.log('Modificar cantidad de venta');
 
-                    console.log(informacionUsuario);
+                if (auth.user._id == informacion._id) {
+
                     setInformacionUsuario({
                         ...informacionUsuario,
                         cantidad_ventas: informacionUsuario.cantidad_ventas + 1,
+                        dinero_recaudado: informacionUsuario.dinero_recaudado + informacion.venta.total
                     })
 
                     setNuevaVenta(informacion._id);
-
-                    console.log(informacionUsuario);
 
                 }
             }
@@ -1642,7 +1633,10 @@ s                                                '
                                 font-semibold
                                         `}
 
-                                    onClick={emitirVenta}
+                                    onClick={() => {
+                                        emitirVenta();
+                                        limpiarVenta();
+                                    }}
 
                                 >
                                     Emitir venta
@@ -1732,7 +1726,11 @@ s                                                '
 
                                         }}
                                     >
-                                        {producto.descripcion} ({producto.id_laboratorio})
+                                        <h1><span className=' font-semibold'>Descripcion :</span> {producto.descripcion || 'ACEITE DE NO SE QUE SUPER LARGO'}</h1>
+                                        <p className='ml-1 font-semibold '>Lote </p> <span className='mx-1'>:</span>{producto.lote || 'FGNOP'}
+                                        <p className='ml-1 font-semibold '>Laboratorio </p> <span className='mx-1'>:</span>{producto.id_laboratorio || 'FGNOP'}
+                                        <p className='ml-1 font-semibold '>Fecha vencimiento </p><span className='mx-1'>:</span> {producto.fecha_vencimiento || '12/12/12'}
+                                        <p className='ml-1 font-semibold '>Stock </p><span className='mx-1'>:</span>{producto.stock}
 
                                     </div>
                                 )

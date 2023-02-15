@@ -51,11 +51,15 @@ function ListaCompra() {
         onAfterPrint: () => console.log('Impreso uwu')
     })
 
-    console.log(vermas);
 
     const columns = [
         {
             field: '_id',
+            headerName: 'id',
+            flex: 0.1,
+        },
+        {
+            field: 'opciones',
             headerName: '',
             flex: 0.1,
             renderCell: (params) => {
@@ -173,7 +177,6 @@ function ListaCompra() {
 
     }, [])
 
-    console.log(vermas);
 
     return (
         <>
@@ -244,6 +247,15 @@ function ListaCompra() {
                         rows={listaCompras || []}
                         columns={columns}
                         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                        initialState={
+                            {
+                                columns: {
+                                    columnVisibilityModel: {
+                                        _id: false
+                                    }
+                                }
+                            }
+                        }
                     />
                 </Box>
             </Box>

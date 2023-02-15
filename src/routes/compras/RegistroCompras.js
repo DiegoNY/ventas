@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { urlAPI } from '../../config';
+import { IGV, urlAPI } from '../../config';
 import { Titulo } from '../../ui/titulos-vistas';
 import { getData } from '../useFetch';
 import icono_moneda from './img/icono-monedas.svg'
@@ -133,7 +133,8 @@ function RegistroCompras() {
                 {
                     ...producto,
                     id_compra: idsCompras.id,
-                    medida: 'U'
+                    medida: 'U',
+                    stock_inicial: producto.stock,
                 }
             ]
         });
@@ -164,7 +165,6 @@ function RegistroCompras() {
                 //Modificando el total
                 //obteniendo el string
                 let stringStock = producto.stock;
-                console.log(stringStock);
                 //separandolo 
                 let arrStringStock = stringStock.split('-');
                 const stock = arrStringStock[1];
@@ -250,6 +250,26 @@ function RegistroCompras() {
         SaveData(`${urlAPI.ListaCompra.url}`, listaCompra);
     }
 
+    useEffect(() => {
+
+        const obtenerInformacionAdicional = () => {
+            let total = listaCompra.total;
+            let igvCompra = (Number(total) * IGV) / 100;
+            let subTotalCompra = total - igvCompra;
+
+            setListaCompra(
+                {
+                    ...listaCompra,
+                    igv: igvCompra,
+                    subtotal: subTotalCompra,
+                }
+            )
+
+        }
+
+        obtenerInformacionAdicional();
+
+    }, [listaCompra.total])
 
     //llamados a API o Funciones que se ejecuten solo una vez 
     useEffect(() => {
@@ -274,6 +294,7 @@ function RegistroCompras() {
 
     }, [])
 
+    console.log(productos);
     return (
         < >
             <Layout

@@ -43,6 +43,7 @@ function NotaSalida() {
 
     );
 
+    const [info, setObtenerInfo] = useState();
 
     // console.log(notaSalida);
     let searchtProductos = [];
@@ -144,15 +145,28 @@ function NotaSalida() {
 
     const emitirNotaSalida = async () => {
         const response = await SaveData(`${urlAPI.Nota_salida.url}`, notaSalida);
-        console.log(response);
         if (response.error) {
             setError({
                 SaveData: response.body,
             });
+
+            return;
         }
+
     }
 
-    // console.log(searchtProductos);
+    const limipiarNotaSalida = () => {
+
+        return setNotaSalida(
+            {
+                ...notaSalida,
+                productos: [],
+                solicitante: '',
+                fecha: '',
+                motivo: ''
+            }
+        )
+    }
 
     useEffect(() => {
 
@@ -165,14 +179,40 @@ function NotaSalida() {
 
         obtenerInformacionProductos();
 
-    }, [])
+    }, [info])
 
     useEffect(() => {
 
+
+        const actualizarStockProductos = (id, stock) => {
+
+
+            notaSalida.productos.map(producto => {
+                if (producto._id == id) {
+                    producto.stock = producto.stock - stock
+                }
+            })
+
+        }
+
+        const obtenerProductosActualizar = (informacion) => {
+            let producto = informacion.productos;
+
+            for (let key in producto) {
+                actualizarStockProductos(
+                    producto[key]._id,
+                    producto[key].stock_saliente,
+                )
+            }
+        }
+
         const obtenerSerie = (informacion) => {
 
-            console.log(informacion);
             const serieGenerada = generarSerieVenta(informacion.numeroNotaSalida)
+
+            obtenerProductosActualizar(informacion);
+
+            setObtenerInfo(informacion)
 
             setNotaSalida({
                 ...notaSalida,
@@ -190,7 +230,7 @@ function NotaSalida() {
 
         }
 
-    }, [])
+    }, [notaSalida])
 
     useEffect(() => {
         const obtenerCorrelativoNotaSalida = async () => {
@@ -553,8 +593,9 @@ function NotaSalida() {
 
 
                                         onClick={() => {
-                                            console.log(notaSalida)
+                                            // console.log(notaSalida)
                                             emitirNotaSalida();
+                                            limipiarNotaSalida();
                                         }}
                                     >
                                         Emitir 🖨
