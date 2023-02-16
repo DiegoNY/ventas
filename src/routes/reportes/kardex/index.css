@@ -1,0 +1,5 @@
+.productos-busqueda {
+    min-width: 50vh;
+    max-height: 40vh;
+    overflow-y: scroll;
+}

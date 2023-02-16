@@ -1,7 +1,7 @@
 import React from 'react';
 import { Footer } from './Footer';
 
-const Layout = React.memo(({ onClick, children, title }) => {
+const Layout = React.memo(({ onClick, children, title, cardex }) => {
 
     return (
         <>
@@ -30,7 +30,7 @@ const Layout = React.memo(({ onClick, children, title }) => {
                     {!!title &&
 
                         <>
-                            <h1 className='text-2xl mx-auto font-bold mt-3 text-sky-400' >{title}</h1>
+                            <h1 className='ml-10 mt-1 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  ' >{title}</h1>
                             <br />
 
                             <div
@@ -46,7 +46,7 @@ const Layout = React.memo(({ onClick, children, title }) => {
                             >
 
                                 {children}
-                                
+
 
                             </div>
                         </>
@@ -60,16 +60,22 @@ const Layout = React.memo(({ onClick, children, title }) => {
 
                         </>
                     }
-                    <div
-                        className='flex w-full text-slate-400 justify-center mb-1'
-                    >
-                     www.rcingenierossac.com
-                    </div>
-                </div>
-                
-                <Footer>
+                    {!cardex &&
+                        <div
+                            className='flex w-full text-slate-400 justify-center mb-1'
+                        >
+                            www.rcingenierossac.com
+                        </div>
 
-                </Footer>
+                    }
+
+                </div>
+
+                {!cardex &&
+                    <Footer>
+
+                    </Footer>
+                }
 
             </div>
 

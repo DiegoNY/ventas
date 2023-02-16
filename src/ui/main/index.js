@@ -367,8 +367,14 @@ function Main() {
 
                                     <SubMenuItem>
                                         <ItemMenu
-                                            name='Ventas'
+                                            name='Ventas diarias'
                                             link='reporte-ventas'
+                                            blur={blur == 7 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(7)}
+                                        />
+                                        <ItemMenu
+                                            name='Ventas mensuales'
+                                            link='reporte-ventas-mensuales'
                                             blur={blur == 7 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(7)}
                                         />
@@ -383,6 +389,12 @@ function Main() {
                                         <ItemMenu
                                             name='Stock productos'
                                             link='reporte-productos'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
+                                        <ItemMenu
+                                            name='Kardex'
+                                            link='reporte-kardex'
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
                                         />

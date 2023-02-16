@@ -27,6 +27,8 @@ import { ListaGastos } from './gastos/ListaGastos';
 import { useMain } from '../ui/main/useMain';
 import { Reporteventas } from './reportes/ventas';
 import { ReporteVentasCompras } from './reportes/ventasCompras';
+import { Kardex } from './reportes/kardex';
+import { VentasMensuales } from './reportes/ventasMensuales';
 
 
 function App() {
@@ -158,12 +160,20 @@ function App() {
                     element={<Reporteventas />}
                   />
                   <Route
+                    path='/reporte-ventas-mensuales'
+                    element={<VentasMensuales />}
+                  />
+                  <Route
                     path='/reporte-ventas-compras'
                     element={<ReporteVentasCompras />}
                   />
                   <Route
                     path='/reporte-productos'
                     element={<h1>Productos stock</h1>}
+                  />
+                  <Route
+                    path='/reporte-kardex'
+                    element={<Kardex />}
                   />
 
                 </Routes>

@@ -273,11 +273,12 @@ function NotaSalida() {
                     '
                 >
 
-                    <h1 className='text-2xl mx-auto font-bold mt-3 text-sky-400' >Estas realizando una nota de salida</h1>
+                    <h1 className='ml-14 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  mt-3' >Estas realizando una nota de salida</h1>
+                    <p className='ml-14 font-normal text-sm  text-slate-500'>Las cantidades salientes de los productos seran restadas </p>
                     <br />
                     <div
                         className='
-                            mt-3
+                            mt-1
                             flex
                             justify-between
                             h-full

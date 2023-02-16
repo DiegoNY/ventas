@@ -66,7 +66,7 @@ function RechartsLineal({ datos, dataKey, aspect, height, fill, nameX, fillX }) 
                     <YAxis tick={<CustomizedYAxisTick className="text-xs text-center  " fill={fill} />} tickLine={false} />
                     <Tooltip contentStyle={{ borderWidth: 1 }} />
                     {dataKey?.map(dataKey => {
-                        return <Line type={dataKey.type || "monotone"} dataKey={dataKey.name} stroke={dataKey.stroke} dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />
+                        return <Line type={dataKey.type || "monotone"} dataKey={dataKey.name} stroke={dataKey.stroke} dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={dataKey.strokeWidth || 3} />
                     })}
                     {!dataKey && <Line type="monotone" dataKey="pv" stroke="#8884d8" dot={{ r: 5 }} activeDot={{ r: 7 }} strokeWidth={3} />}
 

@@ -114,11 +114,11 @@ function ListaCompra() {
 
         },
         {
-            field: 'efectivo',
+            field: 'total',
             headerName: 'Total',
             flex: 0.2,
             renderCell: (params) => {
-                return `S/ ${params.row.efectivo}`
+                return `S/ ${params.row.total}`
             }
 
         },
