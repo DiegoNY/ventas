@@ -14,24 +14,52 @@ const VentasMensuales = () => {
     const [anterior, setAnterior] = useState(1);
     const [buscar, setBuscar] = useState(false);
 
+    // const hoy = ObtnerFechas(new Date());
+    // console.log(hoy);
 
     const [fecha, setFecha] = useState({
         desde: "2023-01-01",
-        hasta: "2024-01-01"
+        hasta: "2024-01-01",
+        año_busqueda: "2023-01-01",
+        año: 2023
     });
 
 
     const AñoAnterior = () => {
-        let hoy = new Date()
-        const fechas = ObtnerFechas(hoy, false, anterior);
-        console.log(fechas);
+        let hoy = new Date(fecha.año_busqueda)
+        const { fin, inicio, año } = ObtnerFechas(hoy, false, anterior);
 
+        setFecha(
+            {
+                ...fecha,
+                año: año,
+                desde: inicio,
+                hasta: fin,
+                año_busqueda: inicio,
+            }
+        )
+
+        setBuscar(!buscar)
     }
 
     const AñoSiguiente = () => {
-        let hoy = new Date()
-        const fechas = ObtnerFechas(hoy, siguiente, false);
-        console.log(fechas);
+
+        let hoy = new Date(fecha.año_busqueda)
+
+        const { fin, inicio, año } = ObtnerFechas(hoy, siguiente);
+
+        setFecha(
+            {
+                ...fecha,
+                año: año,
+                desde: inicio,
+                hasta: fin,
+                año_busqueda: inicio,
+            }
+        )
+
+        setBuscar(!buscar)
+
     }
 
     useEffect(() => {
@@ -106,7 +134,7 @@ const VentasMensuales = () => {
                         <div
                             className='flex justify-end w-1/2'
                         >
-                            <h1 className='text-lg font-semibold' > Año 2023</h1>
+                            <h1 className='text-lg font-semibold' > Año {fecha.año}</h1>
                         </div>
                         <div
                             className='w-1/2 flex justify-end'

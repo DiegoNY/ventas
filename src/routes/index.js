@@ -29,6 +29,7 @@ import { Reporteventas } from './reportes/ventas';
 import { ReporteVentasCompras } from './reportes/ventasCompras';
 import { Kardex } from './reportes/kardex';
 import { VentasMensuales } from './reportes/ventasMensuales';
+import { StockProductos } from './reportes/stockProductos';
 
 
 function App() {
@@ -169,7 +170,7 @@ function App() {
                   />
                   <Route
                     path='/reporte-productos'
-                    element={<h1>Productos stock</h1>}
+                    element={<StockProductos />}
                   />
                   <Route
                     path='/reporte-kardex'
