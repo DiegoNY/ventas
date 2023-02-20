@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Informacion({ onClick, children, className }) {
+function Informacion({ onClick, children, className, height }) {
 
     return (
         <div
@@ -26,6 +26,7 @@ function Informacion({ onClick, children, className }) {
                                 bg-white
                                 border
                                 flex
+                               
                             '
                 onClick={(e) => e.stopPropagation()}
             >
@@ -34,7 +35,7 @@ function Informacion({ onClick, children, className }) {
 
                         className || `
                          //bg-red-200
-                         h-96
+                         ${height || 'h-96'}
                          w-full
                             flex
                          flex-col                                

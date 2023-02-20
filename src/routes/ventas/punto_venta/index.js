@@ -709,7 +709,7 @@ function PuntoVenta() {
     }, [venta])
 
     useEffect(() => {
-        if (!auth.loading) setVenta({ ...venta, usuario: auth?.user?._id })
+        if (!auth.loading) setVenta({ ...venta, usuario: auth?.user?._id, nombre_usuario: auth?.user?.nombre })
     }, [auth])
 
     useEffect(() => {

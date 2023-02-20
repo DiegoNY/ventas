@@ -8,7 +8,6 @@ import {
 } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
-import { Titulo } from '../../../ui/titulos-vistas';
 import { getData } from '../../useFetch';
 import icono_ticket from './img/icono-ticket.svg';
 import icono_pdf from './img/icono-pdf.svg';
@@ -18,6 +17,7 @@ import { useAuth } from '../../../auth/auth';
 import { useReactToPrint } from 'react-to-print';
 import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
 import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
+import { Informacion } from '../../../ui/Error';
 
 
 function CustomToolbar() {
@@ -42,7 +42,8 @@ function ListaVenta() {
 
 
     const [todasVentas, setTodasVentas] = useState([]);
-
+    const [notaCredito, setNotaCredito] = useState(false);
+    const [rc, setRc] = useState(false)
 
     const componenTicketRef = React.useRef();
     const componentPdfRef = React.useRef();
@@ -59,6 +60,48 @@ function ListaVenta() {
         onAfterPrint: () => console.log('Impreso uwu')
     })
 
+    const opcionesAnulacion = [
+        {
+            descripcion: 'Anulacion de la operacion',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Anulacion por error en el  RUC',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Correccion por error en la descripcion ',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Descuento global',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Descuento por item',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Devolucion total',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Devolucion por item',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Bonificacion',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Disminucio en el valor',
+            codigo: 222,
+        },
+        {
+            descripcion: 'Otros conceptos',
+            codigo: 222,
+        },
+    ]
 
 
     const columns = [
@@ -99,9 +142,9 @@ function ListaVenta() {
                 let tipoDocumento;
                 let serie = params.row.serie.split('');
 
-                if(serie[0] === 'B') tipoDocumento = 'BOLETA';
-                if(serie[0] === 'T') tipoDocumento = 'TICKET';
-                if(serie[0] === 'F') tipoDocumento = 'FACTURA';
+                if (serie[0] === 'B') tipoDocumento = 'BOLETA';
+                if (serie[0] === 'T') tipoDocumento = 'TICKET';
+                if (serie[0] === 'F') tipoDocumento = 'FACTURA';
 
                 return <p>{tipoDocumento}</p>
             }
@@ -150,12 +193,12 @@ function ListaVenta() {
                         }}
                     >
                         <div
-                            className='flex font-semibold text-xs text-lime-500 cursor-pointer'
+                            className='flex font-semibold tracking-tighter text-xs text-lime-600 cursor-pointer'
                             onClick={(e) => {
                                 imprimirTicket();
                             }}
                         >
-                            Ticket
+                            TICKET
                             <img src={icono_ticket} className='h-4 rotate-90' />
 
                         </div>
@@ -209,7 +252,7 @@ function ListaVenta() {
                                 cursor-pointer
                             '
                         >
-                            <h1 className='mt-1 '>NC</h1>
+                            <h1 className='mt-1 ' onClick={() => setNotaCredito(params.row)} >NC</h1>
                         </div>
 
 
@@ -363,6 +406,77 @@ function ListaVenta() {
                 {/**Fin impresion */}
 
             </div>
+            {notaCredito &&
+                <Informacion
+                    onClick={() => setNotaCredito(false)}
+                    height=' '
+                >
+                    <div
+                        className='flex flex-col '
+                    >
+                        <h1 className='p-2 border-b border-b-slate-100 text-slate-600 font-bold tracking-tighter'>Anulacion de comprobante</h1>
+                        <h1 className='mt-1 p-2 text-slate-900 font-black '>Informacion del documento</h1>
+                        <p className='p-2 flex justify-end mr-2 text-slate-700 '><p className='font-semibold tracking-tighter'>Fecha de la Nota de Credito</p> : 2023-02-20 </p>
+                        <div className='border-y rounded-xl grid grid-rows-3 p-2 mx-3' >
+
+                            <div
+                                className='grid grid-cols-2 p-1'
+                            >
+                                <h1 className='mx-4'>Tipo de documento </h1>
+                                <div
+                                    className='flex'
+                                >
+                                    Boleta de venta electronico
+                                </div>
+                            </div>
+                            <div
+                                className='grid grid-cols-2 border-t p-1'
+                            >
+                                <h1 className='mx-4' >Numero de documento</h1>
+                                <div className='flex' >
+                                    B001-00007150
+                                </div>
+                            </div>
+                            <div
+                                className='grid grid-cols-2 border-t p-1'
+                            >
+                                <h1 className='mx-4' >Fecha del documento</h1>
+                                <div className='flex' >
+                                    2023-12-09
+                                </div>
+                            </div>
+                        </div>
+                        <div className='p-2 flex justify-between'>
+                            <p className='p-1 text-slate-900 font-semibold'>¿Cual es el motivo de la anulacion?</p>
+                            <select
+                                className='border w-1/2 p-1'
+                            >
+                                <option>Selecciona una opcion</option>
+                                {opcionesAnulacion.map(value => {
+
+                                    return (
+                                        <option value={value.codigo}>{value.descripcion}</option>
+                                    )
+                                })}
+                            </select>
+                        </div>
+                        <p className='px-2 text-slate-900 font-semibold'>Descripcion</p>
+                        <textarea
+                            className='border mx-2 rounded-lg p-1'
+                        >
+
+                        </textarea>
+                        <div
+                            className='flex  justify-end mx-2 '
+                        >
+                            <button className='bg-orange-500 rounded-sm text-white  p-1 mt-1.5'>
+                                Emitir resumen
+                            </button>
+                        </div>
+
+                    </div>
+                </Informacion>
+            }
 
 
         </>

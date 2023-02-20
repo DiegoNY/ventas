@@ -30,6 +30,7 @@ import { ReporteVentasCompras } from './reportes/ventasCompras';
 import { Kardex } from './reportes/kardex';
 import { VentasMensuales } from './reportes/ventasMensuales';
 import { StockProductos } from './reportes/stockProductos';
+import { ProductosVencidosVencer } from './reportes/productosVencidosVencer';
 
 
 function App() {
@@ -175,6 +176,10 @@ function App() {
                   <Route
                     path='/reporte-kardex'
                     element={<Kardex />}
+                  />
+                  <Route
+                    path='/reporte-productos-vencidos-vencer'
+                    element={<ProductosVencidosVencer />}
                   />
 
                 </Routes>

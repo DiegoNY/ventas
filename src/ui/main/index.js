@@ -398,6 +398,12 @@ function Main() {
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
                                         />
+                                        <ItemMenu
+                                            name='Productos vencidos'
+                                            link='reporte-productos-vencidos-vencer'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
                                     </SubMenuItem>
                                 }
 

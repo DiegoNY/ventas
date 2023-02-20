@@ -122,7 +122,7 @@ const ImprimirTicket = ({ data }) => {
                             <p >{fecha} {hora}</p>
                             <div >{data?.venta?.cliente}</div>
                             <p >{data?.venta?.identificacion}</p>
-                            <p>{data?.venta?.vendedor || 'admin'}</p>
+                            <p>{data?.venta?.nombre_usuario || 'undefined'}</p>
                         </div>
 
                     </div>

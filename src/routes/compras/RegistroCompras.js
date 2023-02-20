@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { IGV, urlAPI } from '../../config';
-import { Titulo } from '../../ui/titulos-vistas';
 import { getData } from '../useFetch';
 import icono_moneda from './img/icono-monedas.svg'
 import { ProductoSeleccionado } from './productosSeleccionados';
@@ -13,7 +12,6 @@ import { SaveData } from '../useCRUD';
 import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router';
 import { Layout } from '../../ui/Layouts';
-import { Footer } from '../../ui/Layouts/Footer';
 import { validarSerie } from '../useValidaciones';
 
 function RegistroCompras() {
@@ -294,7 +292,10 @@ function RegistroCompras() {
 
     }, [])
 
-    console.log(productos);
+    useEffect(() => {
+        if (!auth.loading) setListaCompra({ ...listaCompra, usuario: auth?.user?._id, nombre_usuario: auth?.user?.nombre })
+    }, [auth])
+
     return (
         < >
             <Layout

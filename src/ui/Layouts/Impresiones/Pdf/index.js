@@ -228,7 +228,7 @@ const ImprimirPDF = ({ data }) => {
                             </div>
                             <div>
                                 <p>: {data?.venta?.forma_pago} </p>
-                                <p>:  {data?.venta?.vendedor || 'admin'} </p>
+                                <p>:  {data?.venta?.nombre_usuario || 'undefined'} </p>
                             </div>
 
                         </div>

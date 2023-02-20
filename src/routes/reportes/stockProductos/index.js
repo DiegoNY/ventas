@@ -1,5 +1,8 @@
 import { DataGrid, esES, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { urlAPI } from '../../../config';
+import { Footer } from '../../../ui/Layouts/Footer';
+import { getData } from '../../useFetch';
 
 
 
@@ -17,6 +20,19 @@ function CustomToolbar() {
 
 const StockProductos = () => {
 
+    const [reporte, setReporte] = useState();
+
+    useEffect(() => {
+
+        const getReporteProductos = async () => {
+            const dataReporte = await getData(`${urlAPI.Producto.url}?stockReporte=true`)
+
+            setReporte(dataReporte);
+        }
+        getReporteProductos();
+
+    }, [])
+
     const columns = [
         {
             field: '_id',
@@ -25,41 +41,82 @@ const StockProductos = () => {
         },
 
         {
-            field: 'fecha_registro',
-            headerName: 'Fecha',
+            field: 'laboratorio',
+            headerName: 'Laboratorio',
             flex: 0.2,
             headerClassName: '',
 
 
         },
         {
-            field: 'numero_documento',
-            headerName: 'Documento',
+            field: 'codigo',
+            headerName: 'Codigo',
             flex: 0.1,
             headerClassName: '',
 
 
         },
         {
-            field: 'subtotal',
-            headerName: 'Base impuestos',
+            field: 'descripcion',
+            headerName: 'Descripcion',
             flex: 0.2,
             headerClassName: '',
 
 
         },
         {
-            field: 'igv',
-            headerName: 'Igv',
+            field: 'ventas',
+            headerName: 'Cantidad vendida',
             flex: 0.2,
             headerClassName: '',
+            renderCell: (params) => {
+                return params.row.ventas || 0;
+            }
         },
         {
-            field: 'total',
-            headerName: 'Total',
+            field: 'salidas',
+            headerName: 'Cantidad saliente',
             flex: 0.2,
             headerClassName: '',
+            renderCell: (params) => {
+
+                return params.row.salidas || 0
+            }
         },
+        {
+            field: 'stock',
+            headerName: 'Stock actual',
+            flex: 0.2,
+            headerClassName: '',
+            renderCell: (params) => {
+                return params.row.stock || 0;
+            }
+        },
+        {
+            field: 'estado',
+            headerName: 'Estado',
+            renderCell: (params) => {
+
+                return (
+                    <div className={`
+                    ${params.row.estado == 1 && 'bg-green-400 ' || 'bg-red-500'} 
+                        text-white 
+                        w-full 
+                        h-50 
+                        mx-1 
+                        rounded-xl 
+                        text-center 
+                        text-xs 
+                        flex 
+                        items-center 
+                        justify-center
+                        `}
+                    >
+                        {params.row.estado == 1 && 'ACTIVO' || 'INACTIVO'}
+                    </div>
+                )
+            }
+        }
 
 
     ]
@@ -73,37 +130,28 @@ const StockProductos = () => {
                     grid-cols-12
                 '
             >
-                <div
-                    className='
-                        col-span-12
-                        flex
-                        flex-col
-                        ml-3
-                        mb-auto
-                    '
-                >
-                    <h1 className='ml-2 text-2xl mt-1 sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>Stock</h1>
-                    <p className='font-normal text-sm ml-2 text-slate-500'>Estas observando el stock de los productos</p>
-                </div>
 
                 <div
                     className='
-                        col-span-12 
+                        col-span-12
                         h-full
                         mb-auto
                         mx-4
-                        row-span-6
                     '
                 >
+                    <div className='my-2'>
+                        <h1 className='ml-2 text-2xl mt-1 sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>Stock</h1>
+                        <p className='font-normal text-sm ml-2 text-slate-500'>Estas observando el stock de los productos</p>
+                    </div>
 
                     <DataGrid
                         components={{
                             Toolbar: CustomToolbar,
                         }}
                         getRowId={(row) => row._id}
-                        rows={[]}
+                        rows={reporte || []}
                         density='compact'
-                        columns={columns|| []}
+                        columns={columns || []}
                         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                         initialState={
                             {
@@ -117,8 +165,16 @@ const StockProductos = () => {
 
                     />
 
-
+                    <div
+                        className='flex w-full my-2 text-slate-400 justify-center mb-1'
+                    >
+                        www.rcingenierossac.com
+                    </div>
+                    <Footer>
+                    </Footer>
                 </div>
+
+
             </div>
         </>
     )

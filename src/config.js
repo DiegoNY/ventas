@@ -72,6 +72,9 @@ const urlAPI = {
     },
     Productos_vendidos: {
         url: `${hostAPIV2}/api/v2/productos_vendidos`
+    },
+    Stock: {
+        url: `${hostAPIV2}/api/v2/stocks`
     }
 
 }

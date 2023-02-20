@@ -8,10 +8,12 @@ import { CardVentasRecientes } from './ventasRecientes';
 function MainUser() {
     const [mostrar, setMostrar] = React.useState(false);
     const auth = useAuth();
+
     const [tiempo, setTiempo] = React.useState('00:00');
     const [ventasRecientes, setVentasRecientes] = React.useState([]);
     const [mostrarInformacion, setMostrarInformacion] = React.useState(false);
 
+    const [productosStockBajo, setProductosStockBajo] = React.useState();
 
     useEffect(() => {
         const actualizarFechaHora = () => {
@@ -42,6 +44,18 @@ function MainUser() {
 
         return () => {
             socket.off('ventas_recientes', obtenerVentasRecientes);
+        }
+    }, [])
+    useEffect(() => {
+
+        const informacionStockBajo = (informacion) => {
+            console.log(informacion);
+        }
+
+        socket.on('productos_stock_bajo', informacionStockBajo);
+
+        return () => {
+            socket.off('productos_stock_bajo', informacionStockBajo);
         }
     }, [])
 
@@ -77,6 +91,7 @@ function MainUser() {
                     w-1/2
                     '
                 >
+                    <div><span className='absolute ml-3 mt-1 rounded-3xl bg-yellow-400 w-4 flex justify-center items-center '>{productosStockBajo?.length}</span></div>
                     <div
                         className='text-center mt-3 mx-2 cursor-pointer '
                     >
@@ -88,6 +103,16 @@ function MainUser() {
                         '
                         >
                         </i>
+                        {productosStockBajo &&
+                            <div
+                                className='bg-white border absolute mt-3 z-30 rounded-lg grid '
+                            >
+                                s
+                            </div>
+                        }
+
+
+
                     </div>
                     <div
                         className='text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-sm '
@@ -180,10 +205,7 @@ function MainUser() {
 
                                 )
                             })}
-                            <CardVentasRecientes />
-                            <CardVentasRecientes />
-                            <CardVentasRecientes />
-                            <CardVentasRecientes />
+
 
                         </div>
                     }
