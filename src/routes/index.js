@@ -40,6 +40,8 @@ function App() {
   const navigate = useNavigate();
 
   console.log(comprimirs);
+
+  if(comprimirs)
   // Rutas °° 🍅
 
   return (
