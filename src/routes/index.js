@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, BrowserRouter, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, BrowserRouter, Routes, useNavigate } from 'react-router-dom'
 import { Caja } from './Caja/Caja';
 import { Login } from './login/LoginPage';
 import { AuthProvider } from '../auth/auth';
@@ -37,164 +37,165 @@ function App() {
 
   const comprimirs = useMain();
 
+  const navigate = useNavigate();
+
+  console.log(comprimirs);
   // Rutas °° 🍅
 
   return (
     <>
-      <BrowserRouter>
 
-        <AuthProvider>
+      <AuthProvider>
 
-          <NavBar>
+        <NavBar>
 
-            <MainUser />
-          </NavBar>
-
+          <MainUser />
+        </NavBar>
 
 
-          <div className='page-content' >
 
-            <Main />
+        <div className='page-content' >
 
-            <div className='content-wrapper '
+          <Main />
 
-              onClick={() => {
-                comprimirs.setComprimir(false);
-              }}
+          <div className='content-wrapper '
 
-            >
+            onClick={() => {
+              comprimirs.setComprimir(false);
+            }}
 
-              <div className='content-inner h-screen	bg-white' id='scroll' >
+          >
 
-                <Routes>
+            <div className='content-inner h-screen	bg-white' id='scroll' >
 
-                  <Route
-                    path="/"
-                    element={<Login />}
-                  />
-                  <Route
-                    path="/home"
-                    element={<PanelControl />}
-                  />
-                  <Route
-                    path='/caja'
-                    element={<Caja />}
-                  >
-                  </Route>
-                  <Route
-                    path='/caja-cierre'
-                    element={<Caja cierre={true} />}
-                  >
-                  </Route>
+              <Routes>
 
-                  <Route
-                    path='/mantenimiento-tipo-documento'
-                    element={< MantenimientoTipoDocumento />}
-                  />
-                  <Route
-                    path='/mantenimiento-cliente'
-                    element={<MantenimientoCliente />}
-                  />
-                  <Route
-                    path='/mantenimiento-producto'
-                    element={<MantenimientoProducto />}
-                  />
-                  <Route
-                    path='/mantenimiento-usuarios'
-                    element={<MantenimientoUsuario />}
-                  />
-                  <Route
-                    path='/mantenimiento-laboratorio'
-                    element={<MantenimientoLaboratorio />}
-                  />
-                  <Route
-                    path='/mantenimiento-moneda'
-                    element={<MantenimientoMoneda />}
-                  />
-                  <Route
-                    path='/mantenimiento-proveedor'
-                    element={<MantenimientoProveedor />}
-                  />
+                <Route
+                  path="/"
+                  element={<Login />}
+                />
+                <Route
+                  path="/home"
+                  element={<PanelControl />}
+                />
+                <Route
+                  path='/caja'
+                  element={<Caja />}
+                >
+                </Route>
+                <Route
+                  path='/caja-cierre'
+                  element={<Caja cierre={true} />}
+                >
+                </Route>
 
-                  <Route
-                    path='/venta-punto_venta'
-                    element={<PuntoVenta />}
-                  />
-                  <Route
-                    path='/venta-lista_venta'
-                    element={<ListaVenta />}
-                  />
-                  <Route
-                    path='/venta-productos_mas_vendidos'
-                    element={<ProductosMasVendidos />}
-                  />
-                  <Route
-                    path='/venta-nota_salida'
-                    element={<NotaSalida />}
-                  />
-                  <Route
-                    path='/venta-listado_salida'
-                    element={<ListadoSalida />}
-                  />
-                  <Route
-                    path='/compras-registro_compras'
-                    element={<RegistroCompras />}
-                  />
-                  <Route
-                    path='/compras-lista_compras'
-                    element={<ListaCompra />}
-                  />
-                  <Route
-                    path='*'
-                    element={<PanelControl />}
+                <Route
+                  path='/mantenimiento-tipo-documento'
+                  element={< MantenimientoTipoDocumento />}
+                />
+                <Route
+                  path='/mantenimiento-cliente'
+                  element={<MantenimientoCliente />}
+                />
+                <Route
+                  path='/mantenimiento-producto'
+                  element={<MantenimientoProducto />}
+                />
+                <Route
+                  path='/mantenimiento-usuarios'
+                  element={<MantenimientoUsuario />}
+                />
+                <Route
+                  path='/mantenimiento-laboratorio'
+                  element={<MantenimientoLaboratorio />}
+                />
+                <Route
+                  path='/mantenimiento-moneda'
+                  element={<MantenimientoMoneda />}
+                />
+                <Route
+                  path='/mantenimiento-proveedor'
+                  element={<MantenimientoProveedor />}
+                />
 
-                  />
-                  <Route
-                    path='/gastos'
-                    element={<RegistrarGastos />}
-                  />
-                  <Route
-                    path='/gastos-listado'
-                    element={<ListaGastos />}
-                  />
-                  <Route
-                    path='/reporte-ventas'
-                    element={<Reporteventas />}
-                  />
-                  <Route
-                    path='/reporte-ventas-mensuales'
-                    element={<VentasMensuales />}
-                  />
-                  <Route
-                    path='/reporte-ventas-compras'
-                    element={<ReporteVentasCompras />}
-                  />
-                  <Route
-                    path='/reporte-productos'
-                    element={<StockProductos />}
-                  />
-                  <Route
-                    path='/reporte-kardex'
-                    element={<Kardex />}
-                  />
-                  <Route
-                    path='/reporte-productos-vencidos-vencer'
-                    element={<ProductosVencidosVencer />}
-                  />
+                <Route
+                  path='/venta-punto_venta'
+                  element={<PuntoVenta />}
+                />
+                <Route
+                  path='/venta-lista_venta'
+                  element={<ListaVenta />}
+                />
+                <Route
+                  path='/venta-productos_mas_vendidos'
+                  element={<ProductosMasVendidos />}
+                />
+                <Route
+                  path='/venta-nota_salida'
+                  element={<NotaSalida />}
+                />
+                <Route
+                  path='/venta-listado_salida'
+                  element={<ListadoSalida />}
+                />
+                <Route
+                  path='/compras-registro_compras'
+                  element={<RegistroCompras />}
+                />
+                <Route
+                  path='/compras-lista_compras'
+                  element={<ListaCompra />}
+                />
+                <Route
+                  path='*'
+                  element={<PanelControl />}
 
-                </Routes>
+                />
+                <Route
+                  path='/gastos'
+                  element={<RegistrarGastos />}
+                />
+                <Route
+                  path='/gastos-listado'
+                  element={<ListaGastos />}
+                />
+                <Route
+                  path='/reporte-ventas'
+                  element={<Reporteventas />}
+                />
+                <Route
+                  path='/reporte-ventas-mensuales'
+                  element={<VentasMensuales />}
+                />
+                <Route
+                  path='/reporte-ventas-compras'
+                  element={<ReporteVentasCompras />}
+                />
+                <Route
+                  path='/reporte-productos'
+                  element={<StockProductos />}
+                />
+                <Route
+                  path='/reporte-kardex'
+                  element={<Kardex />}
+                />
+                <Route
+                  path='/reporte-productos-vencidos-vencer'
+                  element={<ProductosVencidosVencer />}
+                />
 
-              </div>
+              </Routes>
 
             </div>
 
           </div>
 
+        </div>
 
 
-        </AuthProvider>
 
-      </BrowserRouter>
+      </AuthProvider>
+
 
     </>
   );

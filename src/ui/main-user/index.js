@@ -131,14 +131,12 @@ function MainUser() {
 
 
 
-                        {!auth.loading &&
-                            <h1
-                                className="mx-2 mt-1 text-slate-800 "
-                            >
-                                {auth.user.nombre}
-                            </h1>
+                        <h1
+                            className="mx-2 mt-1 text-slate-800 "
+                        >
+                            {auth.user.nombre}
+                        </h1>
 
-                        }
 
 
 

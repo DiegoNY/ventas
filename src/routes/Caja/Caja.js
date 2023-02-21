@@ -7,9 +7,12 @@ import { SaveData } from '../useCRUD';
 import { urlAPI } from '../../config';
 import { Footer } from '../../ui/Layouts/Footer';
 import { useLocation } from 'react-router-dom';
+import { useMain } from '../../ui/main/useMain';
 
 
 function Caja({ cierre = false }) {
+
+    const aperturas = useMain();
 
     const navigate = useNavigate();
     /**
@@ -20,6 +23,7 @@ function Caja({ cierre = false }) {
     const auth = useAuth();
 
     if (!auth.user) navigate('/');
+
 
     const {
         item: moneyInBox,
@@ -42,6 +46,10 @@ function Caja({ cierre = false }) {
     });
     const [cierreState, setCierre] = React.useState(cierre);
 
+
+    useEffect(() => {
+        if (!!moneyInBox.dinero) setCierre(true);
+    }, [moneyInBox])
     //Obteniendo informacion de cierre
     const location = useLocation();
 
@@ -64,18 +72,26 @@ function Caja({ cierre = false }) {
 
 
         const getIP = async () => {
+            let datas;
             try {
 
                 const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
-
+                datas = data;
                 setApertura({
                     ...apertura,
                     punto_venta: data.ip,
-                    dinero_apertura: moneyInBox.dinero_apertura
+                    dinero: moneyInBox.dinero
                 })
 
             } catch (e) {
+                setApertura({
+                    ...apertura,
+                    punto_venta: datas?.ip,
+                    dinero: moneyInBox.dinero
+                })
+
+                aperturas.setApertura(true);
                 console.warn(e);
             }
         }

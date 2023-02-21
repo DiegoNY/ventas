@@ -5,13 +5,16 @@ import reportWebVitals from './reportWebVitals';
 import { ProviderMenu } from '../src/ui/main/useMain';
 
 import './index.css'
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ProviderMenu>
-      <App />
-    </ProviderMenu>
+    <BrowserRouter>
+      <ProviderMenu>
+        <App />
+      </ProviderMenu>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

@@ -10,7 +10,7 @@ import { useMain } from './useMain';
 function Main() {
 
     const comprimirs = useMain();
-    // console.log(comprimirs);
+    console.log(comprimirs);
 
     const [mostrar, setMostrar] = React.useState(false);
     const [comprimir, setComprimir] = React.useState(false);
@@ -34,17 +34,19 @@ function Main() {
 
     useEffect(() => {
 
-        if (!loading) {
-            moneyInBox.dinero_apertura ? setMostrarApertura(false) : setMostrarApertura(true);
-        }
+        moneyInBox.dinero ? comprimirs.setApertura(true) : comprimirs.setApertura(false);
 
     }, [moneyInBox])
 
     useEffect(() => {
 
-        auth.loading ? setLoading(true) : setUsuario({ nombre: auth.user?.nombre, cargo: auth.user?.cargo });
+        setUsuario({ nombre: auth.user?.nombre, cargo: auth.user?.cargo });
 
     }, [auth])
+
+    console.log(auth);
+    console.log(usuario);
+    console.log(comprimirs);
 
     if (auth.user) {
 
@@ -66,28 +68,25 @@ function Main() {
                                     </a>
 
                                     <div className="media-body">
-                                        {
-                                            !auth.loading && <>
 
-                                                <div
-                                                    div className="font-weight-semibold"
-                                                    id="nombreUsuarioNav"
-                                                >
 
-                                                    {auth.user.nombre}
+                                        <div
+                                            div className="font-weight-semibold"
+                                            id="nombreUsuarioNav"
+                                        >
 
-                                                </div>
+                                            {auth.user.nombre}
 
-                                                <div
-                                                    className="font-size-sm line-height-sm opacity-50"
-                                                >
+                                        </div>
 
-                                                    {auth.user.cargo}
+                                        <div
+                                            className="font-size-sm line-height-sm opacity-50"
+                                        >
 
-                                                </div>
+                                            {auth.user.cargo}
 
-                                            </>
-                                        }
+                                        </div>
+
 
 
                                     </div>
@@ -136,8 +135,8 @@ function Main() {
                                 {!!mostrarSubMenuCaja &&
                                     <SubMenuItem>
 
-                                        {mostrarApertura &&
-                                            <ItemMenu
+                                        {!comprimirs.apertura &&
+                                            < ItemMenu
                                                 link='caja'
                                                 name="Apertura"
                                                 icono="ICONO"
@@ -146,7 +145,7 @@ function Main() {
                                             />
                                         }
 
-                                        {!mostrarApertura &&
+                                        {!!comprimirs.apertura &&
                                             <ItemMenu
                                                 link='caja-cierre'
                                                 name="Cierre"
