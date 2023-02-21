@@ -6,11 +6,9 @@ import {
     GridToolbarDensitySelector,
     GridToolbarFilterButton
 } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
 import { getData } from '../../useFetch';
-import icono_ticket from './img/icono-ticket.svg';
-import icono_pdf from './img/icono-pdf.svg';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
 
@@ -18,6 +16,7 @@ import { useReactToPrint } from 'react-to-print';
 import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
 import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
 import { Informacion } from '../../../ui/Error';
+import { SaveData } from '../../useCRUD';
 
 
 function CustomToolbar() {
@@ -40,27 +39,8 @@ function ListaVenta() {
     const navigation = useNavigate();
     if (!auth.user) navigation('/');
 
-
-    const [todasVentas, setTodasVentas] = useState([]);
-    const [notaCredito, setNotaCredito] = useState(false);
-    const [rc, setRc] = useState(false)
-
-    const componenTicketRef = React.useRef();
-    const componentPdfRef = React.useRef();
-    const [informacionImpresion, setInformacionImpresion] = useState({});
-
-    const imprimirTicket = useReactToPrint({
-        content: () => componenTicketRef.current,
-        documentTitle: 'Ticket de venta',
-        onAfterPrint: () => console.log('Print'),
-    })
-    const imprimirPDF = useReactToPrint({
-        content: () => componentPdfRef.current,
-        documentTitle: 'Documento de venta',
-        onAfterPrint: () => console.log('Impreso uwu')
-    })
-
-    const opcionesAnulacion = [
+    const [columns, setColumns] = useState([]);
+    const [opcionesAnulacion] = useState([
         {
             descripcion: 'Anulacion de la operacion',
             codigo: 222,
@@ -102,167 +82,208 @@ function ListaVenta() {
             codigo: 222,
         },
     ]
+    )
+    const [todasVentas, setTodasVentas] = useState([]);
+    const [informacion, setInformacion] = useState({ NotaCredito: false })
+    const [notaCredito, setNotaCredito] = useState(false);
 
+    /**Manejador de peticiones */
+    const [ventas, setVentas] = useState(false);
 
-    const columns = [
-        {
-            field: '_id',
-            headerName: 'Id',
-            flex: 0.3,
-        },
-        {
-            field: 'identificacion',
-            headerName: 'Ruc / Dni',
-            flex: 0.3,
-            headerClassName: '',
-            renderCell: (params) => {
-                let identificacion = params.row.identificacion;
-                if (identificacion == 0) {
-                    identificacion = '0000000'
+    const [rc, setRc] = useState(false)
+
+    const componenTicketRef = React.useRef();
+    const componentPdfRef = React.useRef();
+    const [informacionImpresion, setInformacionImpresion] = useState({});
+
+    const imprimirTicket = useReactToPrint({
+        content: () => componenTicketRef.current,
+        documentTitle: 'Ticket de venta',
+        onAfterPrint: () => console.log('Print'),
+    })
+    const imprimirPDF = useReactToPrint({
+        content: () => componentPdfRef.current,
+        documentTitle: 'Documento de venta',
+        onAfterPrint: () => console.log('Impreso uwu')
+    })
+
+    const EmitirNotaCredito = () => {
+
+        return new Promise((resolve, reject) => {
+            SaveData(`${urlAPI.Nota_credito.url}`, notaCredito)
+                .then(response => resolve(response))
+                .catch(Error => reject(Error));
+        })
+
+    }
+
+    useEffect(() => {
+        const columns = [
+            {
+                field: '_id',
+                headerName: 'Id',
+                flex: 0.3,
+            },
+            {
+                field: 'identificacion',
+                headerName: 'Ruc / Dni',
+                flex: 0.3,
+                headerClassName: '',
+                renderCell: (params) => {
+                    let identificacion = params.row.identificacion;
+                    if (identificacion == 0) {
+                        identificacion = '0000000'
+                    }
+                    return identificacion;
                 }
-                return identificacion;
-            }
 
 
-        },
-        {
-            field: 'cliente',
-            headerName: 'Cliente',
-            flex: 0.3,
-            headerClassName: '',
+            },
+            {
+                field: 'cliente',
+                headerName: 'Cliente',
+                flex: 0.3,
+                headerClassName: '',
 
 
-        },
-        {
-            field: 'tipo_documento',
-            headerName: 'Tipo documento',
-            flex: 0.2,
-            headerClassName: '',
-            renderCell: (params) => {
-                let tipoDocumento;
-                let serie = params.row.serie.split('');
+            },
+            {
+                field: 'tipo_documento',
+                headerName: 'Tipo documento',
+                flex: 0.2,
+                headerClassName: '',
+                renderCell: (params) => {
+                    let tipoDocumento;
+                    let serie = params.row.serie.split('');
 
-                if (serie[0] === 'B') tipoDocumento = 'BOLETA';
-                if (serie[0] === 'T') tipoDocumento = 'TICKET';
-                if (serie[0] === 'F') tipoDocumento = 'FACTURA';
+                    if (serie[0] === 'B') tipoDocumento = 'BOLETA';
+                    if (serie[0] === 'T') tipoDocumento = 'TICKET';
+                    if (serie[0] === 'F') tipoDocumento = 'FACTURA';
 
-                return <p>{tipoDocumento}</p>
-            }
-
-
-        },
-        {
-            field: 'serie',
-            headerName: 'Serie',
-            flex: 0.1,
-            headerClassName: '',
+                    return <p>{tipoDocumento}</p>
+                }
 
 
-        },
-        {
-            field: 'correlativo',
-            headerName: 'Correlativo',
-            flex: 0.2,
-            headerClassName: '',
+            },
+            {
+                field: 'serie',
+                headerName: 'Serie',
+                flex: 0.1,
+                headerClassName: '',
 
 
-        },
-        {
-            field: 'total',
-            headerName: 'Total',
-            flex: 0.2,
-            headerClassName: '',
-        },
-        {
-            field: 'fecha_registro',
-            headerName: 'Fecha',
-            flex: 0.2,
-            headerClassName: '',
-        },
-        {
-            field: 'Imprimir',
-            headerName: 'Imprimir',
-            flex: 0.2,
-            headerClassName: '',
-            renderCell: (params) => {
-                return (
-                    <div
-                        className='flex justify-between w-full mx-2'
-                        onMouseEnter={() => {
-                            setInformacionImpresion(params.row)
-                        }}
-                    >
+            },
+            {
+                field: 'correlativo',
+                headerName: 'Correlativo',
+                flex: 0.2,
+                headerClassName: '',
+
+
+            },
+            {
+                field: 'total',
+                headerName: 'Total',
+                flex: 0.2,
+                headerClassName: '',
+            },
+            {
+                field: 'fecha_registro',
+                headerName: 'Fecha',
+                flex: 0.2,
+                headerClassName: '',
+            },
+            {
+                field: 'Imprimir',
+                headerName: 'Imprimir',
+                flex: 0.2,
+                headerClassName: '',
+                renderCell: (params) => {
+                    return (
                         <div
-                            className='flex font-semibold tracking-tighter text-xs text-lime-600 cursor-pointer'
-                            onClick={(e) => {
-                                imprimirTicket();
+                            className='flex justify-between w-full mx-2'
+                            onMouseEnter={() => {
+                                setInformacionImpresion(params.row)
                             }}
                         >
-                            TICKET
-                            <img src={icono_ticket} className='h-4 rotate-90' />
+                            <div
+                                className='flex justify-center items-center text-xs bg-green-600 text-white cursor-pointer rounded-sm p-1'
+                                onClick={(e) => {
+                                    imprimirTicket();
+                                }}
+                            >
+                                TICKET
 
+                            </div>
+                            <div
+                                className='flex justify-center items-center text-xs bg-orange-500 text-white cursor-pointer rounded-sm p-1'
+                                onClick={(e) => {
+                                    imprimirPDF();
+                                }}
+                            >
+                                A4
+                            </div>
                         </div>
+                    )
+                }
+            },
+            {
+                field: 'Acciones',
+                headerName: 'Acciones',
+                flex: 0.1,
+                headerClassName: '',
+                renderCell: (params) => {
+                    return (
                         <div
-                            className='flex font-semibold text-xs text-orange-500 	 cursor-pointer'
-                            onClick={(e) => {
-                                imprimirPDF();
-                            }}
+                            className='flex justify-between w-full '
                         >
-                            A4
-                            <img src={icono_pdf} className=' h-4 ' />
+                            <div
+                                className='
+                                    text-xs 
+                                    bg-indigo-400 
+                                    rounded-sm 
+                                    w-1/2 
+                                    h-full 
+                                    text-center  
+                                    text-white 
+                                    cursor-pointer
+                                '
+                            >
+                                <h1 className='mt-1'>RC</h1>
+                            </div>
+                            <div
+                                className='
+                                    text-xs 
+                                    bg-yellow-300 
+                                    rounded-sm 
+                                    w-1/2 
+                                    h-full 
+                                    text-center  
+                                    text-slate-700
+                                    ml-1
+                                    cursor-pointer
+                                '
+                            >
+                                <h1
+                                    className='mt-1 '
+                                    onClick={() => {
+                                        setNotaCredito(params.row)
+                                        setInformacion({ ...informacion, NotaCredito: true })
+                                    }}
+                                >NC</h1>
+                            </div>
+
+
                         </div>
-                    </div>
-                )
-            }
-        },
-        {
-            field: 'Acciones',
-            headerName: 'Acciones',
-            flex: 0.1,
-            headerClassName: '',
-            renderCell: (params) => {
-                return (
-                    <div
-                        className='flex justify-between w-full '
-                    >
-                        <div
-                            className='
-                                text-xs 
-                                bg-indigo-400 
-                                rounded-sm 
-                                w-1/2 
-                                h-full 
-                                text-center  
-                                text-white 
-                                cursor-pointer
-                            '
-                        >
-                            <h1 className='mt-1'>RC</h1>
-                        </div>
-                        <div
-                            className='
-                                text-xs 
-                                bg-yellow-300 
-                                rounded-sm 
-                                w-1/2 
-                                h-full 
-                                text-center  
-                                text-slate-700
-                                ml-1
-                                cursor-pointer
-                            '
-                        >
-                            <h1 className='mt-1 ' onClick={() => setNotaCredito(params.row)} >NC</h1>
-                        </div>
+                    )
+                }
+            },
 
+        ]
 
-                    </div>
-                )
-            }
-        },
+        setColumns(columns);
 
-    ]
-
+    }, [])
 
 
     useEffect(() => {
@@ -276,7 +297,8 @@ function ListaVenta() {
         obtenerTodasVentas();
 
 
-    }, [])
+    }, [ventas])
+
 
 
     return (
@@ -339,7 +361,9 @@ function ListaVenta() {
                     '
                     >
 
+
                         <DataGrid
+
                             components={{
                                 Toolbar: CustomToolbar,
                             }}
@@ -359,6 +383,7 @@ function ListaVenta() {
                             }
 
                         />
+
 
                     </div>
 
@@ -406,9 +431,12 @@ function ListaVenta() {
                 {/**Fin impresion */}
 
             </div>
-            {notaCredito &&
+            {informacion.NotaCredito &&
                 <Informacion
-                    onClick={() => setNotaCredito(false)}
+                    onClick={() => {
+                        setNotaCredito(false)
+                        setInformacion({ NotaCredito: false });
+                    }}
                     height=' '
                 >
                     <div
@@ -426,7 +454,7 @@ function ListaVenta() {
                                 <div
                                     className='flex'
                                 >
-                                    Boleta de venta electronico
+                                    {notaCredito.tipo_documento}
                                 </div>
                             </div>
                             <div
@@ -434,7 +462,7 @@ function ListaVenta() {
                             >
                                 <h1 className='mx-4' >Numero de documento</h1>
                                 <div className='flex' >
-                                    B001-00007150
+                                    {notaCredito.numero_venta}
                                 </div>
                             </div>
                             <div
@@ -442,7 +470,7 @@ function ListaVenta() {
                             >
                                 <h1 className='mx-4' >Fecha del documento</h1>
                                 <div className='flex' >
-                                    2023-12-09
+                                    {notaCredito.fecha_registro} {notaCredito.hora_registro}
                                 </div>
                             </div>
                         </div>
@@ -450,12 +478,20 @@ function ListaVenta() {
                             <p className='p-1 text-slate-900 font-semibold'>¿Cual es el motivo de la anulacion?</p>
                             <select
                                 className='border w-1/2 p-1'
+                                onChange={(e) => {
+                                    setNotaCredito(
+                                        {
+                                            ...notaCredito,
+                                            motivo_anulacion: e.target.value,
+                                        }
+                                    )
+                                }}
                             >
                                 <option>Selecciona una opcion</option>
-                                {opcionesAnulacion.map(value => {
+                                {opcionesAnulacion.map((value, index) => {
 
                                     return (
-                                        <option value={value.codigo}>{value.descripcion}</option>
+                                        <option key={index} value={value.codigo}>{value.descripcion}</option>
                                     )
                                 })}
                             </select>
@@ -463,13 +499,36 @@ function ListaVenta() {
                         <p className='px-2 text-slate-900 font-semibold'>Descripcion</p>
                         <textarea
                             className='border mx-2 rounded-lg p-1'
+                            onChange={(e) => {
+                                useCallback(() => {
+                                    setNotaCredito({
+                                        ...notaCredito,
+                                        descripcion: e.target.value,
+                                    })
+                                }, [])
+                            }}
                         >
 
                         </textarea>
                         <div
                             className='flex  justify-end mx-2 '
                         >
-                            <button className='bg-orange-500 rounded-sm text-white  p-1 mt-1.5'>
+                            <button
+                                className='bg-orange-500 rounded-sm text-white  p-1 mt-1.5'
+                                onClick={() => {
+                                    EmitirNotaCredito()
+                                        .then(response => {
+                                            if (!response[0].error) {
+                                                setInformacion(false);
+                                                setNotaCredito(false);
+                                                setVentas(!ventas)
+                                                return;
+                                            }
+
+                                            console.log("ERROR")
+                                        });
+                                }}
+                            >
                                 Emitir resumen
                             </button>
                         </div>

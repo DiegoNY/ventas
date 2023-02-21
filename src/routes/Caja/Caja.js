@@ -28,14 +28,15 @@ function Caja({ cierre = false }) {
         error
     } = useLocalStorage('BOX_V1', []);
 
-    const [dineroApertura, setDineroApertura] = useState(0);
+    const [dinero, setDinero] = useState(0);
     const [usuario, setUsuario] = useState({});
     const [apertura, setApertura] = React.useState({
 
-        dinero_apertura: dineroApertura,
+        dinero: dinero,
         punto_venta: '',
         usuario: usuario?.name,
         dni: usuario?.dni,
+        tipo: 'APERTURA',
         fecha_apertura: '23/01/2023'
 
     });
@@ -84,15 +85,14 @@ function Caja({ cierre = false }) {
     }, [moneyInBox]);
 
     useEffect(() => {
+        if (!!cierre) {
+            setApertura({
+                ...apertura,
+                tipo: 'CIERRE'
+            })
+        }
+    }, [cierreState])
 
-        // if (location.search == '?cierre') {
-        //     setCierre(true);
-        // } else {
-        //     setCierre(false);
-        // }
-
-
-    }, [location])
 
 
 
@@ -246,11 +246,11 @@ function Caja({ cierre = false }) {
                                                 S/ <textarea
                                                     cols={6}
                                                     rows={1}
-                                                    defaultValue={apertura?.dinero_apertura}
+                                                    defaultValue={apertura?.dinero}
                                                     onChange={(e) => {
                                                         setApertura({
                                                             ...apertura,
-                                                            dinero_apertura: e.target.value
+                                                            dinero: e.target.value
                                                         })
                                                     }}
                                                     className='

@@ -75,6 +75,9 @@ const urlAPI = {
     },
     Stock: {
         url: `${hostAPIV2}/api/v2/stocks`
+    },
+    Nota_credito : {
+        url:`${hostAPIV2}/api/v2/nota_credito`
     }
 
 }

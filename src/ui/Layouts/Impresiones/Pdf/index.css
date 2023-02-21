@@ -2,8 +2,14 @@
     height: 100%;
 }
 
-.layout-productos { 
+.layout-productos {
 
     height: 500px;
+
+}
+
+.layout-productos-nota-salida {
+
+    min-height: 800px;
 
 }

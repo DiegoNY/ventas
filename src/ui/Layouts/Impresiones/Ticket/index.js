@@ -38,7 +38,7 @@ const ItemsCompras = ({ nombre, cantidad, precio, importe, medida }) => {
     )
 }
 
-const ImprimirTicket = ({ data }) => {
+const ImprimirTicket = React.memo(({ data }) => {
 
     let moneda;
     let dineroVenta;
@@ -55,7 +55,6 @@ const ImprimirTicket = ({ data }) => {
 
     if (Number.isInteger(totalVenta)) {
         dineroVenta = numberToName(totalVenta);
-        console.log(dineroVenta);
         if (dineroVenta === 'uno') {
             dineroVenta = 'UN';
             if (moneda == 'SOLES') moneda = 'SOL';
@@ -81,7 +80,7 @@ const ImprimirTicket = ({ data }) => {
                 className='
                     flex
                     flex-col
-                    h-screen
+                    min-h-screen
                 '
             >
 
@@ -213,6 +212,6 @@ const ImprimirTicket = ({ data }) => {
             </div>
         </>
     )
-}
+})
 
 export { ImprimirTicket }

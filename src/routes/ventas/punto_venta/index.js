@@ -430,7 +430,10 @@ function PuntoVenta() {
 
         if (!response[0].error) {
             response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket() : imprimirPDF();
+            return true;
         }
+
+        throw Error("Error al ingresar la venta");
 
     }
 
@@ -1634,8 +1637,9 @@ s                                                '
                                         `}
 
                                     onClick={() => {
-                                        emitirVenta();
-                                        limpiarVenta();
+                                        emitirVenta()
+                                            .then(response => limpiarVenta())
+                                            .catch(Error => console.log(Error));
                                     }}
 
                                 >

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Informacion({ onClick, children, className, height }) {
+const Informacion = React.memo(({ onClick, children, className, height }) => {
 
     return (
         <div
@@ -51,6 +51,6 @@ function Informacion({ onClick, children, className, height }) {
         </div >
     );
 
-}
+})
 
 export { Informacion };

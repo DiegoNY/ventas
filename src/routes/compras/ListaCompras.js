@@ -266,7 +266,8 @@ function ListaCompra() {
                     <div
                         className='flex flex-col text-xs '
                     >
-                        <h1 className='text-lg text-slate-600 p-2 border-b border-slate-300 font-sans' >Detalle de compra</h1>
+                        <h1 className='p-2 border-b text-sm border-b-slate-200 font-black tracking-tighter'>Detalle de Compra</h1>
+
                         <div
                             className='mt-3 px-2  flex justify-between w-full'
                         >

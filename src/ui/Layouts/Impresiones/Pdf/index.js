@@ -4,7 +4,7 @@ import { EMPRESA } from '../../../../config';
 import { numberToName } from '../../../../routes/useNombresNumeros';
 import './index.css';
 
-const ImprimirPDF = ({ data }) => {
+const ImprimirPDF = React.memo(({ data }) => {
 
     let moneda;
     let dineroVenta;
@@ -503,6 +503,6 @@ const ImprimirPDF = ({ data }) => {
             </div>
         </>
     )
-}
+})
 
 export { ImprimirPDF }
