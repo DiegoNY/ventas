@@ -12,7 +12,7 @@ import { useMain } from '../../ui/main/useMain';
 
 function Caja({ cierre = false }) {
 
-    const aperturas = useMain();
+    const contextosGlobales = useMain();
 
     const navigate = useNavigate();
     /**
@@ -32,35 +32,67 @@ function Caja({ cierre = false }) {
         error
     } = useLocalStorage('BOX_V1', []);
 
-    const [dinero, setDinero] = useState(0);
-    const [usuario, setUsuario] = useState({});
+    let hoy = new Date();
     const [apertura, setApertura] = React.useState({
 
-        dinero: dinero,
+        dinero: "",
         punto_venta: '',
-        usuario: usuario?.name,
-        dni: usuario?.dni,
+        usuario: auth?.user?._id,
+        dni: auth?.user?.dni,
         tipo: 'APERTURA',
-        fecha_apertura: '23/01/2023'
+        fecha_apertura: ` ${`${hoy.toISOString()}`.substring(0, 10)}`,
+        id_apertura: "",
 
     });
+
     const [cierreState, setCierre] = React.useState(cierre);
 
 
     useEffect(() => {
-        if (!!moneyInBox.dinero) setCierre(true);
+
+        if (moneyInBox?.tipo == "APERTURA") {
+            if (!!moneyInBox?.dinero) setCierre(true);
+        }
+
     }, [moneyInBox])
-    //Obteniendo informacion de cierre
-    const location = useLocation();
 
     const sendingMoneyDay = async () => {
-
         const response = await SaveData(`${urlAPI.Caja.url}`, apertura);
 
-        if (!response[0].error) {
-            saveMoneyInBox(response[0].body);
-            navigate('/home');
+
+        if (response[0].body.tipo == "CIERRE") {
+
+            if (!response[0].error) {
+                contextosGlobales.setCierre(true);
+                saveMoneyInBox({ ...response[0].body, dinero: "" });
+
+                setCierre(false);
+                setApertura({
+
+                    dinero: "",
+                    punto_venta: '',
+                    usuario: auth?._id,
+                    dni: auth?.user?.dni,
+                    tipo: 'APERTURA',
+                    fecha_apertura: `${hoy.toISOString()}`.substring(0, 10)
+
+                })
+
+
+            }
         }
+
+        if (response[0].body.tipo == "APERTURA") {
+            console.log("se apertura");
+            if (!response[0].error) {
+                contextosGlobales.setCierre(false);
+                contextosGlobales.setDineroCaja(true);
+                saveMoneyInBox(response[0].body);
+                navigate('/home');
+            }
+
+        }
+
 
     }
 
@@ -75,23 +107,23 @@ function Caja({ cierre = false }) {
             let datas;
             try {
 
-                const response = await fetch('https://api.ipify.org?format=json');
+                const response = await fetch(`${urlAPI.IP.url}`);
                 const data = await response.json();
                 datas = data;
                 setApertura({
                     ...apertura,
-                    punto_venta: data.ip,
-                    dinero: moneyInBox.dinero
+                    punto_venta: data?.ip,
+                    dinero: moneyInBox?.dinero
                 })
 
             } catch (e) {
                 setApertura({
                     ...apertura,
                     punto_venta: datas?.ip,
-                    dinero: moneyInBox.dinero
+                    dinero: moneyInBox?.dinero
                 })
 
-                aperturas.setApertura(true);
+                contextosGlobales.setApertura(true);
                 console.warn(e);
             }
         }
@@ -266,7 +298,8 @@ function Caja({ cierre = false }) {
                                                     onChange={(e) => {
                                                         setApertura({
                                                             ...apertura,
-                                                            dinero: e.target.value
+                                                            dinero: e.target.value,
+                                                            id_apertura: moneyInBox?._id
                                                         })
                                                     }}
                                                     className='

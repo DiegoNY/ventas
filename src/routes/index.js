@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, BrowserRouter, Routes, useNavigate } from 'react-router-dom'
 import { Caja } from './Caja/Caja';
 import { Login } from './login/LoginPage';
@@ -31,17 +31,40 @@ import { Kardex } from './reportes/kardex';
 import { VentasMensuales } from './reportes/ventasMensuales';
 import { StockProductos } from './reportes/stockProductos';
 import { ProductosVencidosVencer } from './reportes/productosVencidosVencer';
+import { PantallaCarga } from '../ui/Layouts/PantallaCarga';
 
 
 function App() {
 
-  const comprimirs = useMain();
+  const contextosGlobales = useMain();
 
   const navigate = useNavigate();
 
-  console.log(comprimirs);
 
-  if(comprimirs)
+
+  useEffect(() => {
+
+    if (contextosGlobales.aperturoDiaHoy == false) {
+      navigate("/caja-cierre");
+      return;
+    }
+
+    if (!!contextosGlobales.cierre) {
+      navigate("/caja");
+      return;
+    }
+
+    if (!contextosGlobales.dineroCaja) {
+
+      navigate("/caja");
+      return;
+    }
+
+    
+  }, [contextosGlobales])
+
+  console.log(contextosGlobales);
+
   // Rutas °° 🍅
 
   return (
@@ -63,7 +86,7 @@ function App() {
           <div className='content-wrapper '
 
             onClick={() => {
-              comprimirs.setComprimir(false);
+              contextosGlobales.setComprimir(false);
             }}
 
           >
@@ -192,7 +215,13 @@ function App() {
 
           </div>
 
+          {contextosGlobales.loadingState &&
+
+            < PantallaCarga />
+          }
+
         </div>
+
 
 
 

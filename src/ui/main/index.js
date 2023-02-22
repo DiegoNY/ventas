@@ -10,7 +10,6 @@ import { useMain } from './useMain';
 function Main() {
 
     const comprimirs = useMain();
-    console.log(comprimirs);
 
     const [mostrar, setMostrar] = React.useState(false);
     const [comprimir, setComprimir] = React.useState(false);
@@ -33,8 +32,9 @@ function Main() {
 
 
     useEffect(() => {
-
-        moneyInBox.dinero ? comprimirs.setApertura(true) : comprimirs.setApertura(false);
+        if (!loading) {
+            moneyInBox?.dinero ? comprimirs.setApertura(true) : comprimirs.setApertura(false);
+        }
 
     }, [moneyInBox])
 
@@ -44,9 +44,6 @@ function Main() {
 
     }, [auth])
 
-    console.log(auth);
-    console.log(usuario);
-    console.log(comprimirs);
 
     if (auth.user) {
 
@@ -61,7 +58,9 @@ function Main() {
                             <div className="sidebar-section-body">
                                 <div
                                     className="media"
-                                    onClick={() => comprimirs.setComprimir(!comprimirs.comprimir)}
+                                    onClick={() => {
+                                        comprimirs.setComprimir(!comprimirs.comprimir)
+                                    }}
                                 >
                                     <a href="#" className="mr-3">
                                         <img src="http://192.168.1.110:8080/imagen/imagen-usuario-fake.jpg" className="rounded-circle sidebar-main-resize" alt="" />

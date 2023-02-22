@@ -76,8 +76,11 @@ const urlAPI = {
     Stock: {
         url: `${hostAPIV2}/api/v2/stocks`
     },
-    Nota_credito : {
-        url:`${hostAPIV2}/api/v2/nota_credito`
+    Nota_credito: {
+        url: `${hostAPIV2}/api/v2/nota_credito`
+    },
+    IP: {
+        url: `${hostAPIV2}/ip`
     }
 
 }

@@ -6,6 +6,9 @@ const MyContextMenu = React.createContext();
 const ProviderMenu = ({ children }) => {
     const [comprimir, setComprimir] = React.useState(false);
     const [apertura, setApertura] = React.useState(true);
+    const [cierre, setCierre] = React.useState(false);
+    const [dineroCaja, setDineroCaja] = React.useState(true);
+    const [loadingState, setLoadingState] = React.useState(false);
 
     const [aperturoDiaHoy, setAperturaDiaHoy] = React.useState(true);
 
@@ -17,28 +20,58 @@ const ProviderMenu = ({ children }) => {
     } = useLocalStorage('BOX_V1', []);
 
 
+    useEffect(() => {
 
+        if (!loading) {
+
+            let hoy = new Date();
+
+            let fechaHoy = `${hoy.toISOString()}`.substring(0, 10)
+            let fechaApertura = `${moneyInBox?.fecha_consultas}`.substring(0, 10);
+
+            if (fechaHoy != fechaApertura) {
+                setAperturaDiaHoy(false)
+            };
+
+            if (moneyInBox.tipo == "CIERRE") {
+                setCierre(true);
+            };
+
+            if (moneyInBox.dinero) {
+                setDineroCaja(true);
+            } else {
+                setDineroCaja(false);
+            };
+
+
+        }
+
+        setLoadingState(loading);
+
+
+    }, [loading])
 
     useEffect(() => {
-        console.log(loading);
-        if (!loading) {
-            let hoy = new Date();
-            let fecha_apertura = new Date(moneyInBox.fecha_consultas)
-            if (hoy != fecha_apertura) {
-                console.log("es igual")
-                setAperturaDiaHoy(false)
-            } else {
-                setAperturaDiaHoy(false);
-            };
-            console.log(hoy)
-            console.log(fecha_apertura)
+        console.log(error);
+        if (error) {
+            setDineroCaja(false);
+            setLoadingState(false);
         }
-        console.log(moneyInBox);
-    }, [loading])
+    }, [error])
+
 
 
     return (
-        <MyContextMenu.Provider value={{ comprimir, setComprimir, apertura, setApertura, aperturoDiaHoy, setAperturaDiaHoy }}>
+        <MyContextMenu.Provider
+            value={{
+                comprimir, setComprimir,
+                apertura, setApertura,
+                aperturoDiaHoy, setAperturaDiaHoy,
+                cierre, setCierre,
+                dineroCaja, setDineroCaja,
+                loadingState, setLoadingState
+            }}
+        >
             {children}
         </MyContextMenu.Provider >
     )

@@ -1,0 +1,71 @@
+.carga {
+    position: absolute;
+    z-index: 500;
+   
+}
+
+.carga-1 {
+
+    animation: loading 2s infinite;
+
+}
+
+.carga-2 {
+
+    animation: loading_reverse 2s infinite;
+}
+
+.carga-3 {
+
+    animation: loading 2s infinite;
+
+}
+
+.carga-4 {
+    animation: loading_reverse 2s infinite;
+
+}
+
+@keyframes loading {
+
+    0% {
+        transform: translatey(0px);
+    }
+
+    25% {
+        transform: translatey(-20px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    75% {
+        transform: translatey(20px);
+    }
+
+
+
+}
+
+@keyframes loading_reverse {
+
+    0% {
+        transform: translatey(0px);
+    }
+
+    25% {
+        transform: translatey(20px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translatey(-20px);
+    }
+
+
+
+}

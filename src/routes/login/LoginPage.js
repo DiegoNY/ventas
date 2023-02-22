@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
+import { useMain } from '../../ui/main/useMain';
 import './login.css';
 
 
 
 function Login() {
-
+    const contextGobal = useMain();
     const auth = useAuth();
     const navigation = useNavigate();
-    if(auth.user) navigation('/home');
+    if (auth.user) {
+        navigation('/home')
+    };
+
+    // if (!auth.user) contextGobal.setLoadingState(false);
     /**
      * Estados 
      */
@@ -24,10 +29,10 @@ function Login() {
         e.preventDefault();
 
         auth.login({
-        
+
             username: user.usuario,
             password: user.contraseña
-        
+
         })
 
     }

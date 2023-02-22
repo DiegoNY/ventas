@@ -489,7 +489,6 @@ function RegistroCompras() {
                                             >
                                                 <ProductoSeleccionado
                                                     input={true}
-                                                    value={producto?.fecha_vencimiento}
                                                     type={'date'}
                                                     onChange={(e) => {
                                                         modificandoProductosSeleccionados(producto._id, e.target.value, 'fecha_vencimiento')

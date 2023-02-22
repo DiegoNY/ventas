@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../../auth/auth';
-import { socket } from '../../config';
+import { socket, urlAPI } from '../../config';
+import { getData } from '../../routes/useFetch';
 import img_default_usuarios from './img/simbolo-alerta-succes.png'
 import './index.css';
 import { CardVentasRecientes } from './ventasRecientes';
@@ -46,6 +47,19 @@ function MainUser() {
             socket.off('ventas_recientes', obtenerVentasRecientes);
         }
     }, [])
+
+    useEffect(() => {
+
+        const getProductosStockBajo = async () => {
+            const dataStockBajo = await getData(`${urlAPI.Producto.url}?stock_minimo=true`);
+
+            setProductosStockBajo(dataStockBajo)
+        }
+
+        getProductosStockBajo()
+
+    }, [])
+
     useEffect(() => {
 
         const informacionStockBajo = (informacion) => {
@@ -105,9 +119,23 @@ function MainUser() {
                         </i>
                         {productosStockBajo &&
                             <div
-                                className='bg-white border absolute mt-3 z-30 rounded-lg grid '
+                                className='bg-white border absolute mt-3 z-30 rounded-lg grid p-1'
                             >
-                                s
+                                {productosStockBajo.map((data, index) => {
+
+                                    return (
+                                        <div
+                                            className='
+                                                bg-slate-100
+                                                rounded-xl
+                                                p-1
+                                            '
+                                        >
+                                            <p>El producto aceite ribonucleico tiene 40 unidades y el stock minimo es de 120</p>
+                                        </div>
+                                    )
+                                })}
+
                             </div>
                         }
 
