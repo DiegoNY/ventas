@@ -9,8 +9,10 @@ const ProviderMenu = ({ children }) => {
     const [cierre, setCierre] = React.useState(false);
     const [dineroCaja, setDineroCaja] = React.useState(true);
     const [loadingState, setLoadingState] = React.useState(false);
-
+    const [mostrarProductosStockMinimo, setMostrarProductosStockMinimo] = React.useState(false);
     const [aperturoDiaHoy, setAperturaDiaHoy] = React.useState(true);
+    const [salida, setSalida] = React.useState(false);
+    const [historial, setHistorial] = React.useState(false);
 
     const {
         item: moneyInBox,
@@ -69,7 +71,10 @@ const ProviderMenu = ({ children }) => {
                 aperturoDiaHoy, setAperturaDiaHoy,
                 cierre, setCierre,
                 dineroCaja, setDineroCaja,
-                loadingState, setLoadingState
+                loadingState, setLoadingState,
+                mostrarProductosStockMinimo, setMostrarProductosStockMinimo,
+                salida, setSalida,
+                historial, setHistorial
             }}
         >
             {children}

@@ -2,19 +2,23 @@ import React, { useEffect } from 'react';
 import { useAuth } from '../../auth/auth';
 import { socket, urlAPI } from '../../config';
 import { getData } from '../../routes/useFetch';
-import img_default_usuarios from './img/simbolo-alerta-succes.png'
+import { useMain } from '../main/useMain';
 import './index.css';
 import { CardVentasRecientes } from './ventasRecientes';
 
 function MainUser() {
     const [mostrar, setMostrar] = React.useState(false);
+
     const auth = useAuth();
+    const contextosGlobales = useMain();
 
     const [tiempo, setTiempo] = React.useState('00:00');
     const [ventasRecientes, setVentasRecientes] = React.useState([]);
     const [mostrarInformacion, setMostrarInformacion] = React.useState(false);
 
-    const [productosStockBajo, setProductosStockBajo] = React.useState();
+    const [productosStockBajo, setProductosStockBajo] = React.useState({
+        mostrar: false,
+    });
 
     useEffect(() => {
         const actualizarFechaHora = () => {
@@ -53,7 +57,7 @@ function MainUser() {
         const getProductosStockBajo = async () => {
             const dataStockBajo = await getData(`${urlAPI.Producto.url}?stock_minimo=true`);
 
-            setProductosStockBajo(dataStockBajo)
+            setProductosStockBajo({ productos: dataStockBajo })
         }
 
         getProductosStockBajo()
@@ -86,8 +90,6 @@ function MainUser() {
                         p-1
                         text-slate-900
                         w-1/2
-
-                        
                     '
                 >
 
@@ -105,7 +107,7 @@ function MainUser() {
                     w-1/2
                     '
                 >
-                    <div><span className='absolute ml-3 mt-1 rounded-3xl bg-yellow-400 w-4 flex justify-center items-center '>{productosStockBajo?.length}</span></div>
+                    <div><span className='absolute ml-3 mt-1 rounded-3xl bg-yellow-400 w-4 flex justify-center items-center '>{productosStockBajo?.productos?.length > 0 ? productosStockBajo?.productos?.length : ""}</span></div>
                     <div
                         className='text-center mt-3 mx-2 cursor-pointer '
                     >
@@ -115,36 +117,57 @@ function MainUser() {
                          text-orange-500
                          hover:text-orange-300
                         '
+                            onClick={() => {
+                                contextosGlobales.setMostrarProductosStockMinimo(true)
+                            }}
                         >
                         </i>
-                        {productosStockBajo &&
-                            <div
-                                className='bg-white border absolute mt-3 z-30 rounded-lg grid p-1'
-                            >
-                                {productosStockBajo.map((data, index) => {
-
-                                    return (
-                                        <div
-                                            className='
-                                                bg-slate-100
-                                                rounded-xl
-                                                p-1
-                                            '
-                                        >
-                                            <p>El producto aceite ribonucleico tiene 40 unidades y el stock minimo es de 120</p>
-                                        </div>
-                                    )
-                                })}
-
-                            </div>
-                        }
-
 
 
                     </div>
+
+                    {contextosGlobales.mostrarProductosStockMinimo &&
+                        <div
+                            className='
+                                bg-white 
+                                border 
+                                absolute 
+                                mt-16 
+                                mr-52 
+                                w-64 
+                                z-30 
+                                cursor-pointer 
+                                rounded-lg 
+                                grid p-1
+                                max-h-20
+                                overflow-scroll 
+                            '
+                        >
+                            {productosStockBajo?.productos?.map((data, index) => {
+
+                                return (
+                                    <div
+                                        className={`
+                                                bg-slate-100
+                                                rounded-xl
+                                                p-1
+                                                text-center
+                                                ${index != 0 && 'mt-1' || ''}
+                                            `}
+                                    >
+                                        <p className='text-slate-600 text-xs font-black'>El producto {data.descripcion} tiene {data.stock_actual} unidades y el stock minimo es de {data.stock_minimo}</p>
+                                    </div>
+                                )
+                            })}
+
+                        </div>
+                    }
+
                     <div
                         className='text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-sm '
-                        onClick={() => setMostrarInformacion(!mostrarInformacion)}
+                        onClick={() => {
+                            contextosGlobales.setHistorial(true)
+                        }}
                     >
                         <h1 className='mt-1 '>Historial de ventas recientes</h1>
 
@@ -154,7 +177,9 @@ function MainUser() {
 
                     <div
                         className="text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-md"
-                        onClick={() => setMostrar(!mostrar)}
+                        onClick={() => {
+                            contextosGlobales.setSalida(true)
+                        }}
                     >
 
 
@@ -170,7 +195,7 @@ function MainUser() {
 
                     </div>
 
-                    {!!mostrar &&
+                    {!!contextosGlobales.salida &&
                         <div
                             className=" 
                           bg-white
@@ -203,8 +228,8 @@ function MainUser() {
                         </div>}
 
 
-                    {!!mostrarInformacion &&
-                        <div div
+                    {!!contextosGlobales.historial &&
+                        <div
                             className='
                             bg-white
                             border

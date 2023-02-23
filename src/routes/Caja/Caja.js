@@ -113,14 +113,17 @@ function Caja({ cierre = false }) {
                 setApertura({
                     ...apertura,
                     punto_venta: data?.ip,
-                    dinero: moneyInBox?.dinero
+                    dinero: moneyInBox?.dinero,
+                    id_apertura: moneyInBox?._id
                 })
 
             } catch (e) {
                 setApertura({
                     ...apertura,
                     punto_venta: datas?.ip,
-                    dinero: moneyInBox?.dinero
+                    dinero: moneyInBox?.dinero,
+                    id_apertura: moneyInBox?._id
+
                 })
 
                 contextosGlobales.setApertura(true);

@@ -46,7 +46,6 @@ const StockProductos = () => {
             flex: 0.2,
             headerClassName: '',
 
-
         },
         {
             field: 'codigo',
@@ -54,15 +53,18 @@ const StockProductos = () => {
             flex: 0.1,
             headerClassName: '',
 
-
         },
         {
             field: 'descripcion',
             headerName: 'Descripcion',
             flex: 0.2,
             headerClassName: '',
-
-
+        },
+        {
+            field: 'stock_inicial',
+            headerName: 'Stock inicial',
+            flex: 0.2,
+            headerClassName: '',
         },
         {
             field: 'ventas',

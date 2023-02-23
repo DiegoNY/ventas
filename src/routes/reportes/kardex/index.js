@@ -56,6 +56,28 @@ const Kardex = () => {
         getDataProductos();
     }, [])
 
+    const ObtenerInformacionKardex = async () => {
+        const dataInfo = await getData(`${urlAPI.Producto.url}?kardex={"id_producto":"63c5b406d1572b403576508c", "desde":"2023/02/10","hasta":"2023/02/24"}`)
+        console.log(dataInfo);
+
+        let arregloOrdenado = [];
+
+        dataInfo[0].compras.map(value => {
+
+            arregloOrdenado.push(value);
+
+            value.ventas.map(venta => {
+                arregloOrdenado.push(venta);
+            })
+            value.salidas.map(salida => {
+                arregloOrdenado.push(salida);
+            })
+
+        });
+
+        setData(arregloOrdenado);
+    }
+
     const columns = [
         {
             field: '_id',
@@ -65,51 +87,47 @@ const Kardex = () => {
         {
             field: 'codigo_barras',
             headerName: 'Codigo',
-            flex: 0.2,
+            flex: 0.1,
         },
         {
             field: 'descripcion',
             headerName: 'Descripcion',
             flex: 0.2,
-            headerClassName: '',
-
-
+            renderCell: (params) => {
+                let descripcion = `${params.row.descripcion}`.split(':')
+                return (
+                    <div className='flex'>
+                        <p className='font-semibold  mr-2'>{descripcion[0]}</p>
+                        <p>{descripcion[1]}</p>
+                    </div>
+                )
+            }
         },
         {
             field: 'fecha',
             headerName: 'Fecha',
-            flex: 0.1,
-            headerClassName: '',
-
-
+            flex: 0.2,
         },
         {
-            field: 'subtotal',
+            field: 'entrada',
             headerName: 'Entrada',
-            flex: 0.2,
-            headerClassName: '',
-
-
+            flex: 0.1,
         },
         {
-            field: 'igv',
+            field: 'salida',
             headerName: 'Salida',
-            flex: 0.2,
-            headerClassName: '',
+            flex: 0.1,
         },
         {
-            field: 'total',
+            field: 'stock',
             headerName: 'Stock',
-            flex: 0.2,
-            headerClassName: '',
+            flex: 0.1,
         },
         {
-            field: 'totals',
+            field: 'motivo',
             headerName: 'Motivo',
-            flex: 0.2,
-            headerClassName: '',
+            flex: 0.3,
         },
-
 
     ]
 
@@ -206,7 +224,8 @@ const Kardex = () => {
                                                 p-1
                                             `}
                                             onClick={() => {
-                                                setProductoBuscar(`${value.codigo_barras} ${value.descripcion}`)
+                                                setProductoBuscar(`${value.codigo_barras} ${value.descripcion}`);
+                                                ObtenerInformacionKardex();
                                                 setSearch(false);
                                             }}
                                         >
@@ -321,7 +340,7 @@ const Kardex = () => {
                                 Toolbar: CustomToolbar,
                             }}
                             getRowId={(row) => row._id}
-                            rows={[]}
+                            rows={data || []}
                             density='compact'
                             columns={columns}
                             localeText={esES.components.MuiDataGrid.defaultProps.localeText}

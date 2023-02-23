@@ -60,10 +60,8 @@ function App() {
       return;
     }
 
-    
-  }, [contextosGlobales])
 
-  console.log(contextosGlobales);
+  }, [contextosGlobales])
 
   // Rutas °° 🍅
 
@@ -87,6 +85,9 @@ function App() {
 
             onClick={() => {
               contextosGlobales.setComprimir(false);
+              contextosGlobales.setMostrarProductosStockMinimo(false);
+              contextosGlobales.setHistorial(false)
+              contextosGlobales.setSalida(false)
             }}
 
           >

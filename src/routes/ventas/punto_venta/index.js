@@ -433,7 +433,7 @@ function PuntoVenta() {
             return true;
         }
 
-        throw Error("Error al ingresar la venta");
+        return false;
 
     }
 
@@ -544,7 +544,7 @@ function PuntoVenta() {
     }
 
     const limpiarVenta = () => {
-        console.log(venta);
+
         setVenta({
             ...venta,
             productos: [],
@@ -679,10 +679,8 @@ function PuntoVenta() {
             //actualizando los productos
             actualizarStockProductosEnCarrito(data.productos);
 
-
             const informacionSerie = generarSerieVenta(data.numero_venta);
             // console.log(informacionSerie);
-            // console.log(venta.serie);
 
             if (venta.serie == data.serie) {
                 setVenta({
@@ -731,7 +729,7 @@ function PuntoVenta() {
 
                     setInformacionUsuario({
                         ...informacionUsuario,
-                        apertura_caja: moneyInBox.dinero_apertura,
+                        apertura_caja: moneyInBox.dinero,
                         cantidad_ventas: informacionUsuario[0].cantidad,
                         dinero_recaudado: informacionUsuario[0].cantidad_recaudada,
                         gastos: informacionUsuario[0].gastos.total_dinero_gastos,
@@ -1637,9 +1635,10 @@ s                                                '
                                         `}
 
                                     onClick={() => {
+
                                         emitirVenta()
-                                            .then(response => limpiarVenta())
-                                            .catch(Error => console.log(Error));
+                                        limpiarVenta();
+
                                     }}
 
                                 >
@@ -1724,9 +1723,9 @@ s                                                '
                                         onClick={(event) => {
 
                                             obteniendoProductoSeleccionado(producto)
-
                                             event.stopPropagation();
                                             event.preventDefault();
+                                            setSearch(false);
 
                                         }}
                                     >
