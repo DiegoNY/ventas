@@ -21,7 +21,7 @@ function CustomToolbar() {
 const Kardex = () => {
 
     const [data, setData] = useState();
-    const [fechas, setFechas] = useState({});
+    const [informacionBusqueda, setInformacionBusqueda] = useState({});
     const [search, setSearch] = useState(false);
     const [searchProducto, setSearchProducto] = useState();
     const [productoBuscar, setProductoBuscar] = useState('');
@@ -57,7 +57,7 @@ const Kardex = () => {
     }, [])
 
     const ObtenerInformacionKardex = async () => {
-        const dataInfo = await getData(`${urlAPI.Producto.url}?kardex={"id_producto":"63c5b406d1572b403576508c", "desde":"2023/02/10","hasta":"2023/02/24"}`)
+        const dataInfo = await getData(`${urlAPI.Producto.url}?kardex={"id_producto":"${informacionBusqueda.producto}", "desde":"${informacionBusqueda.desde}","hasta":"${informacionBusqueda.hasta}"}`)
         console.log(dataInfo);
 
         let arregloOrdenado = [];
@@ -225,9 +225,14 @@ const Kardex = () => {
                                             `}
                                             onClick={() => {
                                                 setProductoBuscar(`${value.codigo_barras} ${value.descripcion}`);
-                                                ObtenerInformacionKardex();
+                                                setInformacionBusqueda({
+                                                    ...informacionBusqueda,
+                                                    producto: value._id,
+                                                })
+
                                                 setSearch(false);
                                             }}
+                                            key={index}
                                         >
                                             <p className='text-slate-600'>{value.descripcion} </p>
                                         </div>
@@ -249,19 +254,27 @@ const Kardex = () => {
                         >
                             <div
                                 className='
+                                w-1/2
                                 flex 
                                 flex-col
                             '
                             >
                                 <h1 className='font-semibold text-slate-700 text-xs'>Desde</h1>
                                 <input
-                                    className='border-x border-y rounded-xl px-2 p-1 text-slate-600  focus:border-blue-600 font-mono'
+                                    className='border-x border-y rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600 '
                                     type='date'
+                                    onChange={(e) => {
+                                        setInformacionBusqueda({
+                                            ...informacionBusqueda,
+                                            desde: e.target.value,
+                                        })
+                                    }}
                                 />
 
                             </div>
                             <div
                                 className='
+                                w-1/2
                                 flex-col
                                 ml-2
                                 
@@ -269,8 +282,14 @@ const Kardex = () => {
                             >
                                 <h1 className='font-semibold text-slate-700 text-xs'>Hasta</h1>
                                 <input
-                                    className='border-x border-y p-1 text-slate-600 rounded-xl focus:border-blue-600 font-mono'
+                                    className='border-x border-y p-1 w-full text-slate-600 rounded-sm focus:border-blue-600 '
                                     type='date'
+                                    onChange={(e) => {
+                                        setInformacionBusqueda({
+                                            ...informacionBusqueda,
+                                            hasta: e.target.value,
+                                        })
+                                    }}
                                 />
                             </div>
                         </div>
@@ -287,6 +306,12 @@ const Kardex = () => {
                         >
                             <div
                                 className='flex mt-2 cursor-pointer mr-2 hover:text-slate-400'
+                                onClick={() => {
+
+                                    console.log(informacionBusqueda);
+                                    ObtenerInformacionKardex();
+
+                                }}
                             >
                                 <p className='text-xs mt-0.5'>Buscar </p>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">

@@ -245,13 +245,13 @@ function MainUser() {
                             onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
                         >
                             {ventasRecientes?.map(venta => {
-                                console.log(venta);
+                               
                                 return (
 
                                     <CardVentasRecientes
-                                        usuario={venta.usuario}
-                                        hora={venta.hora}
-                                        total={venta.venta.total}
+                                        usuario={venta?.usuario}
+                                        hora={venta?.hora}
+                                        total={venta?.venta?.total}
                                     />
 
                                 )

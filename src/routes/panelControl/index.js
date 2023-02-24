@@ -37,6 +37,8 @@ function PanelControl() {
     const [clientes, setClientes] = React.useState(0);
     const [productosStockBajo, setProductoStockBajo] = useState([]);
     const [informacionVentaSemana, setInformacionVentaSemana] = useState(false);
+    const [informacionClientes, setInformacionClientes] = useState();
+
     const [ventasSemanales, setVentasSemanales] = React.useState([
         { name: 'Lunes', Ventas: 0 },
         { name: 'Martes', Ventas: 0 },
@@ -80,13 +82,17 @@ function PanelControl() {
             setClientes(clientes);
         }
 
-
+        const obtenerInformacionClientes = async () => {
+            const datainformacion = await getData(`${urlAPI.Cliente.url}?tipos_clientes=true`);
+            const data = datainformacion[0].body;
+            setInformacionClientes(data)
+        }
 
         obtenerDataClientes();
         obtenerDataVenta();
         obtenerDataProductos();
         obtenerDataCompras();
-
+        obtenerInformacionClientes();
         return;
 
     }, [])
@@ -429,7 +435,7 @@ function PanelControl() {
                                     innerRadius={43}
                                     outerRadius={80}
                                     tooltip={true}
-                                    data={[{ name: 'DNI', value: 10 }, { name: 'RUC', value: 30 }, { name: 'VARIOS', value: 1 }]}
+                                    data={informacionClientes || [{ name: 'DNI', value: 10 }, { name: 'RUC', value: 30 }, { name: 'VARIOS', value: 1 }]}
                                     colors={['#fde68a', '#82ca9d']}
                                     label={true}
                                 />

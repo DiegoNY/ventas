@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
+import { useMain } from '../../../ui/main/useMain';
 import { getData } from '../../useFetch';
 import { Cardventa } from './cards_venta';
 
@@ -10,6 +11,8 @@ function Tabventa() {
     const [informacionVentaProductos, setInformacionVentaProducto] = useState([]);
     const [cantidadMostrar, setCantidadMostrar] = useState(9);
     const [productosStockBajo, setProductoStockBajo] = useState([]);
+
+    const ContextosGlobales = useMain();
 
     useEffect(() => {
         const obtenerInformacionRecienteVentas = async () => {
@@ -22,16 +25,15 @@ function Tabventa() {
 
     useEffect(() => {
 
-        const dataProductosStockBajo= async () => {
+        const dataProductosStockBajo = async () => {
             const productosData = await getData(`${urlAPI.Producto.url}?stockBajo=4`);
-            
+
             setProductoStockBajo(productosData)
         }
 
         dataProductosStockBajo();
 
     }, [])
-    // console.log(informacionVentaProductos);
 
     return (
         <>
@@ -58,6 +60,7 @@ function Tabventa() {
                                 fecha={venta.fecha_registro}
                                 onClick={() => {
                                     setInformacionVentaProducto(venta.productos)
+                                    ContextosGlobales.setProductos({ productos: venta.productos, numero: venta.numero_venta })
                                 }}
                             />
                         )
@@ -85,7 +88,6 @@ function Tabventa() {
                     </div>
                 </div>
             </div>
-
 
 
         </>

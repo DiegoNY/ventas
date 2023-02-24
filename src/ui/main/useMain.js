@@ -13,6 +13,7 @@ const ProviderMenu = ({ children }) => {
     const [aperturoDiaHoy, setAperturaDiaHoy] = React.useState(true);
     const [salida, setSalida] = React.useState(false);
     const [historial, setHistorial] = React.useState(false);
+    const [productos, setProductos] = React.useState();
 
     const {
         item: moneyInBox,
@@ -74,7 +75,8 @@ const ProviderMenu = ({ children }) => {
                 loadingState, setLoadingState,
                 mostrarProductosStockMinimo, setMostrarProductosStockMinimo,
                 salida, setSalida,
-                historial, setHistorial
+                historial, setHistorial,
+                productos, setProductos,
             }}
         >
             {children}

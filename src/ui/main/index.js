@@ -402,6 +402,12 @@ function Main() {
                                             blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
                                             onClickBlur={() => setBlur(8)}
                                         />
+                                        <ItemMenu
+                                            name='Reporte de ganancias'
+                                            link='reporte-ganancias'
+                                            blur={blur == 8 && 'backdrop-blur-sm bg-white/10'}
+                                            onClickBlur={() => setBlur(8)}
+                                        />
                                     </SubMenuItem>
                                 }
 

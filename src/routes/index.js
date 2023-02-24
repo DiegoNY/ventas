@@ -32,6 +32,8 @@ import { VentasMensuales } from './reportes/ventasMensuales';
 import { StockProductos } from './reportes/stockProductos';
 import { ProductosVencidosVencer } from './reportes/productosVencidosVencer';
 import { PantallaCarga } from '../ui/Layouts/PantallaCarga';
+import { ReporteGanancias } from './reportes/ganancias/ReporteGanancias';
+import { Informacion } from '../ui/Error';
 
 
 function App() {
@@ -209,6 +211,10 @@ function App() {
                   path='/reporte-productos-vencidos-vencer'
                   element={<ProductosVencidosVencer />}
                 />
+                <Route
+                  path='/reporte-ganancias'
+                  element={<ReporteGanancias />}
+                />
 
               </Routes>
 
@@ -220,6 +226,61 @@ function App() {
 
             < PantallaCarga />
           }
+          {contextosGlobales.productos &&
+            <Informacion
+              onClick={() => contextosGlobales.setProductos('')}
+            >
+              <div
+                className='grid  '
+              >
+                <div
+                  className='font-black text-lg tracking-tighter p-1 border-b pb-2 border-b-slate-200 flex justify-between'
+                >
+                  <p>Productos vendidos</p>
+                  <div
+                    className='cursor-pointer'
+                    onClick={() => contextosGlobales.setProductos('')}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-slate-500">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                </div>
+                <p className='p-1 pt-2'>Nro ° Venta : {contextosGlobales.productos.numero} </p>
+                <div className='max-h-80 overflow-y-auto grid'>
+                  <table className='mx-1 mt-2'>
+                    <thead className='border-b border-b-slate-200 text-center'>
+                      <th>Codigo de producto</th>
+                      <th>Producto</th>
+                      <th>Cantidad </th>
+                      <th>Precio </th>
+                      <th>Total </th>
+                    </thead>
+                    <tbody className=''>
+
+                      {contextosGlobales.productos.productos.map(producto => {
+
+                        return (
+                          <tr className='text-center border-b border-b-slate-200 h-14'>
+                            <td className='text-sky-400 font-black'>{producto.codigo_barras}</td>
+                            <td>{producto.descripcion}</td>
+                            <td>{producto.stock_vendido}</td>
+                            <td>S/{producto.precio}</td>
+                            <td> <p className='border bg-green-500 text-white rounded-lg p-1 '>S/ {producto.total}</p></td>
+                          </tr>
+                        )
+                      })}
+
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </Informacion>
+          }
+
+
 
         </div>
 

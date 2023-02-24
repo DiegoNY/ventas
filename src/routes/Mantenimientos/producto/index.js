@@ -314,11 +314,11 @@ function MantenimientoProducto() {
                                                 )
                                             }}
                                         >
-
+                                            <option>SELECCIONE</option>
                                             {
                                                 laboratorios.map(data => {
 
-                                                    return (<option value={data.abreviatura + '-' + data.nombre}>{data.abreviatura + '-' + data.nombre}</option>)
+                                                    return (<option value={data.abreviatura}>{data.abreviatura + '-' + data.nombre}</option>)
 
 
                                                 })
@@ -341,6 +341,7 @@ function MantenimientoProducto() {
                                                 )
                                             }}
                                         >
+                                            <option>SELECCIONE</option>
                                             <option>Generico</option>
                                             <option>No Generico</option>
 
@@ -377,45 +378,6 @@ function MantenimientoProducto() {
 
                                         </tr>
 
-                                        {/* <tr
-                                            className='
-                                                ml-4 
-                                                mt-1
-                                            '
-                                        >
-                                            <td>
-                                                <span>
-                                                    <i class="fi fi-rr-user"></i>
-                                                </span>
-                                                Tipo venta
-                                            </td>
-
-                                            <td
-                                                className='
-                                                    flex
-                                                    font-mono
-                                                    font-black
-                                                    text-xs
-                                                '
-                                            >
-                                                <div>
-                                                    <input type={'checkbox'} />
-                                                    <span className='ml-1'>Unidad</span>
-                                                </div>
-                                                <div>
-                                                    <input type={'checkbox'} />
-                                                    <span className='ml-1'>Tableta</span>
-
-                                                </div>
-                                                <div>
-                                                    <input type={'checkbox'} />
-                                                    <span className='ml-1' >Caja</span>
-
-                                                </div>
-                                            </td>
-
-
-                                        </tr> */}
                                         <tr>
                                             <td className='font-sans'>
 
@@ -635,8 +597,9 @@ function MantenimientoProducto() {
                                             }}
 
                                         >
-                                            <option>Con receta medica</option>
-                                            <option>Sin receta medica</option>
+                                            <option>SELECCIONE</option>
+                                            <option>CON RECETA MEDICA</option>
+                                            <option>SIN RECETA MEDICA</option>
 
                                         </Label>
 
@@ -653,8 +616,9 @@ function MantenimientoProducto() {
                                                 )
                                             }}
                                         >
-                                            <option value={'1'}> Activo </option>
-                                            <option value={'0'}> Inactivo </option>
+                                            <option>SELECCIONE</option>
+                                            <option value={'1'}> ACTIVO </option>
+                                            <option value={'0'}> INACTIVO </option>
 
                                         </Label>
 

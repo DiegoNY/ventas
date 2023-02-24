@@ -27,7 +27,7 @@ function NotaSalida() {
     const [informacionMotivo, setInformacionMotivo] = useState(true);
     const [ids_notasalida, setIdNotaSalida] = useState(0);
     const [error, setError] = useState(false);
-    const [numeroDocumento, setNumeroDocumento] = useState('');
+    const [tipoCompra, setTipoCompra] = useState();
     const [notaSalida, setNotaSalida] = useState(
 
         {
@@ -94,7 +94,6 @@ function NotaSalida() {
 
     const obtnerCantidadProductos = (id_notasalida, cantidad) => {
 
-        console.log(cantidad);
 
         notaSalida.productos.map(producto => {
             if (producto.id_notasalida == id_notasalida) {
@@ -121,7 +120,6 @@ function NotaSalida() {
                 if (CANTIDAD_SALIENTE.CANTIDAD > producto.stock) {
                     producto.cantidad_comprada = '';
 
-                    console.log('NO HAY SUfICIENTE STOCK');
 
                     setError({
                         producto: producto.descripcion,
@@ -140,7 +138,11 @@ function NotaSalida() {
             }
         })
 
-
+        setNotaSalida(
+            {
+                ...notaSalida
+            }
+        )
     }
 
     const emitirNotaSalida = async () => {
@@ -359,14 +361,14 @@ function NotaSalida() {
                                             onClick={(event) => {
                                                 setNotaSalida({
                                                     ...notaSalida,
-                                                    productos: [...notaSalida.productos, { ...producto, id_notasalida: ids_notasalida }]
+                                                    productos: [...notaSalida.productos, { ...producto, id_notasalida: ids_notasalida, medida: 'U' }]
 
                                                 })
                                                 setIdNotaSalida(ids_notasalida + 1)
 
                                                 event.stopPropagation();
                                                 event.preventDefault();
-
+                                                setBuscador(false)
                                             }}
                                         >
                                             <h1><span className=' font-semibold'>Descripcion :</span> {producto.descripcion || 'ACEITE DE NO SE QUE SUPER LARGO'}</h1>
@@ -402,13 +404,16 @@ function NotaSalida() {
 
                                     {notaSalida?.productos?.map((producto, index) => {
 
-                                        producto.medida = 'U';
-
                                         return (
                                             <>
                                                 <TablaRow TablaRow
                                                     tabIndex={index}
                                                     onClick={(event) => {
+                                                        let medida = '';
+                                                        if (producto.medida == 'C') medida = ' caja';
+                                                        if (producto.medida == 'T') medida = ' tableta';
+                                                        if (producto.medida == 'U') medida = ' unidad';
+                                                        setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por' + medida)
                                                         event.preventDefault();
                                                     }}
 
@@ -417,14 +422,20 @@ function NotaSalida() {
                                                         //Eventes para cambiar el tipo de medida
                                                         if (event.key == 't') {
                                                             producto.medida = 'T';
+                                                            setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por tableta')
+
                                                         }
 
                                                         if (event.key == 'c') {
                                                             producto.medida = 'C';
+                                                            setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por caja')
+
                                                         }
 
                                                         if (event.key == 'u') {
                                                             producto.medida = 'U';
+                                                            setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por unidad')
+
                                                         }
 
                                                     }}
@@ -484,6 +495,7 @@ function NotaSalida() {
                                 </TablaTalwindCss>
                             </div>
 
+                            <h1 className='text-slate-900  ml-2 my-auto uppercase'>{tipoCompra}</h1>
 
 
                         </div>

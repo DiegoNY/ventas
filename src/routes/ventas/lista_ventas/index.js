@@ -154,7 +154,7 @@ function ListaVenta() {
                 headerClassName: '',
                 renderCell: (params) => {
                     let tipoDocumento;
-                    let serie = params.row.serie.split('');
+                    let serie = params?.row?.serie?.split('') || [];
 
                     if (serie[0] === 'B') tipoDocumento = 'BOLETA';
                     if (serie[0] === 'T') tipoDocumento = 'TICKET';

@@ -157,11 +157,7 @@ function ProductosMasVendidos() {
                             '
                         >
                             <h1 className=' font-semibold my-2 text-slate-500' >Hace 3 meses</h1>
-                            <button className='border my-1  text-xs w-36 flex justify-center   hover:' >
-                                <h1 className='mt-1'>Descargar reporte</h1>
-                                <img src={icono_descarga} className=' mt-1 h-4' />
-                            </button>
-
+                            
                         </div>
                         <RechartsBar
                             fill={'#2563EB'}

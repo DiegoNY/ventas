@@ -38,7 +38,7 @@ const ReporteVentasCompras = () => {
         {
             field: 'fecha_registro',
             headerName: 'Fecha',
-            flex: 0.2,
+            flex: 0.05,
             headerClassName: '',
 
 
@@ -54,7 +54,7 @@ const ReporteVentasCompras = () => {
         {
             field: 'subtotal',
             headerName: 'Base impuestos',
-            flex: 0.2,
+            flex: 0.1,
             headerClassName: '',
 
 
@@ -62,13 +62,13 @@ const ReporteVentasCompras = () => {
         {
             field: 'igv',
             headerName: 'Igv',
-            flex: 0.2,
+            flex: 0.1,
             headerClassName: '',
         },
         {
             field: 'total',
             headerName: 'Total',
-            flex: 0.2,
+            flex: 0.1,
             headerClassName: '',
         },
 
@@ -116,19 +116,18 @@ const ReporteVentasCompras = () => {
                 >
                     <h1 className=' mx-8  mt-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>Reportes generales </h1>
                     <p className='font-normal text-sm ml-8 text-slate-500'>Por favor escoge las fechas que deseas buscar </p>
-                    <p className='font-normal text-sm ml-8 text-slate-500'>recuerda descargar un reporte a la vez para evitar cualquier tipo de problema  </p>
                     <div
                         className='flex ml-8 my-2 justify-between mr-4'
                     >
                         <div
                             className='flex flex-col '
                         >
-                            <h1 className='text-slate-700 mb-1 text-lg '>Reporte de ventas</h1>
+                            <h1 className='text-slate-700 mb-1 font-black tracking-tighter'>Reporte de ventas</h1>
                             <div>
                                 Desde
                                 <input
                                     type='date'
-                                    className='mx-2 border-x border-y px-2'
+                                    className='mx-2 border-x border-y p-1 text-center'
                                     onChange={(e) => {
                                         setFechaVentas({
                                             ...fechaVentas,
@@ -139,7 +138,7 @@ const ReporteVentasCompras = () => {
                                 Hasta
                                 <input
                                     type='date'
-                                    className='mx-2 border-x border-y px-2'
+                                    className='mx-2 border-x border-y p-1 text-center'
                                     onChange={(e) => {
                                         setFechaVentas({
                                             ...fechaVentas,
@@ -206,12 +205,12 @@ const ReporteVentasCompras = () => {
                         <div
                             className='flex flex-col'
                         >
-                            <h1 className='text-slate-700 mb-1 text-lg'>Reporte de compras</h1>
+                            <h1 className='text-slate-700 mb-1 font-black tracking-tighter'>Reporte de compras</h1>
                             <div>
                                 Desde
                                 <input
                                     type='date'
-                                    className='mx-2 border-x border-y px-2'
+                                    className='mx-2 border-x border-y p-1 text-center'
                                     onChange={(e) => {
 
                                         setFechaCompras({
@@ -224,7 +223,7 @@ const ReporteVentasCompras = () => {
                                 Hasta
                                 <input
                                     type='date'
-                                    className='mx-2 border-x border-y px-2'
+                                    className='mx-2 border-x border-y p-1 text-center'
                                     onChange={(e) => {
 
                                         setFechaCompras({

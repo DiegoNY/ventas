@@ -1478,8 +1478,6 @@ s                                                '
                                     </div>
                                 }
 
-
-
                                 <br />
                                 <h1 className='font-black text-slate-800'>Escoge el tipo de moneda</h1>
                                 <div
@@ -1784,7 +1782,7 @@ s                                                '
 
                                                 onKeyDown={(event) => {
 
-                                                    //Eventes para cambiar el tipo de medida
+                                                    //Eventos para cambiar el tipo de medida
                                                     if (event.key == 't') {
                                                         producto.medida = 'T';
                                                         setTipoCompra(producto.codigo_barras + ' ' + producto.descripcion + ' esta siendo vendido por tableta')
