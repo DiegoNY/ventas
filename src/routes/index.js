@@ -264,7 +264,7 @@ function App() {
                           <tr className='text-center border-b border-b-slate-200 h-14'>
                             <td className='text-sky-400 font-black'>{producto.codigo_barras}</td>
                             <td>{producto.descripcion}</td>
-                            <td>{producto.stock_vendido}</td>
+                            <td>{producto.stock_vendido} {producto.medida}</td>
                             <td>S/{producto.precio}</td>
                             <td> <p className='border bg-green-500 text-white rounded-lg p-1 '>S/ {producto.total}</p></td>
                           </tr>

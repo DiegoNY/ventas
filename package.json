@@ -19,6 +19,7 @@
     "autoprefixer": "10.4.5",
     "axios": "^1.2.1",
     "chart.js": "^4.1.2",
+    "exceljs": "^4.3.0",
     "gridjs": "^5.1.0",
     "gridjs-react": "^5.1.0",
     "mongoose-unique-validator": "^3.1.0",
@@ -34,7 +35,9 @@
     "socket.io-client": "^4.5.4",
     "sweetalert2": "^11.6.16",
     "tailwindcss": "^3.2.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
+    "xlsx-populate": "^1.21.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { _ } from 'gridjs-react';
-import { Titulo } from '../../ui/titulos-vistas';
 import { getData } from '../useFetch';
 import { urlAPI } from '../../config';
 import {
@@ -10,7 +9,6 @@ import {
     GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
-import icono_compras from './img/icono-compras.svg';
 import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router';
 import { useReactToPrint } from 'react-to-print';
@@ -19,6 +17,10 @@ import { Informacion } from '../../ui/Error';
 import { TablaTalwindCss } from '../../ui/Tabla/useTabla';
 import { TablaRow } from '../../ui/Tabla/tableRow';
 import { TableCell } from '../../ui/Tabla/tableCell';
+
+import * as  XLSX from 'xlsx'
+import * as ExcelJS from 'exceljs'
+
 
 function CustomToolbar() {
 
@@ -50,6 +52,146 @@ function ListaCompra() {
         documentTitle: 'Documento de venta',
         onAfterPrint: () => console.log('Impreso uwu')
     })
+
+    const DescargarDataExcel = (data) => {
+
+
+        const worbook = new ExcelJS.Workbook();
+        const sheet = worbook.addWorksheet("My Sheet");
+
+        sheet.properties.defaultRowHeight = 16;
+        sheet.mergeCells('A1:H2');
+
+        const blueStyle = {
+            font: { color: { argb: 'FFFFFFFF' } },
+            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0070C0' } },
+            alignment: { horizontal: 'center' }
+        };
+
+        const titleCell = sheet.getCell('A1');
+        titleCell.value = `REPORTE DETALLADO DE LA COMPRA ${data[0].numero_documento}`;
+        titleCell.font = { bold: true };
+        titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+        const PROVEEDOR = sheet.getCell('A4');
+        PROVEEDOR.value = 'PROVEEDOR :';
+        PROVEEDOR.font = { bold: true };
+
+        const PROVEEDOR_VALUE = sheet.getCell('B4');
+        PROVEEDOR_VALUE.value = data[0].proveedor;
+
+        const FECHA_COMPRA = sheet.getCell('A5');
+        FECHA_COMPRA.value = 'FECHA COMPRA :';
+        FECHA_COMPRA.font = { bold: true };
+
+        const FECHA_COMPRA_VALUE = sheet.getCell('B5');
+        FECHA_COMPRA_VALUE.value = data[0].fecha_registro;
+
+        const TIPO_COMPRA = sheet.getCell('A6');
+        TIPO_COMPRA.value = 'TIPO COMPRA :';
+        TIPO_COMPRA.font = { bold: true };
+
+        const TIPO_COMPRA_VALUE = sheet.getCell('B6');
+        TIPO_COMPRA_VALUE.value = data[0].tipo_documento;
+
+        const descripcion = sheet.getCell('A8');
+        descripcion.value = "DESCRIPCION";
+        descripcion.font = { bold: true };
+        descripcion.alignment = { horizontal: 'center', vertical: 'middle' };
+        descripcion.style = blueStyle;
+
+
+
+        const cantidad = sheet.getCell('B8');
+        cantidad.value = "CANTIDAD";
+        cantidad.font = { bold: true };
+        cantidad.alignment = { horizontal: 'center', vertical: 'middle' };
+        cantidad.style = blueStyle;
+
+        const LOTE = sheet.getCell('C8');
+        LOTE.value = "LOTE";
+        LOTE.font = { bold: true };
+        LOTE.alignment = { horizontal: 'center', vertical: 'middle' };
+        LOTE.style = blueStyle;
+
+
+        const FECHA_VENCIMIENTO = sheet.getCell('D8');
+        FECHA_VENCIMIENTO.value = "FECHA DE VENCIMIENTO";
+        FECHA_VENCIMIENTO.font = { bold: true };
+        FECHA_VENCIMIENTO.alignment = { horizontal: 'center', vertical: 'middle' };
+        FECHA_VENCIMIENTO.style = blueStyle;
+
+
+        const TOTAL = sheet.getCell('E8');
+        TOTAL.value = "TOTAL";
+        TOTAL.font = { bold: true };
+        TOTAL.alignment = { horizontal: 'center', vertical: 'middle' };
+        TOTAL.style = blueStyle;
+
+
+
+        sheet.columns = [
+            {
+                key: 'descripcion',
+                width: 20,
+            },
+            {
+                key: 'cantidad',
+                width: 16,
+            },
+            {
+                key: 'lote',
+                width: 10,
+            },
+            {
+                key: 'fecha_vencimiento',
+                width: 30,
+            },
+            {
+                key: 'total',
+                width: 10,
+            },
+        ]
+
+        data[0].productos.map(producto => {
+            const row = sheet.addRow({
+                descripcion: producto.descripcion, cantidad: producto.stock,
+                lote: producto.lote, fecha_vencimiento: producto.fecha_vencimiento,
+                total: producto.total,
+            })
+
+            row.eachCell(cell => {
+                cell.alignment = { horizontal: 'center' };
+            });
+        })
+
+        const totalRows = sheet.rowCount;
+        const totalCellTexts = sheet.getCell(`D${totalRows + 1}]`);
+        const totalCell = sheet.getCell(`E${totalRows + 1}]`);
+        totalCellTexts.value = 'TOTAL'
+        totalCellTexts.font = { bold: true };
+        totalCell.value = 120;
+        totalCell.alignment = { horizontal: 'center' }
+
+
+
+
+        worbook.xlsx.writeBuffer().then(datas => {
+            const blob = new Blob([datas], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet",
+            })
+
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = `COMPRA ${data[0].numero_documento}.xlsx`;
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+
+
+    }
+
 
     const [columns] = useState([
         {
@@ -133,7 +275,11 @@ function ListaCompra() {
                             setInformacionImpresion(params.row)
                         }}
                     >
-                        <button>
+                        <button
+                            onClick={() => {
+                                DescargarDataExcel([params.row])
+                            }}
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#16A34A" className="w-6 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
                             </svg>
@@ -164,6 +310,8 @@ function ListaCompra() {
 
     ]
     )
+
+
 
     useEffect(() => {
 

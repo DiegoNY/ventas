@@ -450,7 +450,12 @@ function PanelControl() {
                                     italic  
                                   '
                                 >
-                                    <p className='mx-2 '>RUC</p>  <div className='p-1 bg-yellow-400 rounded-3xl w-2 h-2 mt-1'></div> <p className='mx-2 '>DNI</p> <p className='mx-2 '>VARIOS</p>
+                                    <div className='p-1 bg-indigo-400 rounded-3xl w-2 h-2 mt-1'></div>
+                                    <p className='mx-2 '>RUC</p>
+                                    <div className='p-1 bg-yellow-400 rounded-3xl w-2 h-2 mt-1'></div>
+                                    <p className='mx-2 '>DNI</p>
+                                    <div className='p-1 bg-emerald-400 rounded-3xl w-2 h-2 mt-1'></div>
+                                    <p className='mx-2 '>VARIOS</p>
                                 </div>
                             </div>
 
