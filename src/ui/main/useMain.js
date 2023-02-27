@@ -40,7 +40,7 @@ const ProviderMenu = ({ children }) => {
                 setCierre(true);
             };
 
-            if (moneyInBox.dinero) {
+            if (moneyInBox.dinero || moneyInBox.dinero == 0) {
                 setDineroCaja(true);
             } else {
                 setDineroCaja(false);
@@ -55,7 +55,7 @@ const ProviderMenu = ({ children }) => {
     }, [loading])
 
     useEffect(() => {
-        console.log(error);
+
         if (error) {
             setDineroCaja(false);
             setLoadingState(false);

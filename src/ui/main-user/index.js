@@ -118,6 +118,8 @@ function MainUser() {
                          hover:text-orange-300
                         '
                             onClick={() => {
+                                if (!!contextosGlobales.salida) contextosGlobales.setSalida(false);
+                                if (!!contextosGlobales.historial) contextosGlobales.setHistorial(false);
                                 contextosGlobales.setMostrarProductosStockMinimo(true)
                             }}
                         >
@@ -166,6 +168,9 @@ function MainUser() {
                     <div
                         className='text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-sm '
                         onClick={() => {
+
+                            if (!!contextosGlobales.mostrarProductosStockMinimo) contextosGlobales.setMostrarProductosStockMinimo(false);
+                            if (!!contextosGlobales.salida) contextosGlobales.setSalida(false);
                             contextosGlobales.setHistorial(true)
                         }}
                     >
@@ -178,7 +183,10 @@ function MainUser() {
                     <div
                         className="text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-md"
                         onClick={() => {
+                            if (!!contextosGlobales.mostrarProductosStockMinimo) contextosGlobales.setMostrarProductosStockMinimo(false);
+                            if (!!contextosGlobales.historial) contextosGlobales.setHistorial(false);
                             contextosGlobales.setSalida(true)
+
                         }}
                     >
 
@@ -245,7 +253,7 @@ function MainUser() {
                             onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
                         >
                             {ventasRecientes?.map(venta => {
-                               
+
                                 return (
 
                                     <CardVentasRecientes

@@ -52,12 +52,12 @@ function App() {
     }
 
     if (!!contextosGlobales.cierre) {
+
       navigate("/caja");
       return;
     }
 
     if (!contextosGlobales.dineroCaja) {
-
       navigate("/caja");
       return;
     }

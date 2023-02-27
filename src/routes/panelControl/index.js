@@ -435,8 +435,8 @@ function PanelControl() {
                                     innerRadius={43}
                                     outerRadius={80}
                                     tooltip={true}
-                                    data={informacionClientes || [{ name: 'DNI', value: 10 }, { name: 'RUC', value: 30 }, { name: 'VARIOS', value: 1 }]}
-                                    colors={['#fde68a', '#82ca9d']}
+                                    data={informacionClientes || []}
+                                    colors={['#FACC15', '#82ca9d']}
                                     label={true}
                                 />
 
@@ -450,7 +450,7 @@ function PanelControl() {
                                     italic  
                                   '
                                 >
-                                    <p className='mx-2 '>RUC</p> <p className='mx-2 '>DNI</p> <p className='mx-2 '>VARIOS</p>
+                                    <p className='mx-2 '>RUC</p>  <div className='p-1 bg-yellow-400 rounded-3xl w-2 h-2 mt-1'></div> <p className='mx-2 '>DNI</p> <p className='mx-2 '>VARIOS</p>
                                 </div>
                             </div>
 

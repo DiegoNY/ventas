@@ -321,7 +321,7 @@ function Main() {
                             </ItemMenu>
                             <ItemMenu
                                 name='Gastos'
-                                icono='fi fi-rr-shopping-cart-add'
+                                icono='fi fi-rs-notebook'
                                 onClick={() => {
                                     setMostrarGastos(!mostrarGastos)
                                     comprimirs.setComprimir(true)
@@ -352,7 +352,7 @@ function Main() {
                             </ItemMenu>
                             <ItemMenu
                                 name='Reportes'
-                                icono='fi fi-rr-shopping-cart-add'
+                                icono='fi fi-rs-chart-histogram'
                                 onClick={() => {
                                     setMostrarReportes(!mostrarReportes)
                                     comprimirs.setComprimir(true)

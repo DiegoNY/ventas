@@ -20,7 +20,6 @@ function ItemMenu(props) {
                             className="nav-link"
                             to={`/${props.link}`}
                         >
-
                             <i className={props.icono}></i>
                             <span>{props.name}</span>
 
