@@ -87,6 +87,8 @@ function ListaVenta() {
     const [informacion, setInformacion] = useState({ NotaCredito: false })
     const [notaCredito, setNotaCredito] = useState(false);
 
+    const [loading, setLoadin] = useState(false);
+
     /**Manejador de peticiones */
     const [ventas, setVentas] = useState(false);
 
@@ -288,10 +290,11 @@ function ListaVenta() {
 
     useEffect(() => {
 
+        setLoadin(true)
         const obtenerTodasVentas = async () => {
             const todasVentasData = await getData(`${urlAPI.Venta.url}`);
             setTodasVentas(todasVentasData);
-
+            setLoadin(false);
         }
 
         obtenerTodasVentas();
@@ -378,10 +381,11 @@ function ListaVenta() {
                                         columnVisibilityModel: {
                                             _id: false
                                         }
-                                    }
+                                    },
+
                                 }
                             }
-
+                            loading={loading}
                         />
 
 

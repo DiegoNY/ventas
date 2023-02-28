@@ -234,7 +234,7 @@ function App() {
                 className='grid  '
               >
                 <div
-                  className='font-black text-lg tracking-tighter p-1 border-b pb-2 border-b-slate-200 flex justify-between'
+                  className='font-black  tracking-tighter p-1 border-b pb-2 border-b-slate-200 flex justify-between'
                 >
                   <p>Productos vendidos</p>
                   <div

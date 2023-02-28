@@ -57,7 +57,7 @@ function ListaCompra() {
 
 
         const worbook = new ExcelJS.Workbook();
-        const sheet = worbook.addWorksheet("My Sheet");
+        const sheet = worbook.addWorksheet("compra");
 
         sheet.properties.defaultRowHeight = 16;
         sheet.mergeCells('A1:H2');
@@ -154,6 +154,7 @@ function ListaCompra() {
         ]
 
         data[0].productos.map(producto => {
+
             const row = sheet.addRow({
                 descripcion: producto.descripcion, cantidad: producto.stock,
                 lote: producto.lote, fecha_vencimiento: producto.fecha_vencimiento,

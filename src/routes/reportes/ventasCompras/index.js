@@ -1,6 +1,8 @@
+import { style } from '@mui/system';
 import { DataGrid, esES, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
-import { urlAPI } from '../../../config';
+import { EMPRESA, urlAPI } from '../../../config';
+import { DescargarDataExcel } from '../../useDescargaExcel';
 import { getData } from '../../useFetch';
 
 function CustomToolbar() {
@@ -28,7 +30,7 @@ const ReporteVentasCompras = () => {
 
     const [data, setData] = useState([]);
 
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: 'Id',
@@ -53,7 +55,7 @@ const ReporteVentasCompras = () => {
         },
         {
             field: 'subtotal',
-            headerName: 'Base impuestos',
+            headerName: 'Base Imponible',
             flex: 0.1,
             headerClassName: '',
 
@@ -73,7 +75,260 @@ const ReporteVentasCompras = () => {
         },
 
 
-    ]
+    ])
+
+    const DescargarVentas = (titulo, hoja, data) => {
+        let columns = [
+            {
+                key: 'fecha_registro',
+                width: 20,
+            },
+            {
+                key: 'identificacion',
+                width: 16,
+            },
+            {
+                key: 'cliente',
+                width: 20,
+            },
+            {
+                key: 'tipo_documento',
+                width: 20,
+            },
+            {
+                key: 'serie',
+                width: 20,
+            },
+            {
+                key: 'correlativo',
+                width: 20,
+            },
+            {
+                key: 'subtotal',
+                width: 20,
+            },
+            {
+                key: 'igv',
+                width: 20,
+            },
+            {
+                key: 'total',
+                width: 20,
+            },
+            {
+                key: 'leyenda',
+                width: 20,
+            },
+        ]
+
+
+        let informacion = {
+            hoja: hoja,
+            titulo: {
+                celdas: "A1:I2",
+                value: titulo,
+            },
+            celdas: [
+                {
+                    numero: "A4",
+                    value: `${EMPRESA.RUC}`,
+                    font: { bold: true },
+                    style: {}
+                },
+                {
+                    numero: "A5",
+                    value: `${EMPRESA.NOMBRE}`,
+                    font: { bold: true },
+                    style: {},
+                },
+                {
+                    numero: "A7",
+                    value: "FECHA REGISTRO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "B7",
+                    value: "IDENTIFICACION",
+                    font: { bold: true },
+                },
+                {
+                    numero: "C7",
+                    value: "CLIENTE",
+                    font: { bold: true },
+                },
+                {
+                    numero: "D7",
+                    value: "TIPO COMPROBANTE",
+                    font: { bold: true },
+                    width: 20
+                },
+                {
+                    numero: "E7",
+                    value: "SERIE",
+                    font: { bold: true },
+                },
+                {
+                    numero: "F7",
+                    value: "CORRELATIVO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "G7",
+                    value: "BASE IMPONIBLE",
+                    font: { bold: true },
+                },
+                {
+                    numero: "H7",
+                    value: "IGV",
+                    font: { bold: true },
+                },
+                {
+                    numero: "I7",
+                    value: "TOTAL VENTA",
+                    font: { bold: true },
+                },
+                {
+                    numero: "J7",
+                    value: "LEYENDA VENTA",
+                    font: { bold: true },
+                },
+            ],
+            nombreArchivo: titulo,
+            final: [
+                {
+                    columna: "H",
+                    cantidad: 2,
+                    value: "TOTAL"
+                },
+                {
+                    columna: "I",
+                    cantidad: 2,
+                    value: { formula: { operacion: "SUM", columna: "I", numero: 8 } },
+                    font: { bold: false }
+                },
+            ]
+        }
+        DescargarDataExcel(data, columns, informacion);
+    }
+
+    const DescargarCompras = (titulo, hoja, data) => {
+        let columns = [
+            {
+                key: 'fecha_registro',
+                width: 20,
+            },
+            {
+                key: 'ruc_proveedor',
+                width: 16,
+            },
+            {
+                key: 'proveedor',
+                width: 20,
+            },
+            {
+                key: 'tipo_documento',
+                width: 20,
+            },
+            {
+                key: 'fecha_documento',
+                width: 20,
+            },
+            {
+                key: 'numero_documento',
+                width: 20,
+            },
+            {
+                key: 'total',
+                width: 20,
+            },
+            {
+                key: 'forma_pago',
+                width: 20,
+            },
+        ]
+
+
+        let informacion = {
+            hoja: hoja,
+            titulo: {
+                celdas: "A1:H2",
+                value: titulo,
+            },
+            celdas: [
+                {
+                    numero: "A4",
+                    value: `${EMPRESA.RUC}`,
+                    font: { bold: true },
+                    style: {}
+                },
+                {
+                    numero: "A5",
+                    value: `${EMPRESA.NOMBRE}`,
+                    font: { bold: true },
+                    style: {},
+                },
+                {
+                    numero: "A7",
+                    value: "FECHA REGISTRO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "B7",
+                    value: "RUC",
+                    font: { bold: true },
+                },
+                {
+                    numero: "C7",
+                    value: "LABORATORIO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "D7",
+                    value: "TIPO COMPROBANTE",
+                    font: { bold: true },
+                    width: 20
+                },
+                {
+                    numero: "E7",
+                    value: "FECHA DOCUMENTO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "F7",
+                    value: "CODIGO COMPRA",
+                    font: { bold: true },
+                },
+                {
+                    numero: "G7",
+                    value: "TOTAL COMPRA",
+                    font: { bold: true },
+                },
+                {
+                    numero: "H7",
+                    value: "FORMA PAGO",
+                    font: { bold: true },
+                },
+
+            ],
+            nombreArchivo: titulo,
+            final: [
+                {
+                    columna: "F",
+                    cantidad: 2,
+                    value: "TOTAL"
+                },
+                {
+                    columna: "G",
+                    cantidad: 2,
+                    value: { formula: { operacion: "SUM", columna: "G", numero: 8 } },
+                    font: { bold: false }
+                },
+            ]
+        }
+
+
+        DescargarDataExcel(data, columns, informacion);
+    }
 
     useEffect(() => {
 
@@ -167,6 +422,14 @@ const ReporteVentasCompras = () => {
                                         justify-center
                                         cursor-pointer
                                     '
+                                    onClick={() => {
+
+                                        DescargarVentas(
+                                            `REPORTE DE VENTAS DESDE ${fechaVentas.desde} HASTA ${fechaVentas.hasta}`,
+                                            "VENTAS",
+                                            data
+                                        );
+                                    }}
                                 >
                                     Descargar reporte
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-4 mt-0.5">
@@ -255,6 +518,13 @@ const ReporteVentasCompras = () => {
                                         justify-center
                                         cursor-pointer
                                     '
+                                    onClick={() => {
+                                        DescargarCompras(
+                                            `REPORTE DE COMPRAS DESDE ${fechaCompras.desde} HASTA ${fechaCompras.hasta}`,
+                                            "COMPRAS",
+                                            data
+                                        )
+                                    }}
                                 >
                                     Descargar reporte
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-4 mt-0.5">

@@ -33,47 +33,57 @@ const ListaGastos = () => {
         {
             field: 'fecha',
             headerName: 'Fecha',
-            // headerClassName:'text-slate-800 ',
             flex: 0.1,
-
+            renderCell: (params) => {
+                return <div className='text-center w-full'>{params.row.fecha}</div>
+            }
 
         },
         {
             field: 'descripcion',
             headerName: 'Descripcion',
             flex: 0.3,
-
         },
         {
             field: 'monto',
             headerName: 'Monto',
             flex: 0.1,
-
-
+            renderCell: (params) => {
+                return <div className='text-center w-full'>{params.row.monto}</div>
+            }
         },
         {
             field: 'usuario',
             headerName: 'Creado por ',
             flex: 0.1,
-
-
+            renderCell: (params) => {
+                return <div className='text-center w-full'>{params.row.usuario}</div>
+            }
         },
         {
             field: 'imagen',
-            headerName: 'Imagen',
+            headerName: 'Archivo adjunto',
             flex: 0.1,
             renderCell: (params) => {
                 return (
                     <>
                         <div
-                            className='mx-auto cursor-pointer scale-75'
+                            className='mx-auto cursor-pointer scale-75 flex'
                             onClick={() => {
                                 setImagen(params.row.imagen)
                             }}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 stroke-blue-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                            </svg>
+                            <div className='bg-blue-400 rounded-xl p-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
+                                </svg>
+                            </div>
+
+                            <a href={params.row.imagen} className='p-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                                </svg>
+                            </a>
 
                         </div>
                     </>
@@ -90,10 +100,8 @@ const ListaGastos = () => {
                     <div
                         className='mx-auto'
                     >
-                        <button>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-                            </svg>
+                        <button className='rounded-xl bg-green-600 p-1 text-white text-xs '>
+                            Exportar
                         </button>
                     </div>
 

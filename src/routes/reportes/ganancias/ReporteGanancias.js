@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, esES, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { getData } from '../../useFetch';
-import { urlAPI } from '../../../config';
+import { EMPRESA, urlAPI } from '../../../config';
+import { DescargarDataExcel } from '../../useDescargaExcel';
 
 function CustomToolbar() {
 
@@ -69,9 +70,120 @@ const ReporteGanancias = () => {
         setColumns(columnss);
     }, [])
 
+
     const buscarInformacion = async () => {
         const dataInfo = await getData(`${urlAPI.Producto.url}?reporte_ganancias={"desde":"${informacion?.desde}","hasta":"${informacion?.hasta}"}`);
         setData(dataInfo);
+    }
+
+
+    const DescargarReporte = (titulo, hoja, data) => {
+        let columns = [
+            {
+                key: 'cantidad_vendida',
+                width: 20,
+            },
+            {
+                key: 'descripcion',
+                width: 40,
+            },
+            {
+                key: 'laboratorio',
+                width: 30,
+            },
+            {
+                key: 'precio_venta',
+                width: 20,
+            },
+            {
+                key: 'total',
+                width: 20,
+            },
+            {
+                key: 'utilidad',
+                width: 20,
+            },
+            {
+                key: 'porcentaje',
+                width: 20,
+            },
+        ]
+
+
+        let informacion = {
+            hoja: hoja,
+            titulo: {
+                celdas: "A1:G2",
+                value: titulo,
+            },
+            celdas: [
+                {
+                    numero: "A4",
+                    value: `${EMPRESA.RUC}`,
+                    font: { bold: true },
+                    style: {}
+                },
+                {
+                    numero: "A5",
+                    value: `${EMPRESA.NOMBRE}`,
+                    font: { bold: true },
+                    style: {},
+                },
+                {
+                    numero: "A7",
+                    value: "CANTIDAD VENDIDA    ",
+                    font: { bold: true },
+                },
+                {
+                    numero: "B7",
+                    value: "DESCRIPCION",
+                    font: { bold: true },
+                },
+                {
+                    numero: "C7",
+                    value: "LABORATORIO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "D7",
+                    value: "PRECIO VENTA",
+                    font: { bold: true },
+                    width: 20
+                },
+                {
+                    numero: "E7",
+                    value: "TOTAL",
+                    font: { bold: true },
+                },
+                {
+                    numero: "F7",
+                    value: "UTILIDAD",
+                    font: { bold: true },
+                },
+                {
+                    numero: "G7",
+                    value: "PORCENTAJE",
+                    font: { bold: true },
+                },
+            ],
+            nombreArchivo: titulo,
+            final: [
+                {
+                    columna: "D",
+                    cantidad: 2,
+                    value: "TOTAL"
+                },
+                {
+                    columna: "E",
+                    cantidad: 2,
+                    value: { formula: { operacion: "SUM", columna: "E", numero: 8 } },
+                    font: { bold: false }
+                },
+            ]
+        }
+
+
+        DescargarDataExcel(data, columns, informacion);
     }
 
 
@@ -107,7 +219,12 @@ const ReporteGanancias = () => {
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                     </div>
-                    <div className='ml-1'>
+                    <div
+                        className='ml-1'
+                        onClick={() => {
+                            DescargarReporte(`REPORTE DE GANANCIAS EN EL RANGO DE ${informacion.desde} HASTA EL ${informacion.hasta}`, "REPORTE DE GANANCIAS", data)
+                        }}
+                    >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                         </svg>

@@ -1,5 +1,5 @@
 import { DataGrid, esES, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
 import { Layout } from '../../../ui/Layouts';
 import { getData } from '../../useFetch';
@@ -58,7 +58,6 @@ const Kardex = () => {
 
     const ObtenerInformacionKardex = async () => {
         const dataInfo = await getData(`${urlAPI.Producto.url}?kardex={"id_producto":"${informacionBusqueda.producto}", "desde":"${informacionBusqueda.desde}","hasta":"${informacionBusqueda.hasta}"}`)
-        console.log(dataInfo);
 
         let arregloOrdenado = [];
 
@@ -78,7 +77,7 @@ const Kardex = () => {
         setData(arregloOrdenado);
     }
 
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: 'ID',
@@ -96,7 +95,7 @@ const Kardex = () => {
             renderCell: (params) => {
                 let descripcion = `${params.row.descripcion}`.split(':')
                 return (
-                    <div className='flex'>
+                    <div className='w-full text-center flex'>
                         <p className='font-semibold  mr-2'>{descripcion[0]}</p>
                         <p>{descripcion[1]}</p>
                     </div>
@@ -107,21 +106,33 @@ const Kardex = () => {
             field: 'fecha',
             headerName: 'Fecha',
             flex: 0.2,
+            renderCell: (params) => {
+                return <div className='w-full text-center'>{params.row.fecha}</div>
+            }
         },
         {
             field: 'entrada',
             headerName: 'Entrada',
             flex: 0.1,
+            renderCell: (params) => {
+                return <div className='w-full text-center'>{params.row.entrada}</div>
+            }
         },
         {
             field: 'salida',
             headerName: 'Salida',
             flex: 0.1,
+            renderCell: (params) => {
+                return <div className='w-full text-center'>{params.row.salida}</div>
+            }
         },
         {
             field: 'stock',
             headerName: 'Stock',
             flex: 0.1,
+            renderCell: useCallback((params) => {
+                return <div className='w-full text-center'>{params.row.stock}</div>
+            })
         },
         {
             field: 'motivo',
@@ -129,7 +140,7 @@ const Kardex = () => {
             flex: 0.3,
         },
 
-    ]
+    ])
 
     return (
         <>
@@ -152,69 +163,70 @@ const Kardex = () => {
 
 
                     <div
-                        className=' col-span-6 ml-12'
+                        className=' col-span-12 grid sm:grid-cols-12 '
                     >
-                        <h1 className=' mt-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>
-                            KARDEX
-                        </h1>
-                        <p className='font-normal text-sm  text-slate-500 mb-2'>Estas realizando una busqueda avanzada</p>
+                        <div className='ml-12 col-span-3'>
+                            <h1 className=' mt-2 text-2xl sm:text-2xl font-extrabold text-slate-900 tracking-tight  '>
+                                KARDEX
+                            </h1>
+                            <p className='font-normal text-sm  text-slate-500 mb-2'>Estas realizando una busqueda avanzada</p>
+                        </div>
+                        <div
+                            className=' col-span-5 p-2'
+                        >
+                            <div className='bg-blue-400 p-2 rounded-xl'>
+                                <input
+                                    value={searchProducto}
+                                    type='text'
+                                    className='
+                                        mb-auto
+                                        border-x
+                                        border-y
+                                        rounded-lg
+                                        w-full
+                                        px-2
+                                        py-1
+                                        focus:border-blue-600
+                                        text-lg
+                                        font-black
+                                        text-center
+                                    '
+                                    placeholder='Busca un producto 💊'
+                                    onClick={(e) => {
 
-                    </div>
+                                        setSearch(true);
+                                        e.stopPropagation();
+                                    }}
 
-                    <div
-                        className='col-span-12 opacity-60 h-px mt-2 mb-3 bg-gradient-to-r from-white via-slate-400 to-white '
-                    >
-                    </div>
-                    <div
-                        className='ml-12 flex flex-col col-span-4'
-                    >
-                        <input
-                            type='text'
-                            className='
-                                mt-2
-                                mb-auto
-                                border-x
-                                border-y
-                                rounded-lg
-                                w-full
-                                px-2
-                                py-1
-                                focus:border-blue-600
-                            '
-                            placeholder='Busca un producto 💊'
-                            onClick={(e) => {
+                                    onChange={(e) => {
+                                        setSearchProducto(e.target.value)
+                                    }}
+                                />
+                            </div>
 
-                                setSearch(true);
-                                e.stopPropagation();
-                            }}
-
-                            onChange={(e) => {
-                                setSearchProducto(e.target.value)
-                            }}
-                        />
-                        {!!search &&
-                            <div
-                                className='
+                            {!!search &&
+                                <div
+                                    className='
                                      bg-white
                                      border
                                      rounded-xl
                                      flex
                                      flex-col
                                      absolute
-                                     mt-10
+                                     mt-1
                                      z-10
                                      productos-busqueda
                                      text-uppercase
                                  '
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                }}
-                            >
-                                {searchProductos?.map((value, index) => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    {searchProductos?.map((value, index) => {
 
-                                    return (
-                                        <div
-                                            className={`
+                                        return (
+                                            <div
+                                                className={`
 
                                                 ${index == 0 && 'rounded-t-xl  mt-1' || 'mt-0.5'}
                                                 mx-2
@@ -223,45 +235,33 @@ const Kardex = () => {
                                                 cursor-pointer
                                                 p-1
                                             `}
-                                            onClick={() => {
-                                                setProductoBuscar(`${value.codigo_barras} ${value.descripcion}`);
-                                                setInformacionBusqueda({
-                                                    ...informacionBusqueda,
-                                                    producto: value._id,
-                                                })
+                                                onClick={() => {
+                                                    setProductoBuscar(`${value.codigo_barras} ${value.descripcion}`);
+                                                    setInformacionBusqueda({
+                                                        ...informacionBusqueda,
+                                                        producto: value._id,
+                                                    })
+                                                    setSearchProducto(value.descripcion)
+                                                    setSearch(false);
+                                                }}
+                                                key={index}
+                                            >
+                                                <p className='text-slate-600'>{value.descripcion} </p>
+                                            </div>
 
-                                                setSearch(false);
-                                            }}
-                                            key={index}
-                                        >
-                                            <p className='text-slate-600'>{value.descripcion} </p>
-                                        </div>
+                                        )
+                                    })}
 
-                                    )
-                                })}
+                                </div>
+                            }
 
-                            </div>
-                        }
-
-                        <p className='font-semibold'>{productoBuscar}</p>
-                    </div>
-                    <div
-                        className='col-start-9 col-span-4  flex flex-col'
-                    >
-
+                        </div>
                         <div
-                            className='flex justify-end mr-12'
+                            className='col-span-4 flex'
                         >
-                            <div
-                                className='
-                                w-1/2
-                                flex 
-                                flex-col
-                            '
-                            >
-                                <h1 className='font-semibold text-slate-700 text-xs'>Desde</h1>
+                            <div className='flex flex-col p-1'>
                                 <input
-                                    className='border-x border-y rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600 '
+                                    className='border-x border-y mt-3 rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600 '
                                     type='date'
                                     onChange={(e) => {
                                         setInformacionBusqueda({
@@ -270,19 +270,11 @@ const Kardex = () => {
                                         })
                                     }}
                                 />
-
+                                <h1 className='font-semibold text-slate-400 text-xs flex justify-end p-1'>Desde</h1>
                             </div>
-                            <div
-                                className='
-                                w-1/2
-                                flex-col
-                                ml-2
-                                
-                            '
-                            >
-                                <h1 className='font-semibold text-slate-700 text-xs'>Hasta</h1>
+                            <div className='flex flex-col p-1'>
                                 <input
-                                    className='border-x border-y p-1 w-full text-slate-600 rounded-sm focus:border-blue-600 '
+                                    className='border-x border-y mt-3 rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600  '
                                     type='date'
                                     onChange={(e) => {
                                         setInformacionBusqueda({
@@ -291,44 +283,40 @@ const Kardex = () => {
                                         })
                                     }}
                                 />
+                                <h1 className='font-semibold text-slate-400 text-xs flex justify-end p-1'>Hasta</h1>
                             </div>
-                        </div>
-
-                        <div
-                            className='
+                            <div
+                                className='
                                 row-start-2
-                                col-start-2
-                                col-span-2
                                 flex
-                                justify-end
-                                mr-12
+                                justify-between
+                                p-3
                             '
-                        >
-                            <div
-                                className='flex mt-2 cursor-pointer mr-2 hover:text-slate-400'
-                                onClick={() => {
-
-                                    console.log(informacionBusqueda);
-                                    ObtenerInformacionKardex();
-
-                                }}
                             >
-                                <p className='text-xs mt-0.5'>Buscar </p>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                                </svg>
-                            </div>
-                            <div
-                                className='flex mt-2 mr-4 cursor-pointer hover:text-slate-400'
-                            >
-                                <p className='text-xs mt-0.5'>Descargar </p>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                                </svg>
+                                <div
+                                    className='flex  cursor-pointer  mb-2 hover:text-slate-400 bg-blue-400 p-1 rounded-xl'
+                                    onClick={() => {
 
+                                        ObtenerInformacionKardex();
+
+                                    }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                    </svg>
+                                </div>
+                                <div
+                                    className='flex  cursor-pointer mb-2 hover:text-slate-400 bg-blue-400 p-1 rounded-xl'
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
 
 

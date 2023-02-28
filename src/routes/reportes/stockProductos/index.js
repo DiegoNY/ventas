@@ -21,19 +21,7 @@ function CustomToolbar() {
 const StockProductos = () => {
 
     const [reporte, setReporte] = useState();
-
-    useEffect(() => {
-
-        const getReporteProductos = async () => {
-            const dataReporte = await getData(`${urlAPI.Producto.url}?stockReporte=true`)
-
-            setReporte(dataReporte);
-        }
-        getReporteProductos();
-
-    }, [])
-
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: 'Id',
@@ -121,7 +109,21 @@ const StockProductos = () => {
         }
 
 
-    ]
+    ])
+
+  
+
+    useEffect(() => {
+
+        const getReporteProductos = async () => {
+            const dataReporte = await getData(`${urlAPI.Producto.url}?stockReporte=true`)
+
+            setReporte(dataReporte);
+        }
+        getReporteProductos();
+
+    }, [])
+
 
     return (
         <>

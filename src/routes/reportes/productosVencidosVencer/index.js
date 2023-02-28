@@ -1,6 +1,7 @@
 import { DataGrid, esES, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
-import { urlAPI } from '../../../config';
+import { EMPRESA, urlAPI } from '../../../config';
+import { DescargarDataExcel } from '../../useDescargaExcel';
 import { getData } from '../../useFetch';
 
 
@@ -34,7 +35,7 @@ const ProductosVencidosVencer = () => {
     }, [buscar])
 
 
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: 'ID',
@@ -65,7 +66,85 @@ const ProductosVencidosVencer = () => {
             headerName: 'Cantidad',
             flex: 0.2,
         },
-    ]
+    ])
+
+    const DescargarReporte = (titulo, hoja, data) => {
+        let columns = [
+            {
+                key: 'descripcion',
+                width: 40,
+            },
+            {
+                key: 'laboratorio',
+                width: 19,
+            },
+            {
+                key: 'lote',
+                width: 20,
+            },
+            {
+                key: 'fecha_vencimiento',
+                width: 20,
+            },
+            {
+                key: 'stock',
+                width: 20,
+            },
+        ]
+
+
+        let informacion = {
+            hoja: hoja,
+            titulo: {
+                celdas: "A1:E2",
+                value: titulo,
+            },
+            celdas: [
+                {
+                    numero: "A4",
+                    value: `${EMPRESA.RUC}`,
+                    font: { bold: true },
+                    style: {}
+                },
+                {
+                    numero: "A5",
+                    value: `${EMPRESA.NOMBRE}`,
+                    font: { bold: true },
+                    style: {},
+                },
+                {
+                    numero: "A7",
+                    value: "DESCRIPCION",
+                    font: { bold: true },
+                },
+                {
+                    numero: "B7",
+                    value: "LABORATORIO",
+                    font: { bold: true },
+                },
+                {
+                    numero: "C7",
+                    value: "LOTE",
+                    font: { bold: true },
+                },
+                {
+                    numero: "D7",
+                    value: "FECHA VENCIMIENTO",
+                    font: { bold: true },
+                    width: 20
+                },
+                {
+                    numero: "E7",
+                    value: "CANTIDAD",
+                    font: { bold: true },
+                },
+            ],
+            nombreArchivo: titulo,
+        }
+
+
+        DescargarDataExcel(data, columns, informacion);
+    }
 
     return (
         <>
@@ -108,14 +187,20 @@ const ProductosVencidosVencer = () => {
                                row-start-2 col-span-8  sm:row-start-1 sm:col-span-3 flex justify-end w-full items-center mr-2  
                             '
                         >
-                            <div className='bg-slate-200 rounded-3xl h-10 w-10 flex justify-center items-center border-x border-y hover:border-blue-600 cursor-pointer'
+                            <div
+                                className='bg-blue-400 rounded-3xl h-10 w-10 flex justify-center items-center border-x border-y hover:border-blue-600 cursor-pointer'
                                 onClick={() => setBuscar(!buscar)}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                                 </svg>
                             </div>
-                            <div className=' cursor-pointer mx-2'>
+                            <div
+                                className=' cursor-pointer mx-2'
+                                onClick={() => {
+                                    DescargarReporte(`REPORTE DE PRODUCTOS VENCIDOS EN EL RANGO DE ${fecha.desde} HASTA ${fecha.hasta}`, "PRODUCTOS VENCIDOS", data);
+                                }}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                                 </svg>
