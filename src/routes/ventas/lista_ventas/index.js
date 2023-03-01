@@ -382,7 +382,7 @@ function ListaVenta() {
                             }
                             loading={loading}
                             pagination
-                            pageSize={20}
+                            pageSize={10}
                         />
 
 

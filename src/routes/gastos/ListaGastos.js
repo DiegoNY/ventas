@@ -24,7 +24,7 @@ const ListaGastos = () => {
     const [gastos, setGastos] = useState([]);
     const [imagen, setImagen] = useState(false);
 
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: '',
@@ -113,7 +113,7 @@ const ListaGastos = () => {
 
         }
 
-    ]
+    ])
 
     useEffect(() => {
         const obtenerGastos = async () => {
@@ -179,6 +179,8 @@ const ListaGastos = () => {
                         rows={gastos || []}
                         columns={columns || []}
                         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                        pagination
+                        pageSize={11}
                     />
                 </Box>
 

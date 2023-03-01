@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './index.css'
 import { getData } from '../../useFetch';
 import { hostAPI, IGV, socket, urlAPI } from '../../../config';
@@ -25,7 +25,7 @@ import { useReactToPrint } from 'react-to-print';
 import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
 import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
 import { Layout } from '../../../ui/Layouts';
-
+import { Delete } from '../../useAlert';
 
 function PuntoVenta() {
     const auth = useAuth();
@@ -63,6 +63,7 @@ function PuntoVenta() {
 
     const [cliente, setCliente] = React.useState({});
     const [loadings, setLoading] = React.useState();
+    const [cargandoEmisionVenta, setCargaEmisionVenta] = useState(false);
 
     const [impresion, setImpresion] = React.useState(true);
     const [moneda, setMoneda] = React.useState(true);
@@ -80,6 +81,8 @@ function PuntoVenta() {
     const [error, setError] = React.useState(false);
     const [errores, setErrores] = React.useState({})
     const [verCuotas, setVerCuotas] = React.useState(false);
+
+    const [informacionFaltante, setInformacionFaltante] = useState({ factura: { cliente: false } });
 
     const componenTicketRef = React.useRef();
     const componentPdfRef = React.useRef();
@@ -177,13 +180,11 @@ function PuntoVenta() {
 
 
         if (MEDIDA == medidaPrecio.CAJA.MEDIDA) {
-            console.log(medidaPrecio.CAJA.PRECIO);
             let total = CANTIDAD * medidaPrecio.CAJA.PRECIO;
             return total;
         }
 
         if (MEDIDA == medidaPrecio.UNIDAD.MEDIDA) {
-            console.log(medidaPrecio.UNIDAD.PRECIO);
             let total = CANTIDAD * medidaPrecio.UNIDAD.PRECIO;
             return total;
         }
@@ -252,7 +253,8 @@ function PuntoVenta() {
 
                 if (cantidad_comprada.CANTIDAD > producto.stock) {
 
-                    producto.cantidad_comprada = '';
+                    producto.cantidad_comprada = '0';
+                    producto.error = true;
 
                     setError({
                         producto: producto.descripcion,
@@ -264,7 +266,15 @@ function PuntoVenta() {
                         unidades_tableta: producto.stock_tableta,
                     })
 
+                    return setVenta({
+                        ...venta
+                    })
+
                 }
+
+                producto.error = false;
+                producto.error_stock = false;
+
                 //obtener precio
                 for (let key in cantidad_medida_precio) {
                     if (cantidad_medida_precio[key].MEDIDA == MEDIDA) {
@@ -358,7 +368,11 @@ function PuntoVenta() {
     const saveClient = async (event) => {
         event.preventDefault();
         const response = await SaveData(`${urlAPI.Cliente.url}`, cliente);
-        console.log(response);
+        if (response?.error) {
+
+        } else {
+            setCliente({ descripcion: "", dni_ruc: "", telefono: "", direccion: "", correo: "" })
+        }
 
     }
 
@@ -410,8 +424,7 @@ function PuntoVenta() {
         /**
          * Mostrando los datos obtenidos
          */
-        console.log("no debi ejecutarme")
-
+        setLoading(false);
         setCliente({
             ...cliente,
             descripcion: descripcion,
@@ -425,14 +438,30 @@ function PuntoVenta() {
      * Guarda los datos de la venta e imprime la venta 
      */
     const emitirVenta = async () => {
+
         setInformacionImpresion(venta);
+        const error = validarInformacionVenta(venta);
+
+        if (error === true) {
+            console.log("HUBO UN ERROR NO ENVIAR VENTA");
+            setCargaEmisionVenta(false);
+            return false;
+        }
+        console.log("todo bien debio enviarse la venta");
+        console.log(venta);
+
         const response = await SaveData(`${urlAPI.Venta.url}`, venta);
 
         if (!response[0].error) {
+            console.log("no debi ingresar aca")
+            setCargaEmisionVenta(true);
             response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket() : imprimirPDF();
+
             return true;
         }
 
+        console.log("no debi acabar con esto ");
+        setCargaEmisionVenta(false);
         return false;
 
     }
@@ -444,19 +473,22 @@ function PuntoVenta() {
 
             setVenta({
                 ...venta,
-                identificacion: identificacion,
+                identificacion: "00000000",
                 cliente: 'CLIENTES VARIOS'
             })
 
         };
 
         if (response[0].body.length != 0) {
-            console.log(response);
             setVenta({
                 ...venta,
                 identificacion: response[0]?.body[0]?.dni,
                 cliente: response[0]?.body[0]?.descripcion,
             })
+
+            setInformacionFaltante(
+                { ...informacionFaltante, factura: { cliente: false } }
+            )
         }
 
 
@@ -543,23 +575,11 @@ function PuntoVenta() {
 
     }
 
-    const limpiarVenta = () => {
+    const limpiarVenta = (venta) => {
 
         setVenta({
             ...venta,
-            productos: [],
-            total: 0,
-            subtotal: 0,
-            igv: 0,
-            identificacion: '00000000',
-            cliente: 'CLIENTES VARIOS',
-            tipo_impresion: 'TICKET',
-            tipo_moneda: 'SOLES',
-            forma_pago: 'EFECTIVO',
-            cuotas: 0,
-            informacion_cuotas: [],
         })
-
         setTipoCompra('');
     }
 
@@ -634,6 +654,126 @@ function PuntoVenta() {
 
     }
 
+    const EliminarProducto = (idProducto) => {
+
+        const indiceObjeto = venta.productos.findIndex(producto => producto.id_compra === idProducto);
+
+        if (indiceObjeto !== -1) {
+            venta.productos.splice(indiceObjeto, 1);
+        }
+
+        setVenta({
+            ...venta
+        })
+    }
+
+    const validarTipoDocumento = (informacionDocumento) => {
+
+        switch (informacionDocumento) {
+            case "FACTURA ELECTRONICA":
+
+                if (venta.cliente === 'CLIENTES VARIOS') {
+                    setInformacionFaltante({ ...informacionFaltante, factura: { cliente: true } })
+                }
+                break;
+
+            case 'BOLETA ELECTRONICA':
+                setInformacionFaltante({ ...informacionFaltante, factura: { cliente: false } })
+                break;
+
+            case 'TICKET ELECTRONICO':
+                setInformacionFaltante({ ...informacionFaltante, factura: { cliente: false } })
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
+
+    const validarInformacionVenta = (venta) => {
+        let error = false;
+        for (const key in venta) {
+
+            switch (key) {
+                case 'productos':
+
+                    if (venta[key].length === 0) {
+
+                        Delete(`NO SE A SELECCIONADO NINGUN PRODUCTO POR FAVOR BUSCA EL PRODUCTO QUE DESEAS VENDER`);
+                        setInformacionFaltante({ ...informacionFaltante, productos: true })
+                        error = true;
+                    } else {
+                        venta.productos.map(producto => {
+                            console.log(producto);
+                            if (!producto.stock_vendido) {
+                                producto.error_stock = true;
+                                error = true;
+                                Delete(`NO SE A PODIDO REALIZAR LA VENTA, NO SE A INGRESADO CORRECTAMENTA LA CANTIDAD DE ALGUNOS PRODUCTOS POR FAVOR CORRIGELOS`);
+                                console.log("EL PRODUCTO NO CUENTA CON STOCK" + `${producto.id_compra}`);
+                            }
+
+                        })
+                    }
+
+                    break;
+                case 'tipo_documento':
+
+                    if (venta[key] === 'FACTURA ELECTRONICA') {
+
+                        if (venta.cliente === 'CLIENTES VARIOS') {
+
+                            Delete("ESTAS EMITIENDO UNA FACTURA , SE REQUIERE INFORMACION DEL CLIENTE  ");
+                            setInformacionFaltante({ ...informacionFaltante, factura: { cliente: true } })
+                            error = true;
+                        }
+
+                    }
+
+                    break;
+                case 'forma_pago':
+
+                    if (venta[key] === 'CREDITO') {
+
+                        if (venta.cuotas == 0) {
+
+                            Delete("LAS CUOTAS NO PUEDEN SER 0 ");
+
+                            setInformacionFaltante({ ...informacionFaltante, cuotas: { cantidad: true } })
+                            error = true;
+
+                        }
+
+                        let total = 0;
+
+                        venta?.informacion_cuotas?.map(cuota => {
+                            total = total + Number(cuota.monto)
+                        });
+
+                        if (total != venta.total) {
+                            Delete("EL MONTO DE LAS CUOTAS NO CONCUERDA CON EL VALOR TOTAL DE LA VENTA");
+                            setInformacionFaltante({ ...informacionFaltante, cuotas: { ...informacionFaltante.cuotas, total: true } })
+                            error = true;
+
+                        }
+                    }
+
+                    break;
+                case 'numero_venta':
+                    if (venta[key] === 'XXXX-XXXXXXXX') {
+                        Delete("NO SE A SELECCIONADO UNA SERIE , POR FAVOR SELECCIONALA");
+                        error = true;
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        return error;
+    }
 
     //Obtencion de data Necesaria
     //obtiene los tipos de documentos y actualiza el valor global
@@ -667,6 +807,14 @@ function PuntoVenta() {
 
     }, [stock])
 
+    useEffect(() => {
+
+        if (cargandoEmisionVenta === true) {
+            limpiarVenta({ ...venta, productos: [], cliente: "CLIENTES VARIOS", identificacion: "00000000", total: "", igv: "", subtotal: "" });
+            setCargaEmisionVenta(false);
+        }
+
+    }, [venta, cargandoEmisionVenta])
 
     useEffect(() => {
         /**
@@ -707,7 +855,7 @@ function PuntoVenta() {
             socket.off('connection', socket => { console.log(socket) });
         }
 
-    }, [venta])
+    }, [venta, limpiarVenta])
 
     useEffect(() => {
         if (!auth.loading) setVenta({ ...venta, usuario: auth?.user?._id, nombre_usuario: auth?.user?.nombre })
@@ -986,7 +1134,7 @@ function PuntoVenta() {
 
                                             let informacion = e.target.value
                                             let informacionArray = informacion.split('-');
-
+                                            validarTipoDocumento(informacionArray[1]);
                                             obtenerNumerosVentas(informacionArray[0], informacionArray[1]);
 
                                         }}
@@ -1024,12 +1172,13 @@ function PuntoVenta() {
                                 <div
                                     className='
                                             flex
+                                            
                                         '
                                 >
                                     <input
                                         type={'number'}
                                         value={venta?.identificacion}
-                                        className="
+                                        className={`
                                             mt-1 
                                             font-mono 
                                             w-36 
@@ -1038,7 +1187,8 @@ function PuntoVenta() {
                                             sm:text-sm
                                             text-xs
                                             text-center
-                                        "
+                                            ${informacionFaltante?.factura.cliente && 'border-y border-x border-red-500 rounded-sm focus:border-red-500' || ''}
+                                        `}
                                         onChange={(e) => {
                                             let identificacion = e.target.valueAsNumber;
                                             let arrIdentificacion = String(identificacion).split('');
@@ -1210,19 +1360,19 @@ function PuntoVenta() {
                                                     value={'EFECTIVO'}
                                                     checked={formaPago}
                                                     className='
-                                                 mr-1
-                                                 mb-3
-                                                '
+                                                     mr-1
+                                                     mb-3
+                                                    '
+                                                    onClick={() => setFormaPago(!formaPago)}
                                                     onChange={(e) => {
                                                         let formapago = e.target.value;
-                                                        setFormaPago(!formaPago)
                                                         setVenta({ ...venta, forma_pago: formapago })
                                                     }}
                                                 />
                                                 <span
                                                     className='
-                                                text-xs 
-s                                                '
+                                                        text-xs 
+                                                    '
                                                 >
                                                     Efectivo
                                                 </span>
@@ -1238,12 +1388,12 @@ s                                                '
                                             </div>
                                             <div
                                                 className='
-                                            p-1 
-                                            text-center 
-                                            hover:text-gray-500 
-                                            cursor-pointer
-                                            flex
-                                        '
+                                                    p-1 
+                                                    text-center 
+                                                    hover:text-gray-500 
+                                                    cursor-pointer
+                                                    flex
+                                                '
                                             >
                                                 <input
                                                     type={'checkbox'}
@@ -1286,6 +1436,7 @@ s                                                '
                                         className='
                                             flex
                                             flex-col
+                                            
                                         '
                                     >
                                         <div
@@ -1372,6 +1523,7 @@ s                                                '
                                                     mt-10
                                                     absolute z-30
                                                     bg-white
+                                                    shadow-lg
                                                 '
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -1612,7 +1764,7 @@ s                                                '
                                         `}
 
                                     onClick={() => {
-                                        limpiarVenta();
+                                        limpiarVenta({ ...venta, productos: [] });
                                     }}
                                 >
                                     cancelar venta
@@ -1634,8 +1786,9 @@ s                                                '
 
                                     onClick={() => {
 
-                                        emitirVenta()
-                                        limpiarVenta();
+                                        emitirVenta();
+
+
 
                                     }}
 
@@ -1651,14 +1804,14 @@ s                                                '
 
                     <div
                         className='
-                                flex
-                                flex-col
-                                rounded-xl
-                              bg-sky-200
-                                h-full
-                                mb-3
-                                px-2 
-                            '
+                            flex
+                            flex-col
+                            rounded-xl
+                          bg-sky-200
+                            h-full
+                            mb-3
+                            px-2 
+                        '
                     >
                         <div
                             className='mt-2 flex justify-between'
@@ -1692,6 +1845,7 @@ s                                                '
                                     flex-col 
                                     px-1 
                                     rounded-sm
+                                    shadow-lg
                                     contenedor-productos
 
                                 '
@@ -1751,6 +1905,7 @@ s                                                '
                         >
                             <TablaTalwindCss
                                 headers={[
+                                    { name: '#' },
                                     { name: 'Codigo' },
                                     { name: 'Producto' },
                                     { name: 'Laboratorio' },
@@ -1759,6 +1914,7 @@ s                                                '
                                     { name: 'Cantidad' },
                                     { name: 'Precio' },
                                     { name: 'Total' },
+                                    { name: 'Eliminar' },
                                 ]}
                                 marginY={'my-0 bg-white'}
 
@@ -1769,7 +1925,10 @@ s                                                '
 
                                     return (
                                         <>
-                                            <TablaRow TablaRow
+                                            <TablaRow
+
+                                                TablaRow
+                                                className={`${producto.error_stock && 'border-2 border-red-500'} `}
                                                 tabIndex={index}
                                                 onClick={(event) => {
                                                     let medida = '';
@@ -1806,6 +1965,11 @@ s                                                '
                                                 <TableCell
                                                     className={'font-bold'}
                                                 >
+                                                    {producto.id_compra}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={'font-bold'}
+                                                >
                                                     {producto.codigo_barras}
                                                 </TableCell>
                                                 <TableCell
@@ -1832,6 +1996,7 @@ s                                                '
                                                 </TableCell>
                                                 <TableCell>
                                                     <textarea
+                                                        className={`${producto.error && 'border-y border-x border-red-500 rounded-lg '}`}
                                                         cols={'8'}
                                                         defaultValue={producto.cantidad_comprada}
                                                         rows={'1'}
@@ -1842,7 +2007,6 @@ s                                                '
                                                             let cantidad = `${producto.medida}-${e.target.value}`;
 
                                                             ModificadorTotalCantidad(producto.id_compra, cantidad);
-
                                                         }}
 
                                                     ></textarea>
@@ -1864,6 +2028,18 @@ s                                                '
                                                     className={'font-bold'}
                                                 >
                                                     {producto.total}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={'font-bold'}
+                                                >
+                                                    <div className='cursor-pointer'
+                                                        onClick={() => {
+                                                            EliminarProducto(producto.id_compra);
+                                                        }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mt-1 hover:text-red-500">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
                                                 </TableCell>
                                             </TablaRow>
                                         </>
@@ -1934,12 +2110,13 @@ s                                                '
 
                                                 <i
                                                     role='button'
-                                                    className="
+                                                    className={`
                                                         fi fi-rr-search
                                                         w-14    
                                                         text-center
                                                         mt-2
-                                                    "
+                                                        ${loadings && 'busqueda' || ''}
+                                                    `}
                                                     onClick={() => {
                                                         searchCliente(cliente.dni_ruc);
                                                         setLoading(true);

@@ -379,7 +379,7 @@ function RegistroCompras() {
                                     onClick={(event) => {
 
                                         obteniendoProductoSeleccionado(producto)
-
+                                        setBuscador(false);
                                         event.stopPropagation();
                                         event.preventDefault();
 
@@ -578,7 +578,6 @@ function RegistroCompras() {
                                                     cols={'5'}
                                                     defaultValue={producto?.descuento}
                                                     onChange={(e) => {
-                                                        console.log(e.target.value)
                                                         modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'descuento', true)
                                                     }}
                                                 />

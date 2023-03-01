@@ -172,9 +172,9 @@ const Kardex = () => {
                             <p className='font-normal text-sm  text-slate-500 mb-2'>Estas realizando una busqueda avanzada</p>
                         </div>
                         <div
-                            className=' col-span-5 p-2'
+                            className=' col-span-5 '
                         >
-                            <div className='bg-blue-400 p-2 rounded-xl'>
+                            <div className='mt-3 p-1 rounded-xl'>
                                 <input
                                     value={searchProducto}
                                     type='text'
@@ -289,7 +289,7 @@ const Kardex = () => {
                                 className='
                                 row-start-2
                                 flex
-                                justify-between
+                                flex-col
                                 p-3
                             '
                             >

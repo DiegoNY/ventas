@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 function Save(message = ' Se registro la informacion correctamente! ') {
 
     Swal.fire(
-        '👍',
+        '',
         `${message}`,
         'success'
     )
@@ -28,7 +28,7 @@ function Delete(message = 'Estas seguro de eliminar esta informacion ?') {
     Swal.fire(
         '',
         `${message}`,
-        'warning' // cambiar al alert de edicion
+        'error' // cambiar al alert de edicion
     )
 
 }

@@ -32,8 +32,7 @@
 }
 
 input[type="number"] {
-    border: none;
-
+    outline: none;
 }
 
 input[type="number"]:focus {
@@ -44,4 +43,35 @@ input:focus {
     border: 2px solid rgb(65, 125, 244);
     border-radius: 2px;
     padding: 0 0 0 2px;
+}
+
+.busqueda {
+    animation: busqueda 2s infinite;
+}
+
+@keyframes busqueda {
+    0% {
+        transform: translatey(0px);
+    }
+
+    15% {
+        transform: translateX(-10px);
+    }
+
+    25% {
+        transform: translatey(-10px);
+    }
+
+    45% {
+        transform: translateX(10px);
+
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    75% {
+        transform: translatey(10px);
+    }
 }

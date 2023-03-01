@@ -48,7 +48,7 @@ function ListadoSalida() {
     })
 
 
-    const columns = [
+    const [columns] = useState([
         {
             field: '_id',
             headerName: 'Id',
@@ -149,7 +149,7 @@ function ListadoSalida() {
             }
         },
 
-    ]
+    ])
 
 
     useEffect(() => {
@@ -255,7 +255,8 @@ function ListadoSalida() {
                                     }
                                 }
                             }
-
+                            pagination
+                            pageSize={11}
                         />
 
                     </div>
