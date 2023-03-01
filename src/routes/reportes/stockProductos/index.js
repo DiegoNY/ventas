@@ -89,17 +89,14 @@ const StockProductos = () => {
 
                 return (
                     <div className={`
-                    ${params.row.estado == 1 && 'bg-green-400 ' || 'bg-red-500'} 
+                    ${params.row.estado == 1 && 'bg-green-500 ' || 'bg-red-500'} 
                         text-white 
-                        w-full 
-                        h-50 
-                        mx-1 
-                        rounded-xl 
-                        text-center 
-                        text-xs 
-                        flex 
-                        items-center 
-                        justify-center
+                            w-full 
+                            text-xs
+                            p-1
+                            rounded-xl
+                            text-center
+                            tracking-tighter
                         `}
                     >
                         {params.row.estado == 1 && 'ACTIVO' || 'INACTIVO'}

@@ -39,7 +39,168 @@ function ListaVenta() {
     const navigation = useNavigate();
     if (!auth.user) navigation('/');
 
-    const [columns, setColumns] = useState([]);
+    const [columns] = useState([
+        {
+            field: '_id',
+            headerName: 'Id',
+            flex: 0.3,
+        },
+        {
+            field: 'identificacion',
+            headerName: 'Ruc / Dni',
+            flex: 0.3,
+            headerClassName: '',
+            renderCell: (params) => {
+                let identificacion = params.row.identificacion;
+                if (identificacion == 0) {
+                    identificacion = '0000000'
+                }
+                return identificacion;
+            }
+
+
+        },
+        {
+            field: 'cliente',
+            headerName: 'Cliente',
+            flex: 0.3,
+            headerClassName: '',
+
+
+        },
+        {
+            field: 'tipo_documento',
+            headerName: 'Tipo documento',
+            flex: 0.2,
+            headerClassName: '',
+            renderCell: (params) => {
+                let tipoDocumento;
+                let serie = params?.row?.serie?.split('') || [];
+
+                if (serie[0] === 'B') tipoDocumento = 'BOLETA';
+                if (serie[0] === 'T') tipoDocumento = 'TICKET';
+                if (serie[0] === 'F') tipoDocumento = 'FACTURA';
+
+                return <p>{tipoDocumento}</p>
+            }
+
+
+        },
+        {
+            field: 'serie',
+            headerName: 'Serie',
+            flex: 0.1,
+            headerClassName: '',
+
+
+        },
+        {
+            field: 'correlativo',
+            headerName: 'Correlativo',
+            flex: 0.2,
+            headerClassName: '',
+
+
+        },
+        {
+            field: 'total',
+            headerName: 'Total',
+            flex: 0.2,
+            headerClassName: '',
+        },
+        {
+            field: 'fecha_registro',
+            headerName: 'Fecha',
+            flex: 0.2,
+            headerClassName: '',
+        },
+        {
+            field: 'Imprimir',
+            headerName: 'Imprimir',
+            flex: 0.2,
+            headerClassName: '',
+            renderCell: (params) => {
+                return (
+                    <div
+                        className='flex justify-between w-full mx-2'
+                        onMouseEnter={() => {
+                            setInformacionImpresion(params.row)
+                        }}
+                    >
+                        <div
+                            className='flex justify-center items-center text-xs bg-green-600 text-white cursor-pointer rounded-sm p-1'
+                            onClick={(e) => {
+                                imprimirTicket();
+                            }}
+                        >
+                            TICKET
+
+                        </div>
+                        <div
+                            className='flex justify-center items-center text-xs bg-orange-500 text-white cursor-pointer rounded-sm p-1'
+                            onClick={(e) => {
+                                imprimirPDF();
+                            }}
+                        >
+                            A4
+                        </div>
+                    </div>
+                )
+            }
+        },
+        {
+            field: 'Acciones',
+            headerName: 'Acciones',
+            flex: 0.1,
+            headerClassName: '',
+            renderCell: (params) => {
+                return (
+                    <div
+                        className='flex justify-between w-full '
+                    >
+                        <div
+                            className='
+                                text-xs 
+                                bg-indigo-400 
+                                rounded-sm 
+                                w-1/2 
+                                h-full 
+                                text-center  
+                                text-white 
+                                cursor-pointer
+                            '
+                        >
+                            <h1 className='mt-1'>RC</h1>
+                        </div>
+                        <div
+                            className='
+                                text-xs 
+                                bg-yellow-300 
+                                rounded-sm 
+                                w-1/2 
+                                h-full 
+                                text-center  
+                                text-slate-700
+                                ml-1
+                                cursor-pointer
+                            '
+                        >
+                            <h1
+                                className='mt-1 '
+                                onClick={() => {
+                                    setNotaCredito(params.row)
+                                    setInformacion({ ...informacion, NotaCredito: true })
+                                }}
+                            >NC</h1>
+                        </div>
+
+
+                    </div>
+                )
+            }
+        },
+
+    ]);
     const [opcionesAnulacion] = useState([
         {
             descripcion: 'Anulacion de la operacion',
@@ -119,173 +280,7 @@ function ListaVenta() {
 
     }
 
-    useEffect(() => {
-        const columns = [
-            {
-                field: '_id',
-                headerName: 'Id',
-                flex: 0.3,
-            },
-            {
-                field: 'identificacion',
-                headerName: 'Ruc / Dni',
-                flex: 0.3,
-                headerClassName: '',
-                renderCell: (params) => {
-                    let identificacion = params.row.identificacion;
-                    if (identificacion == 0) {
-                        identificacion = '0000000'
-                    }
-                    return identificacion;
-                }
-
-
-            },
-            {
-                field: 'cliente',
-                headerName: 'Cliente',
-                flex: 0.3,
-                headerClassName: '',
-
-
-            },
-            {
-                field: 'tipo_documento',
-                headerName: 'Tipo documento',
-                flex: 0.2,
-                headerClassName: '',
-                renderCell: (params) => {
-                    let tipoDocumento;
-                    let serie = params?.row?.serie?.split('') || [];
-
-                    if (serie[0] === 'B') tipoDocumento = 'BOLETA';
-                    if (serie[0] === 'T') tipoDocumento = 'TICKET';
-                    if (serie[0] === 'F') tipoDocumento = 'FACTURA';
-
-                    return <p>{tipoDocumento}</p>
-                }
-
-
-            },
-            {
-                field: 'serie',
-                headerName: 'Serie',
-                flex: 0.1,
-                headerClassName: '',
-
-
-            },
-            {
-                field: 'correlativo',
-                headerName: 'Correlativo',
-                flex: 0.2,
-                headerClassName: '',
-
-
-            },
-            {
-                field: 'total',
-                headerName: 'Total',
-                flex: 0.2,
-                headerClassName: '',
-            },
-            {
-                field: 'fecha_registro',
-                headerName: 'Fecha',
-                flex: 0.2,
-                headerClassName: '',
-            },
-            {
-                field: 'Imprimir',
-                headerName: 'Imprimir',
-                flex: 0.2,
-                headerClassName: '',
-                renderCell: (params) => {
-                    return (
-                        <div
-                            className='flex justify-between w-full mx-2'
-                            onMouseEnter={() => {
-                                setInformacionImpresion(params.row)
-                            }}
-                        >
-                            <div
-                                className='flex justify-center items-center text-xs bg-green-600 text-white cursor-pointer rounded-sm p-1'
-                                onClick={(e) => {
-                                    imprimirTicket();
-                                }}
-                            >
-                                TICKET
-
-                            </div>
-                            <div
-                                className='flex justify-center items-center text-xs bg-orange-500 text-white cursor-pointer rounded-sm p-1'
-                                onClick={(e) => {
-                                    imprimirPDF();
-                                }}
-                            >
-                                A4
-                            </div>
-                        </div>
-                    )
-                }
-            },
-            {
-                field: 'Acciones',
-                headerName: 'Acciones',
-                flex: 0.1,
-                headerClassName: '',
-                renderCell: (params) => {
-                    return (
-                        <div
-                            className='flex justify-between w-full '
-                        >
-                            <div
-                                className='
-                                    text-xs 
-                                    bg-indigo-400 
-                                    rounded-sm 
-                                    w-1/2 
-                                    h-full 
-                                    text-center  
-                                    text-white 
-                                    cursor-pointer
-                                '
-                            >
-                                <h1 className='mt-1'>RC</h1>
-                            </div>
-                            <div
-                                className='
-                                    text-xs 
-                                    bg-yellow-300 
-                                    rounded-sm 
-                                    w-1/2 
-                                    h-full 
-                                    text-center  
-                                    text-slate-700
-                                    ml-1
-                                    cursor-pointer
-                                '
-                            >
-                                <h1
-                                    className='mt-1 '
-                                    onClick={() => {
-                                        setNotaCredito(params.row)
-                                        setInformacion({ ...informacion, NotaCredito: true })
-                                    }}
-                                >NC</h1>
-                            </div>
-
-
-                        </div>
-                    )
-                }
-            },
-
-        ]
-
-        setColumns(columns);
-
-    }, [])
+   
 
 
     useEffect(() => {
@@ -386,6 +381,8 @@ function ListaVenta() {
                                 }
                             }
                             loading={loading}
+                            pagination
+                            pageSize={20}
                         />
 
 
