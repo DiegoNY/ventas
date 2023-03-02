@@ -49,12 +49,16 @@ function Caja({ cierre = false }) {
 
 
     useEffect(() => {
+        if (!loading) {
+            if (moneyInBox?.tipo == "APERTURA") {
 
-        if (moneyInBox?.tipo == "APERTURA") {
-            if (!!moneyInBox?.dinero) setCierre(true);
+                if (!!moneyInBox?.dinero || moneyInBox.dinero == 0) {
+                    setCierre(true)
+                };
+            }
         }
 
-    }, [moneyInBox])
+    }, [moneyInBox, loading])
 
     const sendingMoneyDay = async () => {
         const response = await SaveData(`${urlAPI.Caja.url}`, apertura);
@@ -87,6 +91,8 @@ function Caja({ cierre = false }) {
             if (!response[0].error) {
                 contextosGlobales.setCierre(false);
                 contextosGlobales.setDineroCaja(true);
+                contextosGlobales.setAperturaDiaHoy(true);
+                contextosGlobales.setApertura(true);
                 saveMoneyInBox(response[0].body);
                 navigate('/home');
             }

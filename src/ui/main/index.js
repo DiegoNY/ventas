@@ -7,7 +7,7 @@ import { useLocalStorage } from '../../routes/useLocalStorage';
 import { useMain } from './useMain';
 
 
-function Main() {
+const Main = React.memo(() => {
 
     const comprimirs = useMain();
 
@@ -425,7 +425,7 @@ function Main() {
 
     }
 
-}
+})
 
 
 export { Main };

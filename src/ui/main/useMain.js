@@ -42,6 +42,7 @@ const ProviderMenu = ({ children }) => {
 
             if (moneyInBox.dinero || moneyInBox.dinero == 0) {
                 setDineroCaja(true);
+                setApertura(true);
             } else {
                 setDineroCaja(false);
             };

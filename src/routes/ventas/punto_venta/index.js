@@ -706,7 +706,7 @@ function PuntoVenta() {
                         error = true;
                     } else {
                         venta.productos.map(producto => {
-                            console.log(producto);
+
                             if (!producto.stock_vendido) {
                                 producto.error_stock = true;
                                 error = true;
@@ -1440,10 +1440,7 @@ function PuntoVenta() {
                                         '
                                     >
                                         <div
-                                            className='
-                                                flex
-                                                flex-col
-                                            '
+                                            className='flex flex-col '
                                         >
                                             <h1 className='text-xs text-slate-800'>En cuantas cuotas se pagara ? </h1>
                                             <div
@@ -1515,16 +1512,7 @@ function PuntoVenta() {
                                         {!!verCuotas &&
 
                                             <div
-                                                className='
-                                                    border
-                                                    py-2
-                                                    px-2
-                                                    rounded-xl
-                                                    mt-10
-                                                    absolute z-30
-                                                    bg-white
-                                                    shadow-lg
-                                                '
+                                                className={` py-2 px-2 rounded-xl mt-10 absolute z-30 bg-white shadow-lg `}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                 }}
@@ -1749,19 +1737,7 @@ function PuntoVenta() {
                             '
                             >
                                 <button
-                                    className={`
-                                         
-                                h-10
-                                ml-auto
-                                px-2
-                                rounded-xl
-                                text-slate-400
-                                text-uppercase
-                                text-xs	
-                                font-semibold
-                                hover:border-b-2 
-                                hover:border-b-slate-400 
-                                        `}
+                                    className=' h-10 ml-auto px-2 rounded-xl text-slate-400 text-uppercase text-xs font-semibold hover:border-b-2  hover:border-b-slate-400 '
 
                                     onClick={() => {
                                         limpiarVenta({ ...venta, productos: [] });
