@@ -21,8 +21,8 @@ function MantenimientoProducto() {
     if (!auth.user) navigation('/');
 
     /**
-   * @producto , @setProducto maneja el estado de los clientes
-   */
+    * @producto , @setProducto maneja el estado de los clientes
+    */
 
     const [producto, setProducto] = React.useState(null);
     const [laboratorios, setLaboratorios] = React.useState([]);
