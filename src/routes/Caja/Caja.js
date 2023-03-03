@@ -25,12 +25,11 @@ function Caja({ cierre = false }) {
     if (!auth.user) navigate('/');
 
 
+
     const {
-        item: moneyInBox,
-        saveItem: saveMoneyInBox,
+        moneyInBox,
         loading,
-        error
-    } = useLocalStorage('BOX_V1', []);
+    } = contextosGlobales;
 
     let hoy = new Date();
     const [apertura, setApertura] = React.useState({
@@ -53,6 +52,7 @@ function Caja({ cierre = false }) {
             if (moneyInBox?.tipo == "APERTURA") {
 
                 if (!!moneyInBox?.dinero || moneyInBox.dinero == 0) {
+
                     setCierre(true)
                 };
             }
@@ -60,15 +60,22 @@ function Caja({ cierre = false }) {
 
     }, [moneyInBox, loading])
 
-    const sendingMoneyDay = async () => {
-        const response = await SaveData(`${urlAPI.Caja.url}`, apertura);
+    const sendingMoneyDay = async (aper) => {
+
+        setApertura({
+            ...aper,
+            usuario: auth?.user?._id,
+            dni: auth?.user?.dni,
+        })
+
+        return console.log(aper);
+        const response = await SaveData(`${urlAPI.Caja.url}`, aper);
 
 
         if (response[0].body.tipo == "CIERRE") {
 
             if (!response[0].error) {
                 contextosGlobales.setCierre(true);
-                saveMoneyInBox({ ...response[0].body, dinero: "" });
 
                 setCierre(false);
                 setApertura({
@@ -93,7 +100,7 @@ function Caja({ cierre = false }) {
                 contextosGlobales.setDineroCaja(true);
                 contextosGlobales.setAperturaDiaHoy(true);
                 contextosGlobales.setApertura(true);
-                saveMoneyInBox(response[0].body);
+                // saveMoneyInBox(response[0].body);
                 navigate('/home');
             }
 
@@ -108,47 +115,39 @@ function Caja({ cierre = false }) {
 
     useEffect(() => {
 
-
         const getIP = async () => {
-            let datas;
-            try {
 
-                const response = await fetch(`${urlAPI.IP.url}`);
-                const data = await response.json();
-                datas = data;
-                setApertura({
-                    ...apertura,
-                    punto_venta: data?.ip,
-                    dinero: moneyInBox?.dinero,
-                    id_apertura: moneyInBox?._id
-                })
-
-            } catch (e) {
-                setApertura({
-                    ...apertura,
-                    punto_venta: datas?.ip,
-                    dinero: moneyInBox?.dinero,
-                    id_apertura: moneyInBox?._id
-
-                })
-
-                contextosGlobales.setApertura(true);
-                console.warn(e);
-            }
+            const response = await fetch(`${urlAPI.IP.url}`);
+            const data = await response.json();
+            setApertura({
+                ...apertura,
+                punto_venta: data?.ip,
+                dinero: moneyInBox?.dinero,
+                id_apertura: moneyInBox?._id,
+            })
         }
 
         getIP();
 
     }, [moneyInBox]);
 
+
     useEffect(() => {
-        if (!!cierre) {
-            setApertura({
-                ...apertura,
-                tipo: 'CIERRE'
-            })
+        let tipo = 'APERTURA';
+        if (cierreState === true) {
+            tipo = 'CIERRE';
         }
-    }, [cierreState])
+
+        setApertura({
+            ...apertura,
+            tipo: 'CIERRE'
+        })
+
+        console.log(apertura);
+        console.log("ENTRE ACA PERTURA DEBE TIPO SER CIERRE")
+
+        return
+    }, [cierreState, moneyInBox])
 
 
 
@@ -305,6 +304,7 @@ function Caja({ cierre = false }) {
                                                     rows={1}
                                                     defaultValue={apertura?.dinero}
                                                     onChange={(e) => {
+                                                        console.log(apertura);
                                                         setApertura({
                                                             ...apertura,
                                                             dinero: e.target.value,
@@ -347,7 +347,7 @@ function Caja({ cierre = false }) {
                                             hover:bg-orange-600
  
                                         '
-                                        onClick={sendingMoneyDay}
+                                        onClick={() => sendingMoneyDay(apertura)}
                                     >
                                         {!cierreState && ' aperturar'}
                                         {!!cierreState && ' registrar cierre'}

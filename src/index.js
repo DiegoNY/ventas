@@ -6,14 +6,17 @@ import { ProviderMenu } from '../src/ui/main/useMain';
 
 import './index.css'
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './auth/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ProviderMenu>
-        <App />
-      </ProviderMenu>
+      <AuthProvider>
+        <ProviderMenu>
+          <App />
+        </ProviderMenu>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

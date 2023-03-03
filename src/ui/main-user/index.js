@@ -42,7 +42,7 @@ function MainUser() {
     useEffect(() => {
 
         const obtenerVentasRecientes = (informacion) => {
-            ventasRecientes.push(informacion);
+            setVentasRecientes(informacion);
         }
 
         socket.on('ventas_recientes', obtenerVentasRecientes);
@@ -54,12 +54,18 @@ function MainUser() {
 
     useEffect(() => {
 
+        const getVentasRecientes = async () => {
+            const data = await getData(`${urlAPI.Venta.url}?historial=true`)
+            setVentasRecientes(data.body);
+        }
+
         const getProductosStockBajo = async () => {
             const dataStockBajo = await getData(`${urlAPI.Producto.url}?stock_minimo=true`);
 
             setProductosStockBajo({ productos: dataStockBajo })
         }
 
+        getVentasRecientes();
         getProductosStockBajo()
 
     }, [])

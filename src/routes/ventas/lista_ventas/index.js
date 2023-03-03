@@ -128,21 +128,32 @@ function ListaVenta() {
                         }}
                     >
                         <div
-                            className='flex justify-center items-center text-xs bg-green-600 text-white cursor-pointer rounded-sm p-1'
+                            className='flex justify-center items-center text-xs  text-green-600 cursor-pointer rounded-sm p-1'
                             onClick={(e) => {
                                 imprimirTicket();
                             }}
                         >
-                            TICKET
+                            <div className=' flex justify-items-center p-0.5 rounded-xl'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                                </svg>
 
+                                <h1 className='mt-0.5'>Ticket</h1>
+                            </div>
                         </div>
                         <div
-                            className='flex justify-center items-center text-xs bg-orange-500 text-white cursor-pointer rounded-sm p-1'
+                            className='flex justify-center items-center text-xs  text-orange-500 cursor-pointer rounded-sm p-1'
                             onClick={(e) => {
                                 imprimirPDF();
                             }}
                         >
-                            A4
+                            <div className=' flex justify-items-center p-0.5 rounded-xl' >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                                <h1 className='mt-0.5'>A4</h1>
+                            </div>
+
                         </div>
                     </div>
                 )
@@ -280,7 +291,7 @@ function ListaVenta() {
 
     }
 
-   
+
 
 
     useEffect(() => {

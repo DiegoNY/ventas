@@ -1,9 +1,13 @@
-import React, { Children, useEffect } from 'react';
+import React, { Children, useEffect, useState } from 'react';
+import { useAuth } from '../../auth/auth';
+import { urlAPI } from '../../config';
+import { getData } from '../../routes/useFetch';
 import { useLocalStorage } from '../../routes/useLocalStorage';
 
 const MyContextMenu = React.createContext();
 
 const ProviderMenu = ({ children }) => {
+
     const [comprimir, setComprimir] = React.useState(false);
     const [apertura, setApertura] = React.useState(true);
     const [cierre, setCierre] = React.useState(false);
@@ -14,14 +18,33 @@ const ProviderMenu = ({ children }) => {
     const [salida, setSalida] = React.useState(false);
     const [historial, setHistorial] = React.useState(false);
     const [productos, setProductos] = React.useState();
+    const [loading, setLoading] = useState(true);
+    const [moneyInBox, setMoneyInbox] = useState();
 
     const {
-        item: moneyInBox,
+        item: moneyInBoxs,
         saveItem: saveMoneyInBox,
-        loading,
-        error
     } = useLocalStorage('BOX_V1', []);
 
+    const {
+
+        item: user,
+        loading: userLoading,
+        error,
+
+    } = useLocalStorage('USER_V2');
+
+    useEffect(() => {
+        const informacionCaja = async () => {
+            const data = await getData(`${urlAPI.Caja.url}?aperturo=${user?._id}`)
+            setLoading(false);
+            setMoneyInbox(data[0]);
+        }
+
+        if (!userLoading) {
+            informacionCaja();
+        }
+    }, [userLoading])
 
     useEffect(() => {
 
@@ -29,9 +52,9 @@ const ProviderMenu = ({ children }) => {
 
             let hoy = new Date();
 
+
             let fechaHoy = `${hoy.toISOString()}`.substring(0, 10)
             let fechaApertura = `${moneyInBox?.fecha_consultas}`.substring(0, 10);
-
             if (fechaHoy != fechaApertura) {
                 setAperturaDiaHoy(false)
             };
@@ -78,6 +101,7 @@ const ProviderMenu = ({ children }) => {
                 salida, setSalida,
                 historial, setHistorial,
                 productos, setProductos,
+                moneyInBox, loading
             }}
         >
             {children}

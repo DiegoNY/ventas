@@ -34,6 +34,7 @@ import { ProductosVencidosVencer } from './reportes/productosVencidosVencer';
 import { PantallaCarga } from '../ui/Layouts/PantallaCarga';
 import { ReporteGanancias } from './reportes/ganancias/ReporteGanancias';
 import { Informacion } from '../ui/Error';
+import { Reporte } from './Caja/reporte/Reporte';
 
 
 function App() {
@@ -65,12 +66,12 @@ function App() {
 
   }, [contextosGlobales])
 
+  console.log(contextosGlobales);
   // Rutas °° 🍅
 
   return (
     <>
 
-      <AuthProvider>
 
         <NavBar>
 
@@ -114,6 +115,11 @@ function App() {
                 <Route
                   path='/caja-cierre'
                   element={<Caja cierre={true} />}
+                >
+                </Route>
+                <Route
+                  path='/caja-reporte'
+                  element={<Reporte />}
                 >
                 </Route>
 
@@ -287,7 +293,6 @@ function App() {
 
 
 
-      </AuthProvider>
 
 
     </>
