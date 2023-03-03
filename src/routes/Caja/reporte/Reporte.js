@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { urlAPI } from '../../../config';
 import { TablaDataGrid } from '../../../ui/Tabla/DataGrid';
+import { getData } from '../../useFetch';
 
 const Reporte = () => {
-    const [load, setLoad] = useState(true);
+    const [load, setLoad] = useState(false);
     const [columnas, setColumnas] = useState([])
-    const [reportes, setReporte] = useState();
+    const [reportes, setReportes] = useState();
 
     useEffect(() => {
         const columns = [
@@ -16,32 +18,59 @@ const Reporte = () => {
             {
                 field: 'usuario',
                 headerName: 'USUARIO',
-                flex: 0.3,
+                flex: 0.2,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.usuario}</div>
+                }
             },
             {
-                field: 'apertura',
+                field: 'info_registro',
                 headerName: 'APERTURA',
                 flex: 0.3,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.info_registro}</div>
+                }
             },
             {
-                field: 'monto_apertura',
+                field: 'dinero_registro',
                 headerName: 'MONTO DE APERTURA',
-                flex: 0.3,
+                flex: 0.2,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.dinero_registro}</div>
+                }
             },
             {
-                field: 'cierre',
+                field: 'info_cierre',
                 headerName: 'CIERRE',
                 flex: 0.3,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.info_cierre}</div>
+                }
             },
             {
-                field: 'monto_cierre',
+                field: 'dinero_cierre',
                 headerName: 'MONTO DE CIERRE',
-                flex: 0.3,
+                flex: 0.2,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.dinero_cierre}</div>
+                }
             },
             {
-                field: 'tipo',
-                headerName: 'TIPO',
-                flex: 0.3,
+                field: 'total',
+                headerName: 'TOTAL',
+                flex: 0.2,
+                renderCell: (params) => {
+                    return <div className='w-full text-center'>{params.row.total}</div>
+                }
+            },
+            {
+                field: 's',
+                headerName: 'VISUALIZAR',
+                flex: 0.2,
+                renderCell: (params) => {
+
+                    return <div>EYES</div>
+                }
             },
 
         ]
@@ -50,7 +79,13 @@ const Reporte = () => {
     }, [])
 
     useEffect(() => {
-
+        setLoad(true);
+        const getReporte = async () => {
+            const reportesData = await getData(`${urlAPI.Caja.url}?reporte=true`);
+            setLoad(false);
+            setReportes(reportesData);
+        }
+        getReporte();
     }, [])
 
     return (

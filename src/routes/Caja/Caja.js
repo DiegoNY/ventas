@@ -13,6 +13,10 @@ import { useMain } from '../../ui/main/useMain';
 function Caja({ cierre = false }) {
 
     const contextosGlobales = useMain();
+    const {
+        moneyInBox,
+        loading,
+    } = contextosGlobales;
 
     const navigate = useNavigate();
     /**
@@ -25,13 +29,13 @@ function Caja({ cierre = false }) {
     if (!auth.user) navigate('/');
 
 
-
     const {
-        moneyInBox,
-        loading,
-    } = contextosGlobales;
+        item: user,
+        loading: load,
+    } = useLocalStorage('USER_V2');
 
     let hoy = new Date();
+
     const [apertura, setApertura] = React.useState({
 
         dinero: "",
@@ -60,17 +64,9 @@ function Caja({ cierre = false }) {
 
     }, [moneyInBox, loading])
 
-    const sendingMoneyDay = async (aper) => {
+    const sendingMoneyDay = async (tipos) => {
 
-        setApertura({
-            ...aper,
-            usuario: auth?.user?._id,
-            dni: auth?.user?.dni,
-        })
-
-        return console.log(aper);
-        const response = await SaveData(`${urlAPI.Caja.url}`, aper);
-
+        const response = await SaveData(`${urlAPI.Caja.url}`, { ...apertura, tipo: tipos, usuario: auth.user._id, dni: auth.user.dni });
 
         if (response[0].body.tipo == "CIERRE") {
 
@@ -79,22 +75,16 @@ function Caja({ cierre = false }) {
 
                 setCierre(false);
                 setApertura({
-
                     dinero: "",
                     punto_venta: '',
                     usuario: auth?._id,
                     dni: auth?.user?.dni,
                     tipo: 'APERTURA',
                     fecha_apertura: `${hoy.toISOString()}`.substring(0, 10)
-
                 })
-
-
             }
         }
-
         if (response[0].body.tipo == "APERTURA") {
-            console.log("se apertura");
             if (!response[0].error) {
                 contextosGlobales.setCierre(false);
                 contextosGlobales.setDineroCaja(true);
@@ -103,7 +93,6 @@ function Caja({ cierre = false }) {
                 // saveMoneyInBox(response[0].body);
                 navigate('/home');
             }
-
         }
 
 
@@ -115,10 +104,13 @@ function Caja({ cierre = false }) {
 
     useEffect(() => {
 
-        const getIP = async () => {
+        contextosGlobales.setLoadingState(true);
 
+        const getIP = async () => {
             const response = await fetch(`${urlAPI.IP.url}`);
             const data = await response.json();
+            contextosGlobales.setLoadingState(false);
+
             setApertura({
                 ...apertura,
                 punto_venta: data?.ip,
@@ -131,25 +123,9 @@ function Caja({ cierre = false }) {
 
     }, [moneyInBox]);
 
-
     useEffect(() => {
-        let tipo = 'APERTURA';
-        if (cierreState === true) {
-            tipo = 'CIERRE';
-        }
-
-        setApertura({
-            ...apertura,
-            tipo: 'CIERRE'
-        })
-
-        console.log(apertura);
-        console.log("ENTRE ACA PERTURA DEBE TIPO SER CIERRE")
-
-        return
-    }, [cierreState, moneyInBox])
-
-
+        contextosGlobales.setLoadingState(load)
+    }, [load])
 
 
     return (
@@ -347,7 +323,15 @@ function Caja({ cierre = false }) {
                                             hover:bg-orange-600
  
                                         '
-                                        onClick={() => sendingMoneyDay(apertura)}
+                                        onClick={() => {
+                                            let tipos = 'APERTURA';
+                                            if (cierreState === true) {
+                                                tipos = 'CIERRE';
+                                            }
+
+                                            sendingMoneyDay(tipos);
+
+                                        }}
                                     >
                                         {!cierreState && ' aperturar'}
                                         {!!cierreState && ' registrar cierre'}

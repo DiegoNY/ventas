@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { urlAPI } from '../config';
 import { postData } from '../routes/useFetch';
 import { useLocalStorage } from '../routes/useLocalStorage';
+import { useMain } from '../ui/main/useMain';
 
 /**
  * Se inicializa el contexto  los contextos se usan para que otros componentes puedan acceder a ellos
@@ -13,7 +14,7 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
 
     const navigate = useNavigate();
-
+    const contextosGlobales = useMain();
     const {
 
         item: user,

@@ -20,19 +20,15 @@ const ProviderMenu = ({ children }) => {
     const [productos, setProductos] = React.useState();
     const [loading, setLoading] = useState(true);
     const [moneyInBox, setMoneyInbox] = useState();
-
-    const {
-        item: moneyInBoxs,
-        saveItem: saveMoneyInBox,
-    } = useLocalStorage('BOX_V1', []);
+    const [usuario, setUsuario] = useState();
 
     const {
 
         item: user,
         loading: userLoading,
         error,
-
     } = useLocalStorage('USER_V2');
+
 
     useEffect(() => {
         const informacionCaja = async () => {
@@ -42,6 +38,7 @@ const ProviderMenu = ({ children }) => {
         }
 
         if (!userLoading) {
+            setUsuario(user);
             informacionCaja();
         }
     }, [userLoading])
@@ -87,7 +84,6 @@ const ProviderMenu = ({ children }) => {
     }, [error])
 
 
-
     return (
         <MyContextMenu.Provider
             value={{
@@ -101,7 +97,8 @@ const ProviderMenu = ({ children }) => {
                 salida, setSalida,
                 historial, setHistorial,
                 productos, setProductos,
-                moneyInBox, loading
+                moneyInBox, loading,
+                usuario
             }}
         >
             {children}
