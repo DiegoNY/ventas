@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "bufferutil": "^4.0.7",
+    "react-app-rewired": "^2.2.1",
     "utf-8-validate": "^5.0.10"
   }
 }

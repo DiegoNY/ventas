@@ -27,6 +27,8 @@ import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
 import { Layout } from '../../../ui/Layouts';
 import { Delete } from '../../useAlert';
 
+
+
 function PuntoVenta() {
     const auth = useAuth();
     const navigation = useNavigate();
@@ -447,8 +449,6 @@ function PuntoVenta() {
             setCargaEmisionVenta(false);
             return false;
         }
-        console.log("todo bien debio enviarse la venta");
-        console.log(venta);
 
         const response = await SaveData(`${urlAPI.Venta.url}`, venta);
 
@@ -460,7 +460,7 @@ function PuntoVenta() {
             return true;
         }
 
-        console.log("no debi acabar con esto ");
+
         setCargaEmisionVenta(false);
         return false;
 
@@ -917,6 +917,12 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
+    const handlePrint = async () => {
+
+        const rta = await SaveData(`${urlAPI.Ticket.url}/192.168.1.170`, venta);
+        console.log(rta);
+
+    };
 
     return (
         <>
@@ -1736,10 +1742,12 @@ function PuntoVenta() {
                                 justify-end
                             '
                             >
+
                                 <button
                                     className=' h-10 ml-auto px-2 rounded-xl text-slate-400 text-uppercase text-xs font-semibold hover:border-b-2  hover:border-b-slate-400 '
 
                                     onClick={() => {
+                                        handlePrint();
                                         limpiarVenta({ ...venta, productos: [] });
                                     }}
                                 >
@@ -1761,11 +1769,7 @@ function PuntoVenta() {
                                         `}
 
                                     onClick={() => {
-
                                         emitirVenta();
-
-
-
                                     }}
 
                                 >

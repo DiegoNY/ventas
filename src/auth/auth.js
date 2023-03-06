@@ -14,7 +14,6 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
 
     const navigate = useNavigate();
-    const contextosGlobales = useMain();
     const {
 
         item: user,
