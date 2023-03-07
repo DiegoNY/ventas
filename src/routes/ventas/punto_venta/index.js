@@ -51,7 +51,7 @@ function PuntoVenta() {
         forma_pago: 'EFECTIVO',
         cuotas: 0,
         informacion_cuotas: [],
-
+        impresora: '192.168.1.171',
     });
     const [tipoDocumento, setTipoDocumento] = React.useState([]);
     const [productos, setProductos] = React.useState([]);
@@ -92,11 +92,6 @@ function PuntoVenta() {
     //impresion
     const [informacionImpresion, setInformacionImpresion] = React.useState({});
 
-    const imprimirTicket = useReactToPrint({
-        content: () => componenTicketRef.current,
-        documentTitle: 'Ticket de venta',
-        onAfterPrint: () => console.log('Impreso uwu')
-    })
     const imprimirPDF = useReactToPrint({
         content: () => componentPdfRef.current,
         documentTitle: 'Documento de venta',
@@ -455,7 +450,7 @@ function PuntoVenta() {
         if (!response[0].error) {
             console.log("no debi ingresar aca")
             setCargaEmisionVenta(true);
-            response[0].body.tipo_impresion === 'TICKET' ? imprimirTicket() : imprimirPDF();
+            response[0].body.tipo_impresion === 'TICKET' ? handlePrint(response[0].body, venta.impresora) : imprimirPDF();
 
             return true;
         }
@@ -917,34 +912,14 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
-    const handlePrint = async () => {
-
-        const rta = await SaveData(`${urlAPI.Ticket.url}/192.168.1.170`, venta);
-        console.log(rta);
-
+    const handlePrint = async (data, impresora) => {
+        const rta = await SaveData(`${urlAPI.Ticket.url}/${impresora}`, data);
+        return rta;
     };
 
     return (
         <>
             {/**Impresion */}
-            <div
-                className='hidden'
-            >
-                <div
-                    ref={componenTicketRef}
-
-                >
-
-                    <ImprimirTicket
-                        data={
-                            {
-                                venta: informacionImpresion,
-                                qr: 'www.datos.com'
-                            }
-                        }
-                    />
-                </div>
-            </div>
             <div
                 className='hidden'
             >
@@ -1747,7 +1722,7 @@ function PuntoVenta() {
                                     className=' h-10 ml-auto px-2 rounded-xl text-slate-400 text-uppercase text-xs font-semibold hover:border-b-2  hover:border-b-slate-400 '
 
                                     onClick={() => {
-                                        handlePrint();
+
                                         limpiarVenta({ ...venta, productos: [] });
                                     }}
                                 >

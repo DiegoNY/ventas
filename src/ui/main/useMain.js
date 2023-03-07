@@ -21,7 +21,7 @@ const ProviderMenu = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [moneyInBox, setMoneyInbox] = useState();
     const [usuario, setUsuario] = useState();
-
+    const [reporte, setReporte] = useState();
     const {
 
         item: user,
@@ -98,7 +98,7 @@ const ProviderMenu = ({ children }) => {
                 historial, setHistorial,
                 productos, setProductos,
                 moneyInBox, loading,
-                usuario
+                usuario, reporte, setReporte
             }}
         >
             {children}
