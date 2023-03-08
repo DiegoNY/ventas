@@ -50,7 +50,7 @@ const Main = React.memo(() => {
         return (
             <>
 
-                <div className={`${!!comprimirs.comprimir && 'absolute z-50 sidebar-light  rounded-xl text-slate-800  h-100'}   ${!comprimirs.comprimir && ' sidebar-main-resized sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-100 '} `}>
+                <div className={` ${!!comprimirs.comprimir && 'absolute z-50 sidebar-light  rounded-xl text-slate-800  h-100 shadow-lg'}   ${!comprimirs.comprimir && ' sidebar-main-resized sidebar sidebar-light  rounded-xl text-slate-800 sidebar-main sidebar-expand-sm h-100 '} `}>
 
                     <div className="sidebar-content h-100">
 
@@ -60,6 +60,7 @@ const Main = React.memo(() => {
                                     className="media"
                                     onClick={() => {
                                         comprimirs.setComprimir(!comprimirs.comprimir)
+                                        comprimirs.setPerfil(false);
                                     }}
                                 >
                                     <a href="#" className="mr-3">

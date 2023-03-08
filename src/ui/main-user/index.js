@@ -148,7 +148,8 @@ function MainUser() {
                                 rounded-lg 
                                 grid p-1
                                 max-h-20
-                                overflow-scroll 
+                                overflow-scroll
+                                shadow-md 
                             '
                         >
                             {productosStockBajo?.productos?.map((data, index) => {
@@ -187,7 +188,7 @@ function MainUser() {
 
 
                     <div
-                        className="text-center p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-md"
+                        className=" p-2 cursor-pointer text-slate-900 hover:bg-slate-100 rounded-md flex items-center"
                         onClick={() => {
                             if (!!contextosGlobales.mostrarProductosStockMinimo) contextosGlobales.setMostrarProductosStockMinimo(false);
                             if (!!contextosGlobales.historial) contextosGlobales.setHistorial(false);
@@ -196,14 +197,13 @@ function MainUser() {
                         }}
                     >
 
-
+                        <img className=' rounded-full w-14 p-2  ' src={auth.user.foto || 'http://192.168.1.110:8080/imagen/imagen-usuario-fake.jpg'} />
 
                         <h1
-                            className="mx-2 mt-1 text-slate-800 "
+                            className="mx-2 mb-1.5  text-slate-800 "
                         >
                             {auth.user.nombre}
                         </h1>
-
 
 
 
@@ -221,23 +221,30 @@ function MainUser() {
                             grid
                             mt-16
                             w-40
+                            shadow-md 
+
                         "
                             onMouseLeave={() => setMostrar(!mostrar)}
 
                         >
-                            <a href="#" className="dropdown-item"><i className="icon-user-plus"></i> Mi perfil</a>
+                            <div
+                                className="dropdown-item flex items-center gap-2 "
+                                onClick={() => contextosGlobales.setPerfil(true)}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                                <h1 >Mi perfil</h1>
+                            </div>
                             <div className="dropdown-divider"></div>
                             <a
                                 href="#"
                                 onClick={() => auth.logout()}
-                                className="dropdown-item">
-                                <i
-                                    className="icon-switch2"
-                                >
-                                </i>
-
+                                className="dropdown-item flex gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                </svg>
                                 Salir
-
                             </a>
                         </div>}
 
@@ -255,6 +262,8 @@ function MainUser() {
                             mr-14
                             grid
                             scroll-historial
+                            shadow-lg 
+
                         '
                             onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
                         >

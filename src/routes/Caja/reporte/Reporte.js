@@ -25,23 +25,33 @@ const Reporte = () => {
                 <p className='p-0.5 bg-slate-100 rounded-lg my-1'></p>
                 <div className='flex justify-center items-center flex-col'>
                     <h1 className='mb-0.5'>RELACION DE DOCUMENTOS EMITIDOS</h1>
-                    <div className='w-1/2 flex justify-between px-2'>
-                        <p>Minimo apertura</p>
-                        <span className='text-slate-800'>{data.minimo || 0}</span>
+                    <div className='grid grid-cols-3 mx-auto gap-2'>
+                        <div className='flex flex-col'>
+                            <p>Minimo apertura</p>
+                            <span className='text-slate-800'>{informacion_adicional?.BOLETAS.PRIMERA_VENTA || 0}</span>
+                            <span className='text-slate-800'>{informacion_adicional?.FACTURAS.PRIMERA_VENTA}</span>
+                            <span className='text-slate-800'>{informacion_adicional?.TICKETS.PRIMERA_VENTA}</span>
+                        </div>
+                        <div className='flex flex-col items-center'>
+                            <p>Maximo</p>
+                            <span className='text-slate-800'>{informacion_adicional?.BOLETAS.ULTIMA_VENTA || 0}</span>
+                            <span className='text-slate-800'>{informacion_adicional?.FACTURAS.ULTIMA_VENTA}</span>
+                            <span className='text-slate-800'>{informacion_adicional?.TICKETS.ULTIMA_VENTA}</span>
+                        </div>
+                        <div className='flex flex-col'>
+                            <p className='ml-1'>Total</p>
+                            <span className='ml-2 text-slate-800'>{informacion_adicional?.BOLETAS.TOTAL || 0}</span>
+                            <span className='ml-2 text-slate-800'>{informacion_adicional?.FACTURAS.TOTAL}</span>
+                            <span className='ml-2 text-slate-800'>{informacion_adicional?.TICKETS.TOTAL}</span>
+                        </div>
                     </div>
-                    <div className='w-1/2 flex justify-between px-2'>
-                        <p>Maximo</p>
-                        <span className='text-slate-800'>{data.minimo || 0}</span>
-                    </div>
-                    <div className='p-1 flex justify-end w-1/2 px-2'>
-                        <p className='ml-1'>Total  <span className='ml-2 text-slate-800'>{data.minimo || 0}</span> </p>
-                    </div>
+
                 </div>
                 <p className='p-0.5 bg-slate-100 rounded-lg my-1'></p>
                 <div className='flex justify-center items-center flex-col'>
                     <div className='flex justify-between w-1/2 px-2'>
                         <h1>TOTAL VENTA</h1>
-                        <p>{data.total_venta || 0}</p>
+                        <p>{informacion_adicional?.TOTAL_VENTAS || 0}</p>
                     </div>
                     <div className='flex justify-between w-1/2 px-2'>
                         <h1>MONTO CIERRE</h1>

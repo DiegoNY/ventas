@@ -343,7 +343,6 @@ function PuntoVenta() {
     */
     const obteniendoProductoSeleccionado = (producto) => {
 
-        if (producto.stock == 0) console.log("Stock es de 0 producto no puede ser vendido");
 
         setVenta({
             ...venta,
@@ -890,7 +889,6 @@ function PuntoVenta() {
             const informacionUsuarios = (informacion) => {
 
                 if (auth.user._id == informacion._id) {
-
                     setInformacionUsuario({
                         ...informacionUsuario,
                         cantidad_ventas: informacionUsuario.cantidad_ventas + 1,
@@ -901,11 +899,11 @@ function PuntoVenta() {
 
                 }
             }
-            socket.on('ventas_recientes', informacionUsuarios);
+            socket.on('ventas_recientes_usuarios', informacionUsuarios);
 
             return () => {
 
-                socket.off('ventas_recientes', informacionUsuarios)
+                socket.off('ventas_recientes_usuarios', informacionUsuarios)
 
             }
         }

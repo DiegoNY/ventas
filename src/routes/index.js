@@ -35,6 +35,7 @@ import { PantallaCarga } from '../ui/Layouts/PantallaCarga';
 import { ReporteGanancias } from './reportes/ganancias/ReporteGanancias';
 import { Informacion } from '../ui/Error';
 import { Reporte } from './Caja/reporte/Reporte';
+import { Perfil } from './usuario/Perfil';
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
             contextosGlobales.setMostrarProductosStockMinimo(false);
             contextosGlobales.setHistorial(false)
             contextosGlobales.setSalida(false)
+            contextosGlobales.setPerfil(false);
           }}
 
         >
@@ -220,6 +222,10 @@ function App() {
                 path='/reporte-ganancias'
                 element={<ReporteGanancias />}
               />
+              <Route
+                path='/usuario-perfil'
+                element={<Perfil />}
+              />
 
             </Routes>
 
@@ -292,7 +298,7 @@ function App() {
             <div> {contextosGlobales.reporte}</div>
           </Informacion>
         }
-
+       
       </div>
 
 

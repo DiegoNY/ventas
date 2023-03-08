@@ -1365,7 +1365,7 @@ function MantenimientoProducto() {
 
                 </Modal >
                 <div
-                    className='col-span-12 row-span-2 sm:row-span-1 flex z-10'
+                    className='col-span-12 row-span-2 sm:row-span-1 flex '
                 >
 
                     <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { IGV, urlAPI } from '../../config';
 import { getData } from '../useFetch';
 import icono_moneda from './img/icono-monedas.svg'
@@ -182,16 +182,18 @@ function RegistroCompras() {
                     // console.log("Se esta realizando una compra por caja");
 
                     const stock_comprado = stock * producto.stock_caja;
-                    // console.log(stock_comprado);
                     producto.stock_comprado = stock_comprado;
-
-                    // console.log(producto);
+                    producto.total = stock * producto.precio_compra_caja
+                    producto.precio_compra = producto.precio_compra_caja
 
                 }
 
                 if (unidadesCompra.TABLETA == tipoUnidad.toUpperCase()) {
                     const stock_comprado = stock * producto.stock_tableta;
                     producto.stock_comprado = stock_comprado;
+                    producto.total = stock * producto.precio_compra_tableta;
+                    producto.precio_compra = producto.precio_compra_tableta
+
                     // console.log(producto);
                 }
 
@@ -199,8 +201,11 @@ function RegistroCompras() {
 
                     const stock_comprado = stock;
                     producto.stock_comprado = stock_comprado;
-                    // console.log(producto);
+                    producto.total = stock * Number(producto.precio_compra)
+                    producto.precio_compra = Number(producto.precio_compra)
 
+
+                    // console.log(producto);
                 }
 
                 //Moificando el total segun descuentos ingresados
@@ -233,18 +238,24 @@ function RegistroCompras() {
         listaCompra.total = totalReal;
         listaCompra.efectivo = totalReal;
 
-        setListaCompra(() => {
+        return setListaCompra(() => {
 
             return { ...listaCompra }
         })
 
-        // console.log(listaCompra);
 
     }
 
+    const modificarTotal = (id, e) => {
+
+        const indexProducto = listaCompra.productos.findIndex(item => item.id_compra == id)
+        listaCompra.productos[indexProducto].total = listaCompra.productos[indexProducto].stock.split('-')[1] * Number(e)
+
+        return setListaCompra({ ...listaCompra })
+    }
 
     const saveListaCompra = () => {
-        console.log(listaCompra);
+        return console.log(listaCompra);
         SaveData(`${urlAPI.ListaCompra.url}`, listaCompra);
     }
 
@@ -453,11 +464,13 @@ function RegistroCompras() {
                                                 if (event.key == 'c') {
                                                     producto.medida = 'C';
                                                     setTipoCompra(producto.descripcion + ' esta siendo comprado por caja')
+
                                                 }
 
                                                 if (event.key == 'u') {
                                                     producto.medida = 'U';
                                                     setTipoCompra(producto.descripcion + ' esta siendo comprado por unidad')
+
                                                 }
 
                                             }}
@@ -515,15 +528,17 @@ function RegistroCompras() {
                                                 className='text-xs'
 
                                             >
-                                                <ProductoSeleccionado
+                                                <textarea
                                                     rows={'1'}
                                                     cols={'5'}
                                                     defaultValue={producto?.precio_compra}
                                                     onChange={(e) => {
-
-                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'precio_compra')
+                                                        producto.precio_compra = Number(e.target.value)
+                                                        modificandoProductosSeleccionados(producto.id_compra, e.target.value, 'precio_compra');
+                                                        modificarTotal(producto.id_compra, e.target.value);
                                                     }}
-                                                />
+                                                >
+                                                </textarea>
                                             </TableCell>
                                             <TableCell
                                                 className='text-xs'
@@ -628,6 +643,7 @@ function RegistroCompras() {
                     className='
                         flex
                         w-full
+                        p-1
                     '
                 >
                     <div
@@ -640,7 +656,7 @@ function RegistroCompras() {
                         <h1 className='font-black text-slate-800'>¿Que tipo de documento registraras?</h1>
                         <select
                             type={'text'}
-                            className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
+                            className='mx-4 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
                             placeholder='Nombre del solicitante ...'
                             onChange={(e) => {
                                 setListaCompra({
@@ -670,7 +686,7 @@ function RegistroCompras() {
 
                         <input
                             type={'text'}
-                            className={`mx-2 rounded-sm mt-1 border-y border-x p-1  focus:border-2 ${!!erroresFormulario?.NUMERO_DOCUMENTO?.error && 'border-2 border-red-500 focus:border-red-500' || ' focus:border-blue-600'}  `}
+                            className={`mx-4 rounded-sm mt-1 border-y border-x p-1  focus:border-2 ${!!erroresFormulario?.NUMERO_DOCUMENTO?.error && 'border-2 border-red-500 focus:border-red-500' || ' focus:border-blue-600'}  `}
                             placeholder='B00-00000000 ... '
                             onChange={(e) => {
                                 let formatoCorrecto = validarSerie(e.target.value);
@@ -697,7 +713,7 @@ function RegistroCompras() {
                         <h1 className='font-black text-slate-800' >¿Cuando se realizo? </h1>
                         <input
                             type={'date'}
-                            className='mx-2 rounded-sm text-center mt-1 border-y border-x p-1 focus:border-2 focus:border-blue-600 '
+                            className='mx-4 rounded-sm text-center mt-1 border-y border-x p-1 focus:border-2 focus:border-blue-600 '
                             onChange={(e) => {
                                 setListaCompra({
                                     ...listaCompra,
@@ -709,7 +725,7 @@ function RegistroCompras() {
                         <h1 className='font-black text-slate-800'>¿Quien es el proveedor?</h1>
                         <select
                             type={'text'}
-                            className='mx-2 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
+                            className='mx-4 w-60 rounded-sm mt-1 border-x border-y  p-1 focus:border-2 focus:border-blue-600 '
                             placeholder='Nombre del solicitante ...'
                             onChange={(e) => {
                                 let informacion = e.target.value;
@@ -755,10 +771,13 @@ function RegistroCompras() {
                                 />
                                 <span className='text-xs mt-1'>Efectivo</span>
 
-                                <img src={icono_moneda} className='ml-1 h-5' />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+
                             </div>
                             <div
-                                className='p-1 text-center ml-2 hover:text-gray-500 cursor-pointer'
+                                className='p-1 text-center ml-2 hover:text-gray-500 cursor-pointer flex items-center gap-1'
                             >
                                 <input
                                     type={'checkbox'}
@@ -779,8 +798,13 @@ function RegistroCompras() {
                                         setFormaPago(!formaPago);
                                     }}
                                 />
-                                <span className='text-xs'>Credito</span>
-                                <i class="fi fi-rs-credit-card ml-1 text-blue-700"></i>
+                                <div className='flex items-center'>
+                                    <span className='text-xs'>Credito</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                                    </svg>
+                                </div>
+
                             </div>
 
 
