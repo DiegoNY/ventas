@@ -4,12 +4,11 @@
 
 .historial-venta-container {
     margin-top: 350px;
-    width: 320px;
+    max-width: 320px;
 }
 
 .scroll-historial {
     margin-top: 220px;
-    min-height: 5rem;
     max-height: 10rem;
     overflow: scroll;
 

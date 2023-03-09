@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
 import { socket, urlAPI } from '../../config';
 import { getData } from '../../routes/useFetch';
@@ -212,30 +213,27 @@ function MainUser() {
                     {!!contextosGlobales.salida &&
                         <div
                             className=" 
-                          bg-white
-                            border
-                            z-10
-                            absolute
-                            rounded-xl
-                            mr-2
-                            grid
-                            mt-16
-                            w-40
-                            shadow-md 
-
-                        "
+                            bg-white border z-10 absolute rounded-xl mr-2 grid mt-16 w-40 shadow-md 
+                            "
                             onMouseLeave={() => setMostrar(!mostrar)}
 
                         >
-                            <div
-                                className="dropdown-item flex items-center gap-2 "
-                                onClick={() => contextosGlobales.setPerfil(true)}
+                            <Link
+                                to='/usuario-perfil'
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                </svg>
-                                <h1 >Mi perfil</h1>
-                            </div>
+                                <div
+                                    className="dropdown-item flex items-center gap-2 "
+                                    onClick={() => contextosGlobales.setPerfil(true)}
+                                >
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                    </svg>
+                                    <h1 >Mi perfil</h1>
+
+                                </div>
+                            </Link>
+
                             <div className="dropdown-divider"></div>
                             <a
                                 href="#"
@@ -251,20 +249,7 @@ function MainUser() {
 
                     {!!contextosGlobales.historial &&
                         <div
-                            className='
-                            bg-white
-                            border
-                            z-10
-                            absolute
-                            historial-venta-container
-                            rounded-xl
-                            mt-16
-                            mr-14
-                            grid
-                            scroll-historial
-                            shadow-lg 
-
-                        '
+                            className=' bg-white border z-10 absolute historial-venta-container rounded-xl mt-16 mr-32 grid scroll-historial shadow-lg '
                             onMouseLeave={() => setMostrarInformacion(!mostrarInformacion)}
                         >
                             {ventasRecientes?.map(venta => {
