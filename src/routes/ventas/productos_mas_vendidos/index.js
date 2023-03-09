@@ -90,7 +90,6 @@ function ProductosMasVendidos() {
                         mb-2
                         flex
                         flex-col
-                        text-white
                         rounded-sm
 
                     '

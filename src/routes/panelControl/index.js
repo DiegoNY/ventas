@@ -438,6 +438,23 @@ function PanelControl() {
                                     data={informacionClientes || []}
                                     colors={['#FACC15', '#82ca9d']}
                                     label={true}
+                                    filas={[
+                                        {
+                                            cell:'DNI',
+                                            name:'DNI',
+                                            color:'#FACC15',
+                                        },
+                                        {
+                                            cell:'RUC',
+                                            name:'RUC',
+                                            color:'#8884d8',
+                                        },
+                                        {
+                                            cell:'VARIOS',
+                                            name:'VARIOS',
+                                            color:'#82ca9d',
+                                        },
+                                    ]}
                                 />
 
                                 <div

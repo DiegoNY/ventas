@@ -1728,17 +1728,16 @@ function PuntoVenta() {
                                 </button>
                                 <button
                                     className={`
-                                         
-                                bg-orange-500
-                                h-10
-                                px-2
-                                ml-2
-                                mr-10
-                                rounded-xl
-                                text-white
-                                text-uppercase
-                                text-xs	
-                                font-semibold
+                                            bg-orange-500
+                                            h-10
+                                            px-2
+                                            ml-2
+                                            mr-10
+                                            rounded-xl
+                                            text-white
+                                            text-uppercase
+                                            text-xs	
+                                            font-semibold
                                         `}
 
                                     onClick={() => {
@@ -2304,9 +2303,9 @@ function PuntoVenta() {
 
 
                             <div className='flex justify-start ml-3 mt-1 text-lg'>Stock disponible :</div>
-                            <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
-                            <h1 className='flex text-sm ml-20  mt-1' >Tabletas disponibles : {error?.stock_tableta} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
-                            <h1 className='flex text-sm ml-20  mt-1' >Stock general : {error.stock} unidades</h1>
+                            <h1 className='flex text-sm ml-20 mt-3 '> Cajas disponibles : {error?.stock_caja?.toString().split('.')[0]}<span className='ml-1'> recuerda que  una caja contiene {error.tabletas_caja || '12'} tabletas</span></h1>
+                            <h1 className='flex text-sm ml-20  mt-1' >Tabletas disponibles : {error?.stock_tableta?.toString().split('.')[0]} una tableta contiene {error.unidades_tableta || '8'} unidades</h1>
+                            <h1 className='flex text-sm ml-20  mt-1' >Stock general : {error?.stock?.toString().split('.')[0]} unidades</h1>
 
 
                         </div>

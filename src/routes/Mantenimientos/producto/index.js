@@ -1392,7 +1392,7 @@ function MantenimientoProducto() {
                     <div class="flex flex-row-reverse">
                         <button
                             type="button"
-                            class=" 
+                            className=" 
 
                                 bg-blue-500 
                                 h-10 

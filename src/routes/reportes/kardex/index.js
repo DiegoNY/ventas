@@ -65,10 +65,10 @@ const Kardex = () => {
 
             arregloOrdenado.push(value);
 
-            value.ventas.map(venta => {
+            value?.ventas?.map(venta => {
                 arregloOrdenado.push(venta);
             })
-            value.salidas.map(salida => {
+            value?.salidas?.map(salida => {
                 arregloOrdenado.push(salida);
             })
 

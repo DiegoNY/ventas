@@ -1,58 +1,66 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
+import { urlAPI } from '../../config';
 import { useMain } from '../../ui/main/useMain';
 import { TablaDataGrid } from '../../ui/Tabla/DataGrid';
+import { getData } from '../useFetch';
 
 const Perfil = React.memo(() => {
     const contextosGlobales = useMain();
     const auth = useAuth();
 
     const [columnas, setColumnas] = useState([])
+    const [data, setData] = useState([]);
+    const [COLORES] = useState(['bg-orange-500', 'bg-green-600', 'bg-yellow-500', 'bg-red-400',])
+    useEffect(() => {
+
+        const getDatas = async () => {
+            const dataRta = await getData(`${urlAPI.Usuario.url}/perfil/${auth?.user?._id}`)
+            setData(dataRta)
+        }
+        if (auth?.user?._id) {
+            getDatas();
+        }
+    }, [auth])
 
     useEffect(() => {
         const columns = [
-            {
-                field: '_id',
-                headerName: 'Id',
-                flex: 0.3,
-            },
-            {
-                field: 'fecha',
-                headerName: 'CODIGO BARRAS',
-                flex: 0.3,
-            },
-            {
-                field: 'tipo',
-                headerName: 'DESCRIPCION',
-                flex: 0.3,
-            },
-            {
-                field: 'serie',
-                headerName: 'FECHA REGISTRO',
-                flex: 0.3,
-            },
 
             {
-                field: 'min_correlativo',
-                headerName: 'PRECIO VENTA',
+                field: 'fecha',
+                headerName: 'FECHA',
                 flex: 0.3,
             },
             {
-                field: 'max_correlativo',
-                headerName: 'TIPO',
+                field: 'tipo_documento',
+                headerName: 'TIPO_DOCUMENTO',
+                flex: 0.3,
+            },
+            {
+                field: '_id',
+                headerName: 'SERIE',
+                flex: 0.3,
+            },
+            {
+                field: 'primera_venta',
+                headerName: 'MIN_CORRELATIVO',
+                flex: 0.3,
+            },
+            {
+                field: 'ultima_venta',
+                headerName: 'MAX_CORRELATIVO',
                 flex: 0.3,
             },
             {
                 field: 'total',
-                headerName: 'TIPO',
+                headerName: 'TOTAL',
                 flex: 0.3,
             },
         ]
 
         setColumnas(columns);
     }, [])
-
     return (
         <div
             className=' w-full h-screen bg-gray-100 rounded-xl  shadow-lg p-2 grid grid-cols-8 sm:grid-cols-12'
@@ -74,7 +82,7 @@ const Perfil = React.memo(() => {
                         <div className='text-xl uppercase font-black tracking-tighter font-sans mb-1'>
                             {auth?.user?.nombre}
                         </div>
-                        <div className='w-full px-1  grid grid-cols-4 mb-1'>
+                        <div className='w-full px-1 mt-2  grid grid-cols-4 mb-1'>
                             <h1 className='font-black tracking-tighter'>CARGO</h1>
                             <p className='text-blue-500 uppercase col-start-3'>{auth?.user?.cargo}</p>
                             <h1 className='font-black row-start-2 tracking-tighter'>DESDE</h1>
@@ -108,7 +116,7 @@ const Perfil = React.memo(() => {
                                     Contacto
                                 </p>
                                 <div className='border-b border-b-gray-200 outline-none font-black  p-0.5' >
-                                    {auth.user?.telefono}/ {auth?.user?.email}
+                                    {auth.user?.telefono} / {auth?.user?.email}
                                 </div>
 
 
@@ -117,12 +125,31 @@ const Perfil = React.memo(() => {
                                 <h1 className='font-black'>
                                     Series utilizadas :
                                 </h1>
-                                <div className='grid grid-cols-3 gap-2 p-1 max-h-24 overflow-y-scroll mt-2 rounded-xl'>
-                                    <div className='p-0.5 sm:px-3'>
-                                        <div className='bg-orange-500 text-center text-white p-1 rounded-xl'>
-                                            B001
-                                        </div>
-                                    </div>
+                                <div className='grid grid-cols-5 gap-2 p-1 max-h-24 overflow-y-scroll mt-2 rounded-xl border-b-gray-200 border-b'>
+
+                                    {data.data?.series_utilizadas?.map((serie, index) => {
+                                        return (
+                                            <div className='p-0.5 sm:px-2'>
+                                                <div className={` ${COLORES[index % COLORES.length]} text-center text-white p-1 rounded-xl`}>
+                                                    {serie._id}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+
+                                </div>
+                            </div>
+                            <div
+                                className='px-2'
+                            >
+                                <h1 className='font-black flex items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                    </svg>
+                                    Nota
+                                </h1>
+                                <div className='px-3'>
+                                    Estimado trabajador sigue adelante, esfuerzate cada dia. Eres una persona maravillosa
                                 </div>
                             </div>
                         </div>
@@ -146,6 +173,7 @@ const Perfil = React.memo(() => {
                                         {auth?.user?.estado == 1 && 'ACTIVO' || 'INACTIVO'}
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
@@ -159,15 +187,7 @@ const Perfil = React.memo(() => {
                     >
                         <TablaDataGrid
                             columns={columnas}
-                            data={[{
-                                _id: "1",
-                                fecha: "12-12-2023",
-                                tipo: "03",
-                                serie: "B5321",
-                                min_correlativo: "0023546871",
-                                max_correlativo: "1",
-                                total: "1",
-                            }]}
+                            data={data?.data?.actividad_reciente || []}
                             loading={false}
                         />
                     </div>

@@ -1,10 +1,11 @@
+import { color } from '@mui/system';
 import React from 'react';
 import { Cell, Label, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 
 
 
-function RechartsPie({ fill, data, innerRadius, outerRadius, tooltip, colors, label }) {
+function RechartsPie({ fill, data, innerRadius, outerRadius, tooltip, colors, label, filas }) {
     const COlORS = colors;
     const data01 = [
         { name: 'Producto C', value: 500 },
@@ -25,8 +26,8 @@ function RechartsPie({ fill, data, innerRadius, outerRadius, tooltip, colors, la
                     label={label}
 
                 >
-                    {!!colors && data01.map((entry, index) => {
-                        return <Cell key={`cell-${index}`} fill={COlORS[index % COlORS.length]} />
+                    {!!filas && filas.map((entry, index) => {
+                        return <Cell key={`cell-${entry.cell}`} fill={entry.color} name={entry.name || ''} />
                     })}
                     <Legend align='right' wrapperStyle={{ position: 'absolute', top: 10, right: 0, }} layout='vertical' />
 
