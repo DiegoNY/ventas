@@ -52,7 +52,7 @@ function MantenimientoCliente() {
 
 
         const data = await getData(`${urlAPI.Cliente.url}`);
-        console.log(data);
+        // console.log(data);
         setDataCliente(data[0].body);
 
     }
@@ -268,7 +268,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             DNI / RUC
@@ -315,7 +315,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Descripción
@@ -351,7 +351,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Telefono
@@ -388,7 +388,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Direccion
@@ -423,7 +423,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Correo
@@ -524,7 +524,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             DNI / RUC
@@ -555,12 +555,7 @@ function MantenimientoCliente() {
 
                                                 <i
                                                     role='button'
-                                                    className="
-                                                            fi fi-rr-search
-                                                            w-14    
-                                                            text-center
-                                                            mt-2
-                                                        "
+                                                    className={`fi fi-rr-search w-14 text-center  mt-2 ${loading && 'busqueda' || 's'}`}
                                                     onClick={() => {
                                                         setLoading(true);
                                                     }}
@@ -576,7 +571,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Descripción
@@ -612,7 +607,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Telefono
@@ -649,7 +644,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Direccion
@@ -684,7 +679,7 @@ function MantenimientoCliente() {
                                         <td className='font-sans'>
 
                                             <span>
-                                                <i class="fi fi-rr-user"></i>
+                                                <i class=""></i>
                                             </span>
 
                                             Correo

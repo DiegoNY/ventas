@@ -172,7 +172,7 @@ function MantenimientoLaboratorio() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Ruc"}
                                     type={'number'}
                                     onChange={e => {
@@ -186,7 +186,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     onChange={e => {
                                         setLaboratorio(
@@ -200,7 +200,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     onChange={e => {
                                         setLaboratorio(
@@ -213,7 +213,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Direccion"}
                                     onChange={e => {
                                         setLaboratorio(
@@ -227,7 +227,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Telefono"}
                                     type={'number'}
                                     onChange={e => {
@@ -308,7 +308,7 @@ function MantenimientoLaboratorio() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Ruc"}
                                     type={'number'}
 
@@ -324,7 +324,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     value={laboratorio?.nombre}
 
@@ -340,7 +340,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     value={laboratorio?.abreviatura}
                                     onChange={e => {
@@ -354,7 +354,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Direccion"}
                                     value={laboratorio?.direccion}
 
@@ -370,7 +370,7 @@ function MantenimientoLaboratorio() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Telefono"}
                                     type={'number'}
                                     value={laboratorio?.telefono}

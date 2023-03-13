@@ -25,7 +25,7 @@ const Reporteventas = () => {
                 ventaArray.push(
                     {
                         id: venta._id,
-                        title: `Subtotal  : S/${venta?.subtotal} - IGV :  S/${venta?.igv} - TOTAL : S/ ${venta?.total}`,
+                        title: `Subtotal  : S/${venta?.subtotal.toString().split('.')[0]}.${venta?.subtotal.toString().split('.')[1]?.substring(0, 2)} - IGV :  S/${venta?.igv} - TOTAL : S/ ${venta?.total}`,
                         date: venta?._id,
                         color: 'white',
                         textColor: '#34D399'
@@ -43,7 +43,6 @@ const Reporteventas = () => {
 
     function renderEventContent(eventInfo) {
         let total = eventInfo.event.title.split('-');
-        console.log(total);
         return (
             <>
                 <div

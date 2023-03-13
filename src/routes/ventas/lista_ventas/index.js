@@ -8,7 +8,7 @@ import {
 } from '@mui/x-data-grid';
 import React, { useCallback, useEffect, useState } from 'react';
 import { urlAPI } from '../../../config';
-import { getData } from '../../useFetch';
+import { getData, postData } from '../../useFetch';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../auth/auth';
 
@@ -131,6 +131,7 @@ function ListaVenta() {
                             className='flex justify-center items-center text-xs  text-green-600 cursor-pointer rounded-sm p-1'
                             onClick={(e) => {
                                 imprimirTicket();
+                                ImprimirTickets('192.168.1.170', params.row);
                             }}
                         >
                             <div className=' flex justify-items-center p-0.5 rounded-xl'>
@@ -260,26 +261,23 @@ function ListaVenta() {
     const [notaCredito, setNotaCredito] = useState(false);
 
     const [loading, setLoadin] = useState(false);
-
     /**Manejador de peticiones */
     const [ventas, setVentas] = useState(false);
-
-    const [rc, setRc] = useState(false)
 
     const componenTicketRef = React.useRef();
     const componentPdfRef = React.useRef();
     const [informacionImpresion, setInformacionImpresion] = useState({});
 
-    const imprimirTicket = useReactToPrint({
+    const imprimirTicket = useCallback(useReactToPrint({
         content: () => componenTicketRef.current,
         documentTitle: 'Ticket de venta',
-        onAfterPrint: () => console.log('Print'),
-    })
-    const imprimirPDF = useReactToPrint({
+        onAfterPrint: () => console.log("PRINT"),
+    }), [])
+    const imprimirPDF = useCallback(useReactToPrint({
         content: () => componentPdfRef.current,
         documentTitle: 'Documento de venta',
         onAfterPrint: () => console.log('Impreso uwu')
-    })
+    }), [])
 
     const EmitirNotaCredito = () => {
 
@@ -291,6 +289,10 @@ function ListaVenta() {
 
     }
 
+    const ImprimirTickets = async (impresora, data) => {
+        const rta = await SaveData(`${urlAPI.Ticket.url}/${impresora}`, data);
+        return rta;
+    }
 
 
 

@@ -244,7 +244,7 @@ function MantenimientoTipoDocumento() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Selecciona.Tipo"}
                                     select={true}
                                     onChange={e => {
@@ -269,7 +269,7 @@ function MantenimientoTipoDocumento() {
 
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Serie"}
                                     value={tipoDocumento?.serie}
                                     onChange={e => {
@@ -284,7 +284,7 @@ function MantenimientoTipoDocumento() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Descripcion Caja"}
                                     onChange={e => {
                                         setTipoDocumento(
@@ -297,7 +297,7 @@ function MantenimientoTipoDocumento() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"IP Mask"}
                                     onChange={e => {
                                         setTipoDocumento(
@@ -311,7 +311,7 @@ function MantenimientoTipoDocumento() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Selecciona.Estado"}
                                     select={true}
                                     onChange={e => {
@@ -396,7 +396,7 @@ function MantenimientoTipoDocumento() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Selecciona.Tipo"}
                                     value={tipoDocumento?.nombre}
                                     select={true}
@@ -419,7 +419,7 @@ function MantenimientoTipoDocumento() {
                                 </Label>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Serie"}
                                     value={tipoDocumento?.serie}
 
@@ -427,7 +427,7 @@ function MantenimientoTipoDocumento() {
 
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Descripcion Caja"}
                                     value={tipoDocumento?.descripcion_caja}
 
@@ -442,7 +442,7 @@ function MantenimientoTipoDocumento() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"IP Mask"}
                                     value={tipoDocumento?.ip_mask}
 
@@ -458,7 +458,7 @@ function MantenimientoTipoDocumento() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Selecciona.Estado"}
                                     select={true}
                                     value={tipoDocumento?.estado}

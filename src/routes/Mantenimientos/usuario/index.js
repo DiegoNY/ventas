@@ -207,7 +207,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Email'}
                                     onChange={e => {
                                         setUsuario(
@@ -220,7 +220,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Telefono'}
                                     onChange={e => {
                                         setUsuario(
@@ -233,7 +233,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Fecha Ingreso'}
                                     date={true}
                                     onChange={e => {
@@ -247,7 +247,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Cargo'}
                                     onChange={e => {
                                         setUsuario(
@@ -272,7 +272,7 @@ function MantenimientoUsuario() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Estado"}
                                     select={true}
                                     onChange={e => {
@@ -289,7 +289,7 @@ function MantenimientoUsuario() {
                                 </Label>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Tipo Impresion"}
                                     select={true}
                                     onChange={e => {
@@ -307,7 +307,7 @@ function MantenimientoUsuario() {
                                 </Label>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Tipo"}
                                     select={true}
                                     onChange={e => {
@@ -324,7 +324,7 @@ function MantenimientoUsuario() {
                                 </Label>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Usuario"}
                                     onChange={e => {
                                         setUsuario(
@@ -338,7 +338,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Clave"}
                                     onChange={e => {
                                         setUsuario(
@@ -438,7 +438,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Email'}
                                     value={usuario?.email}
                                     onChange={e => {
@@ -452,7 +452,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Telefono'}
                                     value={usuario?.telefono}
 
@@ -467,7 +467,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Fecha Ingreso'}
                                     value={usuario?.fecha_ingreso}
 
@@ -482,7 +482,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={'Cargo'}
                                     value={usuario?.cargo}
 
@@ -509,7 +509,7 @@ function MantenimientoUsuario() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Estado"}
                                     value={usuario?.estado}
 
@@ -524,7 +524,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Tipo Impresion"}
                                     value={usuario?.tipo_impresion}
                                     onChange={e => {
@@ -539,7 +539,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Tipo"} value={usuario?.tipo}
 
                                     onChange={e => {
@@ -553,7 +553,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Usuario"}
                                     value={usuario?.usuario}
                                     onChange={e => {
@@ -568,7 +568,7 @@ function MantenimientoUsuario() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Clave"} value={usuario?.clave}
 
                                     onChange={e => {
@@ -594,8 +594,8 @@ function MantenimientoUsuario() {
                         <button
                             type="button"
                             className="
-                btn
-            "
+                                btn
+                            "
                             data-bs-dismiss="modal"
                         >
                             Cerrar
@@ -604,19 +604,18 @@ function MantenimientoUsuario() {
                         <button
                             type="submit"
                             className="
-            ml-2
-            bg-indigo-500 
-            h-10 
-            rounded-md
-            text-white 
-            cursor-pointer
-            px-3
-            text-sm
-            w-px-15
-            w-30
-            mr-2
-        "
-
+                                ml-2
+                                bg-indigo-500 
+                                h-10 
+                                rounded-md
+                                text-white 
+                                cursor-pointer
+                                px-3
+                                text-sm
+                                w-px-15
+                                w-30
+                                mr-2
+                            "
                         >
                             Guardar Cambios
                         </button>

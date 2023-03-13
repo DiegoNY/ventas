@@ -1,5 +1,4 @@
 .productos-busqueda {
-    min-width: 50vh;
-    max-height: 40vh;
-    overflow-y: scroll;
+    min-width: 80vh;
+    max-width: 80vh;
 }

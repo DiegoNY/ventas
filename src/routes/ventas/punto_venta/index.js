@@ -22,7 +22,6 @@ import { useAuth } from '../../../auth/auth';
 import { useNavigate } from 'react-router';
 import { useLocalStorage } from '../../useLocalStorage';
 import { useReactToPrint } from 'react-to-print';
-import { ImprimirTicket } from '../../../ui/Layouts/Impresiones/Ticket';
 import { ImprimirPDF } from '../../../ui/Layouts/Impresiones/Pdf';
 import { Layout } from '../../../ui/Layouts';
 import { Delete } from '../../useAlert';
@@ -51,7 +50,8 @@ function PuntoVenta() {
         forma_pago: 'EFECTIVO',
         cuotas: 0,
         informacion_cuotas: [],
-        impresora: '192.168.1.171',
+        impresora: '192.168.1.172',
+        tipo_identificacion: 'SIN DOC',
     });
     const [tipoDocumento, setTipoDocumento] = React.useState([]);
     const [productos, setProductos] = React.useState([]);
@@ -427,7 +427,6 @@ function PuntoVenta() {
             direccion: direccion,
             tipo_identificacion: tipoIdentifiacion,
         })
-
     }
 
     /**
@@ -468,7 +467,8 @@ function PuntoVenta() {
             setVenta({
                 ...venta,
                 identificacion: "00000000",
-                cliente: 'CLIENTES VARIOS'
+                cliente: 'CLIENTES VARIOS',
+                tipo_identificacion: 'SIN DOC'
             })
 
         };
@@ -478,6 +478,7 @@ function PuntoVenta() {
                 ...venta,
                 identificacion: response[0]?.body[0]?.dni,
                 cliente: response[0]?.body[0]?.descripcion,
+                tipo_identificacion: response[0]?.body[0]?.tipo_identificacion,
             })
 
             setInformacionFaltante(
@@ -686,6 +687,12 @@ function PuntoVenta() {
 
     }
 
+    const ModificadorDecimales = (data) => {
+        const dataArray = data?.toString()?.split('.');
+        const dataString = `${dataArray[0]}.${dataArray[1]?.toString()?.substring(0, 4) || '0'}`
+        return Number(dataString);
+    }
+
     const validarInformacionVenta = (venta) => {
         let error = false;
         for (const key in venta) {
@@ -761,6 +768,18 @@ function PuntoVenta() {
                     }
 
                     break;
+                case 'subtotal':
+                    const subMod = ModificadorDecimales(venta.subtotal);
+                    venta[key] = subMod;
+                    break;
+                case 'igv':
+                    const igvMod = ModificadorDecimales(venta.igv);
+                    venta[key] = igvMod;
+                    break;
+                case 'total':
+                    const totMod = ModificadorDecimales(venta.total);
+                    venta[key] = totMod;
+                    break;
 
                 default:
                     break;
@@ -768,6 +787,7 @@ function PuntoVenta() {
         }
         return error;
     }
+
 
     //Obtencion de data Necesaria
     //obtiene los tipos de documentos y actualiza el valor global
@@ -1151,7 +1171,6 @@ function PuntoVenta() {
                                 <div
                                     className='
                                             flex
-                                            
                                         '
                                 >
                                     <input

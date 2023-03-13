@@ -172,26 +172,21 @@ const Kardex = () => {
                             <p className='font-normal text-sm  text-slate-500 mb-2'>Estas realizando una busqueda avanzada</p>
                         </div>
                         <div
-                            className=' col-span-5 '
+                            className=' col-span-5 mx-2'
                         >
-                            <div className='mt-3 p-1 rounded-xl'>
+                            <div className='mt-2.5 p-1 rounded-xl flex items-center border-x border-y'>
                                 <input
                                     value={searchProducto}
                                     type='text'
                                     className='
                                         mb-auto
-                                        border-x
-                                        border-y
                                         rounded-lg
                                         w-full
                                         px-2
                                         py-1
-                                        focus:border-blue-600
-                                        text-lg
-                                        font-black
-                                        text-center
+                                        focus:border-blue-200
                                     '
-                                    placeholder='Busca un producto 💊'
+                                    placeholder='Buscar'
                                     onClick={(e) => {
 
                                         setSearch(true);
@@ -202,6 +197,12 @@ const Kardex = () => {
                                         setSearchProducto(e.target.value)
                                     }}
                                 />
+                                <div className='p-1 border-l'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                    </svg>
+                                </div>
+
                             </div>
 
                             {!!search &&
@@ -213,10 +214,12 @@ const Kardex = () => {
                                      flex
                                      flex-col
                                      absolute
-                                     mt-1
+                                     mt-0
                                      z-10
                                      productos-busqueda
                                      text-uppercase
+                                     max-h-40
+                                     overflow-scroll
                                  '
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -230,7 +233,6 @@ const Kardex = () => {
 
                                                 ${index == 0 && 'rounded-t-xl  mt-1' || 'mt-0.5'}
                                                 mx-2
-                                                bg-slate-100
                                                 hover:bg-sky-100
                                                 cursor-pointer
                                                 p-1
@@ -261,7 +263,7 @@ const Kardex = () => {
                         >
                             <div className='flex flex-col p-1'>
                                 <input
-                                    className='border-x border-y mt-3 rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600 '
+                                    className='border-x border-y mt-2  rounded-xl px-2 p-1  text-slate-600  focus:border-blue-600 '
                                     type='date'
                                     onChange={(e) => {
                                         setInformacionBusqueda({
@@ -274,7 +276,7 @@ const Kardex = () => {
                             </div>
                             <div className='flex flex-col p-1'>
                                 <input
-                                    className='border-x border-y mt-3 rounded-sm px-2 p-1  text-slate-600  focus:border-blue-600  '
+                                    className='border-x border-y mt-2 rounded-xl px-2 p-1  text-slate-600  focus:border-blue-600  '
                                     type='date'
                                     onChange={(e) => {
                                         setInformacionBusqueda({

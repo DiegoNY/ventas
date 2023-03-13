@@ -84,6 +84,7 @@ function MantenimientoProveedor() {
 
     const obtenerDataProveedores = async () => {
         const data = await getData(`${urlAPI.Proveedor.url}`);
+        console.log(data);
         setDataProveedores(data);
     }
 
@@ -95,106 +96,29 @@ function MantenimientoProveedor() {
                 flex: 0.3,
             },
             {
-                field: 'codigo_barras',
-                headerName: 'CODIGO BARRAS',
-                flex: 0.3,
+                field: 'abreviatura',
+                headerName: 'ABREVIATURA',
+                flex: 0.2,
             },
             {
-                field: 'descripcion',
-                headerName: 'DESCRIPCION',
-                flex: 0.3,
+                field: 'nombre',
+                headerName: 'RAZON SOCIAL',
+                flex: 0.2,
             },
             {
-                field: 'fecha_registro',
-                headerName: 'FECHA REGISTRO',
-                flex: 0.3,
+                field: 'direccion',
+                headerName: 'DIRECCION',
+                flex: 0.4,
             },
             {
-                field: 'stock',
-                headerName: 'STOCK',
-                flex: 0.3,
-                renderCell: (params) => {
-
-                    const percentage = params?.row?.stock / params?.row?.stock_minimo * 100;
-                    let color = '';
-
-                    if (percentage >= 70) {
-                        color = '#5DAB5D';
-                    } else if (percentage >= 30) {
-                        color = '#F5D496';
-                    } else {
-                        color = '#F44336';
-                    }
-
-                    const progressStyle = {
-                        width: `${percentage}%`,
-                        height: '30px',
-                        backgroundColor: color,
-                    };
-
-                    return (
-                        <div className='flex w-full border mx-1'>
-                            <div style={progressStyle} className=' items-center  border-x border-slate-400 rounded-sm p-2 flex justify-center'  ></div>
-                            <div className=' w-auto'>
-                            </div>
-                            <div className='absolute w-32 mt-1 text-center'>{params?.row?.stock}</div>
-                        </div>
-                    )
-                }
-            },
-            {
-                field: 'precio_venta',
-                headerName: 'PRECIO VENTA',
-                flex: 0.3,
-            },
-            {
-                field: 'tipo',
-                headerName: 'TIPO',
-                flex: 0.3,
-            },
-            {
-                field: 'estado',
-                headerName: 'ESTADO',
-                flex: 0.3,
-                renderCell: (params) => {
-                    let estadoInfo = {
-                        borde: 'border-red-400', text: 'text-red-400', texto: 'Inactivo',
-                        icono:
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                            </svg>
-                    }
-
-                    if (params.row.estado === 1) {
-                        estadoInfo = {
-                            borde: 'border-green-600', text: 'text-green-600', texto: 'Activo',
-                            icono:
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-
-                        }
-                    }
-
-
-                    return (
-                        <div className='w-full  px-4'>
-                            <div className={`border-y border-x text-xs text-center px-1  rounded-xl ${estadoInfo.borde} ${estadoInfo.text} flex justify-between mx-1`}>
-                                <div className='mt-0.5'>
-                                    {estadoInfo.icono}
-                                </div>
-                                <div className='mt-0.5 mr-1'>
-                                    {estadoInfo.texto}
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
+                field: 'telefono',
+                headerName: 'TELEFONO',
+                flex: 0.2,
             },
             {
                 field: '',
                 headerName: 'ACCIONES',
-                flex: 0.2,
+                flex: 0.1,
                 renderCell: (params) => {
                     return (
                         <div className='w-full flex justify-between mx-3'>
@@ -221,7 +145,7 @@ function MantenimientoProveedor() {
         ]
 
         setColumnas(columns);
-    }, [proveedor])
+    }, [dataProveedores])
 
     useEffect(() => {
         obtenerDataProveedores();
@@ -253,7 +177,7 @@ function MantenimientoProveedor() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Ruc"}
                                     type={'number'}
                                     onChange={e => {
@@ -267,7 +191,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     onChange={e => {
                                         setProveedor(
@@ -281,7 +205,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     onChange={e => {
                                         setProveedor(
@@ -294,7 +218,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Direccion"}
                                     onChange={e => {
                                         setProveedor(
@@ -308,7 +232,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Telefono"}
                                     type={'number'}
                                     onChange={e => {
@@ -369,7 +293,7 @@ function MantenimientoProveedor() {
 
             <Modal
                 id={'modalEditar'}
-                title={'EDITAR EL PRODUCTO ' + proveedor?.nombre}
+                title={'EDITAR EL PROVEEDOR ' + proveedor?.nombre}
             >
 
                 <form onSubmit={updateProveedor} className="modal-body p-0">
@@ -389,7 +313,7 @@ function MantenimientoProveedor() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Ruc"}
                                     value={proveedor?.ruc}
                                     type={'number'}
@@ -404,7 +328,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     value={proveedor?.nombre}
                                     onChange={e => {
@@ -419,7 +343,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     value={proveedor?.abreviatura}
 
@@ -434,7 +358,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Direccion"}
                                     value={proveedor?.direccion}
 
@@ -450,7 +374,7 @@ function MantenimientoProveedor() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Telefono"}
                                     value={proveedor?.telefono}
                                     type={'number'}
@@ -553,8 +477,8 @@ function MantenimientoProveedor() {
 
                     <TablaDataGrid
                         columns={columnas}
-                        data={proveedor || []}
-                        loading={true}
+                        data={dataProveedores || []}
+                        loading={false}
                     />
 
                 </div>
