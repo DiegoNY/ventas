@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './index.css'
 import { getData } from '../../useFetch';
-import { hostAPI, IGV, socket, urlAPI } from '../../../config';
+import { hostAPIV2, IGV, socket, urlAPI } from '../../../config';
 import { Modal } from '../../../ui/modal';
 import iconoMoneda from './img/icono-monedas.svg';
 import iconoticket from './img/icono-ticket.svg';
@@ -399,7 +399,7 @@ function PuntoVenta() {
 
         }
 
-        let url = `${hostAPI}/api/v1/procesos?peticion=SUNAT&descripcion=${tipoIdentifiacion}&${queryParametro}=`;
+        let url = `${hostAPIV2}/api/v2/procesos?peticion=SUNAT&descripcion=${tipoIdentifiacion}&${queryParametro}=`;
 
 
 
@@ -1057,10 +1057,6 @@ function PuntoVenta() {
                                     </div>
 
                                 </div>
-                                <p
-                                    className='mt-3 mr-2 text-sm text-sky-400 font-bold cursor-pointer hover:text-sky-200'
-                                    onClick={() => setVermas(!verMas)}
-                                >Ver mas </p>
                             </div>
 
                         </div>
@@ -2329,18 +2325,6 @@ function PuntoVenta() {
 
                         </div>
                     </Informacion>
-                }
-                {!!verMas &&
-
-                    <Informacion
-                        onClick={() => setVermas(!verMas)}
-                        className={'bg-red-200 h-96 w-1/2'}
-                    >
-
-                        sdsad
-
-                    </Informacion>
-
                 }
 
             </Layout>

@@ -110,4 +110,5 @@ export {
     socket,
     EMPRESA,
     IGV,
+    hostAPIV2
 }

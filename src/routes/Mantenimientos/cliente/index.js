@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { hostAPI, urlAPI } from '../../../config';
+import { hostAPIV2, urlAPI } from '../../../config';
 import img_registro from '../../img/mantenimiento-img/img-registro-cliente.png'
 import img_editar from '../../img/mantenimiento-img/img-editar.png'
 import { _, Grid } from "gridjs-react";
@@ -25,6 +25,7 @@ function MantenimientoCliente() {
     const [cliente, setCliente] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [dataCliente, setDataCliente] = React.useState([{}])
+    const [cambio, setCambios] = React.useState(false);
 
     const [columnas, setColumnas] = useState([]);
 
@@ -40,7 +41,7 @@ function MantenimientoCliente() {
 
         DeleteData(`${urlAPI.Cliente.url}/${id}`);
         dataClientes();
-
+        setCambios(!cambio);
     }
 
     /**
@@ -61,7 +62,7 @@ function MantenimientoCliente() {
 
         dataClientes();
 
-    }, [])
+    }, [cambio])
 
     useEffect(() => {
         const columns = [
@@ -74,7 +75,7 @@ function MantenimientoCliente() {
                 field: 'tipo_identificacion',
                 headerName: 'T. IDENTIFICACION',
                 flex: 0.1,
-                renderCell:(params) => {
+                renderCell: (params) => {
                     return <div className='w-full text-center'>{params.row.tipo_identificacion}</div>
                 }
             },
@@ -128,7 +129,7 @@ function MantenimientoCliente() {
         ]
 
         setColumnas(columns);
-    }, [dataCliente])
+    }, [dataCliente, cliente, cambio])
 
     // Informacion y registro de cliente
 
@@ -161,7 +162,7 @@ function MantenimientoCliente() {
 
             }
 
-            let url = `${hostAPI}/api/v1/procesos?peticion=SUNAT&descripcion=${tipoIdentifiacion}&${queryParametro}=`;
+            let url = `${hostAPIV2}/api/v2/procesos?peticion=SUNAT&descripcion=${tipoIdentifiacion}&${queryParametro}=`;
 
 
 
@@ -182,7 +183,6 @@ function MantenimientoCliente() {
             /**
              * Mostrando los datos obtenidos
              */
-            console.log("no debi ejecutarme")
 
             setCliente({
                 ...cliente,
@@ -209,12 +209,10 @@ function MantenimientoCliente() {
      * @param {*} e  recive el evento submit para hacer que no se refresque la pagina
      */
 
-    const saveClient = async (e) => {
-
-        e.preventDefault();
+    const saveClient = async () => {
         SaveData(`${urlAPI.Cliente.url}`, cliente)
         dataClientes();
-
+        setCambios(!cambio);
     }
 
     const updateCliente = (e) => {
@@ -222,6 +220,8 @@ function MantenimientoCliente() {
 
         UpdateData(`${urlAPI.Cliente.url}/${cliente._id}`, cliente)
         dataClientes();
+        setCambios(!cambio);
+
     }
     /**
      * Vacia la informacion almacenada en el estado 🗑
@@ -507,7 +507,7 @@ function MantenimientoCliente() {
                     title={'Nuevo Cliente'}
                 >
 
-                    <form onSubmit={saveClient} className="modal-body p-0">
+                    <form className="modal-body p-0">
 
                         <div className='row'>
 
@@ -730,8 +730,7 @@ function MantenimientoCliente() {
                                 Cerrar
                             </button>
 
-                            <button
-                                type="submit"
+                            <div
                                 className="
                                     ml-2
                                     bg-indigo-500 
@@ -744,11 +743,13 @@ function MantenimientoCliente() {
                                     w-px-15
                                     w-30
                                     mr-2
+                                    items-center
+                                    flex
                                 "
-
+                                onClick={() => saveClient()}
                             >
                                 Registrar
-                            </button>
+                            </div>
 
                         </div>
 
