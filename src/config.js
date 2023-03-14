@@ -84,6 +84,9 @@ const urlAPI = {
     },
     Ticket: {
         url: `${hostAPIV2}/api/v2/impresion`
+    },
+    Imagen : {
+        url: `${hostAPIV2}/imagen`
     }
 
 }

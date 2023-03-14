@@ -13,6 +13,7 @@ import { useAuth } from '../../auth/auth';
 import { useNavigate } from 'react-router';
 import { Layout } from '../../ui/Layouts';
 import { validarSerie } from '../useValidaciones';
+import { Delete } from '../useAlert';
 
 function RegistroCompras() {
     //Usuario autenticado ? 
@@ -254,9 +255,102 @@ function RegistroCompras() {
         return setListaCompra({ ...listaCompra })
     }
 
+    const ModificadorDecimales = (data) => {
+        const dataArray = data?.toString()?.split('.');
+        const dataString = `${dataArray[0]}.${dataArray[1]?.toString()?.substring(0, 4) || '0'}`
+        console.log(dataString);
+        return Number(dataString);
+    }
+
     const saveListaCompra = () => {
-        return console.log(listaCompra);
+        let error = validarInformacion(listaCompra);
+
+        if (error == true) {
+            return console.log("ERROR");
+        }
+
         SaveData(`${urlAPI.ListaCompra.url}`, listaCompra);
+    }
+
+    const validarInformacion = (compra) => {
+        let error = false;
+        for (const key in compra) {
+            switch (key) {
+                case 'fecha_documento':
+                    if (compra[key] == '') {
+                        error = true;
+                        Delete('NO SE A COLOCADO LA FECHA EN LA QUE SE REALIZO LA COMPRA ')
+                    }
+                    break;
+                case 'forma_pago':
+
+                    break;
+                case 'igv':
+                    compra[key] = ModificadorDecimales(compra[key])
+                    break;
+                case 'nombre_usuario':
+
+                    break;
+                case 'numero_documento':
+                    if (compra[key] == '') {
+                        error = true;
+                        Delete('NO SE A COLOCADO UN NUMERO DE DOCUMENTO ');
+                    }
+                    break;
+                case 'productos':
+
+                    if (compra[key].length == 0) {
+                        error = true;
+                        Delete('NO AS SELECCIONADO NINGUN PRODUCTO');
+                    }
+                    compra[key].map(producto => {
+                        console.log(producto.lote);
+                        if (producto.lote == '' || producto.lote == undefined) {
+                            error = true;
+                            Delete('TIENES QUE INGRESAR EL NOMBRE DEL LOTE')
+                            producto.error = true;
+                        }
+                        if (producto.fecha_vencimiento == '' || producto.fecha_vencimiento == undefined) {
+                            error = true;
+                            Delete('TIENES QUE INGRESAR UNA FECHA DE VENCIMIENTO')
+                            producto.error = true;
+                        }
+                        if (producto.stock_comprado == '' || producto.stock_comprado == undefined) {
+                            error = true;
+                            Delete('EL STOCK COMPRADO NO PUEDE SER 0 ')
+                            producto.error = true;
+                        }
+                    })
+                    break;
+                case 'ruc_proveedor':
+                    if (compra[key] == '') {
+                        Delete('NO AS SELECCIONADO UN PROVEEDOR')
+                        error = true;
+                    }
+                    break;
+                case 'subtotal':
+                    compra[key] = ModificadorDecimales(compra[key])
+                    break;
+                case 'total':
+                    compra[key] = ModificadorDecimales(compra[key])
+
+                    break;
+                case 'vuelto':
+                    compra[key] = ModificadorDecimales(compra[key])
+
+                    break;
+                case 'tipo_documento':
+                    if (compra[key] == '') {
+                        error = true;
+                        Delete('NO SE A SELECCIONADO UN TIPO DE DOCUMENTO ')
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        return error
     }
 
     useEffect(() => {
@@ -442,7 +536,7 @@ function RegistroCompras() {
                                     <>
 
                                         <TablaRow
-
+                                            className={`${producto.error && 'border-2 border-red-500'}`}
                                             tabIndex={index}
                                             onClick={(event) => {
                                                 let medida = '';
@@ -820,9 +914,9 @@ function RegistroCompras() {
 
 
 
-                            <p className='font-black ' >Subtotal : <span className='font-normal'>{listaCompra.subtotal}</span></p>
-                            <p className='font-black '>igv : <span className='font-normal'>{listaCompra.igv}</span></p>
-                            <p className='font-black '>Total : <span className='font-normal'>{listaCompra.total}</span></p>
+                            <p className='font-black ' >Subtotal : <span className='font-normal'>{ModificadorDecimales(listaCompra.subtotal)}</span></p>
+                            <p className='font-black '>igv : <span className='font-normal'>{ModificadorDecimales(listaCompra.igv)}</span></p>
+                            <p className='font-black '>Total : <span className='font-normal'>{ModificadorDecimales(listaCompra.total)}</span></p>
 
                         </div>
                         <div
@@ -862,19 +956,7 @@ function RegistroCompras() {
                             '
                         >
                             <button
-                                className={`
-                                         
-                                bg-orange-500
-                                h-10
-                                w-1/2
-                                ml-16
-                                rounded-xl
-                                text-white
-                                text-uppercase
-                                text-xs	
-                                font-semibold
-                                        `}
-
+                                className={`bg-orange-500  h-10  w-1/2  ml-16  rounded-xl  text-white  text-uppercase  text-xs	 font-semibold `}
                                 onClick={() => {
                                     saveListaCompra();
                                 }}

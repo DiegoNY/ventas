@@ -212,10 +212,10 @@ const ReporteGanancias = () => {
                 </div>
                 <div className='flex justify-end items-center sm:mr-7 cursor-pointer'>
                     <div
-                        className='rounded-2xl p-1 border-x border-y bg-slate-200 mt-1 hover:border-blue-400'
+                        className='rounded-2xl p-1 border-x border-y bg-blue-400 mt-1 hover:border-blue-400'
                         onClick={() => buscarInformacion()}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2563EB" class="w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                     </div>

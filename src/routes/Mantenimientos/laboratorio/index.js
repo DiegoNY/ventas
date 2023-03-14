@@ -26,6 +26,7 @@ function MantenimientoLaboratorio() {
     const [laboratorio, setLaboratorio] = React.useState(null);
     const [dataLaboratoriosEstado, setDataLaboratiosEstado] = React.useState([]);
     const [load, setLoad] = useState(false);
+    const [recargar, setRecarga] = useState(false);
     const [columnas, setColumnas] = useState([])
 
     const saveLaboratorio = (e) => {
@@ -33,13 +34,15 @@ function MantenimientoLaboratorio() {
         e.preventDefault();
         SaveData(`${urlAPI.Laboratorio.url}`, laboratorio);
         dataLaboratorios();
-
+        e.target.reset();
+        setRecarga(!recargar);
     }
 
     const updateLaboratorio = (e) => {
         e.preventDefault();
         UpdateData(`${urlAPI.Laboratorio.url}/${laboratorio._id}`, laboratorio)
         dataLaboratorios();
+        setRecarga(!recargar);
     }
 
     const obtenerData = (data) => {
@@ -54,6 +57,8 @@ function MantenimientoLaboratorio() {
     const eliminar = (data) => {
         DeleteData(`${urlAPI.Laboratorio.url}/${data}`);
         dataLaboratorios();
+        setRecarga(!recargar);
+
     }
 
 
@@ -108,7 +113,7 @@ function MantenimientoLaboratorio() {
                 field: 'telefono',
                 headerName: 'TELEFONO',
                 flex: 0.2,
-              
+
             },
             {
                 field: '',
@@ -141,11 +146,11 @@ function MantenimientoLaboratorio() {
 
         setColumnas(columns);
 
-    }, [dataLaboratoriosEstado])
+    }, [dataLaboratoriosEstado, recargar])
 
     useEffect(() => {
         dataLaboratorios();
-    }, [])
+    }, [recargar])
 
     return (
         <>
@@ -445,7 +450,7 @@ function MantenimientoLaboratorio() {
 
 
                         >
-                            Laboratorio Proveedor 
+                            Laboratorio Proveedor
                         </button>
 
 

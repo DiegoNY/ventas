@@ -50,7 +50,7 @@ function PuntoVenta() {
         forma_pago: 'EFECTIVO',
         cuotas: 0,
         informacion_cuotas: [],
-        impresora: '192.168.1.172',
+        impresora: '192.168.1.170',
         tipo_identificacion: 'SIN DOC',
     });
     const [tipoDocumento, setTipoDocumento] = React.useState([]);
@@ -68,7 +68,7 @@ function PuntoVenta() {
     const [cargandoEmisionVenta, setCargaEmisionVenta] = useState(false);
 
     const [impresion, setImpresion] = React.useState(true);
-    const [moneda, setMoneda] = React.useState(true);
+    const [moneda, setMoneda] = React.useState(-1);
     const [formaPago, setFormaPago] = React.useState(true);
 
     const {
@@ -79,10 +79,10 @@ function PuntoVenta() {
 
     const [informacionUsuario, setInformacionUsuario] = React.useState({});
     const [nuevaVenta, setNuevaVenta] = React.useState();
-    const [verMas, setVermas] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [errores, setErrores] = React.useState({})
     const [verCuotas, setVerCuotas] = React.useState(false);
+    const [monedas, setMonedas] = React.useState([]);
 
     const [informacionFaltante, setInformacionFaltante] = useState({ factura: { cliente: false } });
 
@@ -436,9 +436,8 @@ function PuntoVenta() {
 
         setInformacionImpresion(venta);
         const error = validarInformacionVenta(venta);
-
         if (error === true) {
-            console.log("HUBO UN ERROR NO ENVIAR VENTA");
+            // console.log("HUBO UN ERROR NO ENVIAR VENTA");
             setCargaEmisionVenta(false);
             return false;
         }
@@ -446,10 +445,8 @@ function PuntoVenta() {
         const response = await SaveData(`${urlAPI.Venta.url}`, venta);
 
         if (!response[0].error) {
-            console.log("no debi ingresar aca")
             setCargaEmisionVenta(true);
             response[0].body.tipo_impresion === 'TICKET' ? handlePrint(response[0].body, venta.impresora) : imprimirPDF();
-
             return true;
         }
 
@@ -718,6 +715,23 @@ function PuntoVenta() {
                         })
                     }
 
+                    productos.map(producto => {
+                        let totalProductosVendidos = 0;
+                        venta[key].map(product => {
+                            if (producto.lote == product.lote) {
+                                totalProductosVendidos = Number(totalProductosVendidos) + Number(product.stock_vendido);
+                                if (totalProductosVendidos > producto.stock) {
+                                    product.error_stock = true;
+                                    error = true;
+                                    Delete(`NO SE A PODIDO REALIZAR LA VENTA, EL STOCK NO PUEDE SER MAYOR AL ESTOCK ACTUAL`);
+                                    console.log("EL PRODUCTO NO CUENTA CON STOCK" + `${producto.id_compra}`);
+                                }
+                            }
+                        });
+
+
+                    })
+
                     break;
                 case 'tipo_documento':
 
@@ -788,7 +802,14 @@ function PuntoVenta() {
         return error;
     }
 
+    const handlePrint = async (data, impresora) => {
+        const rta = await SaveData(`${urlAPI.Ticket.url}/${impresora}`, data);
+        return rta;
+    };
 
+    const handleChecked = (index) => {
+        setMoneda(index)
+    }
     //Obtencion de data Necesaria
     //obtiene los tipos de documentos y actualiza el valor global
     useEffect(() => {
@@ -930,10 +951,15 @@ function PuntoVenta() {
 
     }, [nuevaVenta, moneyInBox, informacionUsuario])
 
-    const handlePrint = async (data, impresora) => {
-        const rta = await SaveData(`${urlAPI.Ticket.url}/${impresora}`, data);
-        return rta;
-    };
+    useEffect(() => {
+        const DataMonedas = async () => {
+            const rta = await getData(`${urlAPI.Moneda.url}`);
+            setMonedas(rta);
+        }
+
+        DataMonedas();
+    }, [])
+
 
     return (
         <>
@@ -1352,7 +1378,7 @@ function PuntoVenta() {
                                                 <input
                                                     type={'checkbox'}
                                                     value={'EFECTIVO'}
-                                                    checked={formaPago}
+                                                    checked={venta.forma_pago === 'EFECTIVO'}
                                                     className='
                                                      mr-1
                                                      mb-3
@@ -1392,7 +1418,7 @@ function PuntoVenta() {
                                                 <input
                                                     type={'checkbox'}
                                                     value={'CREDITO'}
-                                                    checked={!formaPago}
+                                                    checked={venta.forma_pago === 'CREDITO'}
                                                     className='
                                                         mr-1
                                                         mb-3
@@ -1620,91 +1646,54 @@ function PuntoVenta() {
                                             w-1/2
                                         '
                                 >
-                                    <div
-                                        className='
-                                                p-1 
-                                                text-center 
-                                                ml-2 
-                                                hover:text-gray-500 
-                                                flex
-                                                cursor-pointer 
-                                                w-full
-                                            '
-                                    >
 
-                                        <input
-                                            type={'checkbox'}
-                                            value={'SOLES'}
-                                            checked={moneda}
-                                            className='
-                                                 mr-1
-                                                 mb-3
+                                    {monedas.map((monedas, index) => {
+
+                                        return (
+                                            <div
+                                                className='
+                                                    p-1 
+                                                    text-center 
+                                                    ml-2 
+                                                    hover:text-gray-500 
+                                                    cursor-pointer
+                                                    flex
+                                                    '
+                                                onClick={() => handleChecked(index)}
+                                            >
+                                                <input
+                                                    type={'checkbox'}
+                                                    value={monedas.nombre}
+                                                    checked={moneda === index}
+                                                    className='
+                                                        mr-1
+                                                        mb-3
+                                                    '
+                                                    onChange={(e) => {
+                                                        setVenta({ ...venta, tipo_moneda: e.target.value })
+                                                    }}
+                                                />
+                                                <span
+                                                    className='
+                                                    text-xs
+                                                    
                                                 '
-                                            onChange={(e) => {
-                                                let soles = e.target.value;
-                                                setVenta({ ...venta, tipo_moneda: soles })
-                                                setMoneda(!moneda)
-                                            }}
-                                        />
-                                        <span
-                                            className='
-                                                text-xs 
-                                                
-                                            '
-                                        >
-                                            Soles
-                                        </span>
+                                                >
+                                                    {monedas.abreviatura}
+                                                </span>
+                                                <span
+                                                    className='
+                                                    text-xs
+                                                    ml-1
+                                                    
+                                                '
+                                                >
+                                                    {monedas.simbolo}
+                                                </span>
 
-                                        <img
-                                            src={iconosol}
-                                            className='
-                                                ml-1
-                                                h-4
-                                            '
-                                        />
-
-                                    </div>
-                                    <div
-                                        className='
-                                            p-1 
-                                            text-center 
-                                            ml-2 
-                                            hover:text-gray-500 
-                                            cursor-pointer
-                                            flex
-                                        '
-                                    >
-                                        <input
-                                            type={'checkbox'}
-                                            value={'DOLARES'}
-                                            checked={!moneda}
-                                            className='
-                                                mr-1
-                                                mb-3
-                                            '
-                                            onChange={(e) => {
-                                                let dorales = e.target.value;
-                                                setVenta({ ...venta, tipo_moneda: dorales })
-                                                setMoneda(!moneda)
-                                            }}
-                                        />
-                                        <span
-                                            className='
-                                                text-xs
-                                                
-                                            '
-                                        >
-                                            Dolares
-                                        </span>
-                                        <img
-                                            src={iconodolar}
-                                            className='
-                                                ml-1 
-                                                h-3
-                                                
-                                            '
-                                        />
-                                    </div>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
 
                                 <div

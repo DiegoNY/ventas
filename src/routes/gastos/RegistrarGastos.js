@@ -170,9 +170,11 @@ const RegistrarGastos = () => {
                                 <label class="block text-sm  text-slate-800 font-semibold">Selecciona un archivo </label>
                                 <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-sky-400 px-6 pt-2 pb-2">
                                     <div class="space-y-1 text-center">
-                                        <svg class="mx-auto h-20 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                       
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mx-auto h-20 w-12 text-gray-400">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
                                         </svg>
+
                                         <div class="flex text-sm text-gray-600">
                                             <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
                                                 <span>Sube un archivo </span>
@@ -191,9 +193,9 @@ const RegistrarGastos = () => {
                                                     }}
                                                 />
                                             </label>
-                                            <p class="pl-1">📷</p>
+                                            <p class="pl-1">📁</p>
                                         </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG </p>
+                                        <p class="text-xs text-gray-500">PNG, JPG, PDF, XLSX </p>
                                     </div>
                                 </div>
 

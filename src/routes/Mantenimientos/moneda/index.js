@@ -184,7 +184,7 @@ function MantenimientoMoneda() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     onChange={e => {
                                         setMoneda(
@@ -197,7 +197,7 @@ function MantenimientoMoneda() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     onChange={e => {
                                         setMoneda(
@@ -211,7 +211,7 @@ function MantenimientoMoneda() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"simbolo"}
                                     onChange={e => {
                                         setMoneda(
@@ -293,7 +293,7 @@ function MantenimientoMoneda() {
                             <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Nombre"}
                                     value={moneda?.nombre}
                                     onChange={e => {
@@ -307,7 +307,7 @@ function MantenimientoMoneda() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"Abreviatura"}
                                     value={moneda?.abreviatura}
                                     onChange={e => {
@@ -322,7 +322,7 @@ function MantenimientoMoneda() {
                                 />
 
                                 <Label
-                                    icon={'fi fi-rr-user'}
+                                    icon={''}
                                     text={"simbolo"}
                                     value={moneda?.simbolo}
                                     onChange={e => {

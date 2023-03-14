@@ -19,13 +19,7 @@ function Label(props) {
                     {props.type &&
                         <input
                             placeholder={props.text}
-                            className='
-                     input-form
-                     form-control 
-                     form-control-sm
-                     shadow-sm p-2  
-                     rounded
-                 '
+                            className=' input-form form-control  form-control-sm shadow-sm p-2   rounded'
                             value={props.value}
                             type={props.type}
 

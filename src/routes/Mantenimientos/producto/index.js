@@ -1,5 +1,4 @@
-import { _, Grid } from 'gridjs-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { socket, urlAPI } from '../../../config';
 import { Label } from '../../../ui/forms/label';
 import { Modal } from '../../../ui/modal';
@@ -24,7 +23,13 @@ function MantenimientoProducto() {
     * @producto , @setProducto maneja el estado de los clientes
     */
 
-    const [producto, setProducto] = React.useState(null);
+    const [producto, setProducto] = React.useState({
+        descripcion: "", descuento: "",
+        estado: "", id_laboratorio: "",
+        stock: 0, stock_caja: "", stock_minimo: "",
+        stock_tableta: "", tipo: "",
+    });
+
     const [laboratorios, setLaboratorios] = React.useState([]);
     const [codigoBarra, setCodigoBarra] = React.useState('');
     const [productos, setProductos] = React.useState([]);
@@ -34,9 +39,7 @@ function MantenimientoProducto() {
     const [columnas, setColumnas] = useState([])
 
     const saveProducto = async (e) => {
-
-        e.preventDefault();
-
+        e.preventDefault()
         let formData = new FormData();
 
         for (const key in producto) {
@@ -48,22 +51,16 @@ function MantenimientoProducto() {
         SaveData(`${urlAPI.CodigoBarras.url}`, { numero: producto.codigo_barras });
 
         //Obtiene codigo de barra  / se limpian los labels
+        obtenerDataProductos();
         codigo();
         limpiarData();
-
-        setTimeout(() => {
-            obtenerDataProductos();
-        }, 800)
-
+        e.target.reset();
     }
 
     const updateProducto = (e) => {
         e.preventDefault();
         UpdateData(`${urlAPI.Producto.url}/${producto._id}`, producto);
-        setTimeout(() => {
-            obtenerDataProductos();
-        }, 800)
-
+        obtenerDataProductos();
     }
 
     const obtenerData = (id) => {
@@ -76,15 +73,15 @@ function MantenimientoProducto() {
 
     const eliminar = (id) => {
         DeleteData(`${urlAPI.Producto.url}/${id}`);
-        setTimeout(() => {
-            obtenerDataProductos();
-        }, 800)
+        obtenerDataProductos();
 
     }
 
-    const limpiarData = () => {
-
-    }
+    const limpiarData = useCallback(() => {
+        setProducto({
+            codigo_barras: producto.codigo_barras,
+        })
+    }, producto)
     /**
      * Obtiene 
      * el ultimo codigo de barras y aumenta el codigo en 1
@@ -299,7 +296,7 @@ function MantenimientoProducto() {
                 console.log(data);
             })
         }
-    }, [])
+    }, [producto])
 
     /**
      * Esta ligada al estado de codigosBarras si este cambia se ejecuta
@@ -309,7 +306,7 @@ function MantenimientoProducto() {
 
         obtenerCodigosBarras();
 
-    }, [codigosBarras])
+    }, [codigosBarras,])
 
 
     /**
@@ -329,6 +326,7 @@ function MantenimientoProducto() {
         obtenerDataProductos();
     }, [])
 
+   
     return (
         <>
 
@@ -344,17 +342,7 @@ function MantenimientoProducto() {
 
                         <div className='grid grid-cols-6 grid-rows-6 h-auto '>
                             <div
-                                className='
-                                    col-span-6
-                                    //bg-indigo-500
-                                    row-span-6
-                                    mx-2
-                                    my-2
-                                    sm:grid
-                                    sm:grid-cols-6
-
-
-                                '
+                                className='  col-span-6  //bg-indigo-500  row-span-6  mx-2  my-2  sm:grid  sm:grid-cols-6 '
                             >
 
                                 <div
@@ -362,14 +350,14 @@ function MantenimientoProducto() {
                                         sm:col-span-3
                                     '
                                 >
-                                    <table className='table mt-3 table-borderless  table-responsive-sm '>
+                                    <table className='table mt-3 table-borderless  table-responsive-sm ' >
                                         {loading && <p>OBteniendo codigo</p> ||
 
                                             <tr>
                                                 <td className='font-sans'>
 
                                                     <span>
-                                                        <i class="fi fi-rr-user"></i>
+                                                        <i class=""></i>
                                                     </span>
 
                                                     Cod.Producto
@@ -379,16 +367,9 @@ function MantenimientoProducto() {
 
                                                     <input
                                                         placeholder=' Codigo Producto '
-                                                        className='
-                                                    input-form
-                                                    form-control 
-                                                    form-control-sm
-                                                    shadow-sm p-2  
-                                                    rounded
-                                                '
+                                                        className=' input-form form-control  form-control-sm shadow-sm p-2   rounded '
+                                                        readOnly
                                                         value={codigoBarra}
-
-
                                                     />
 
                                                 </td>
@@ -399,7 +380,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Descripción
@@ -409,14 +390,8 @@ function MantenimientoProducto() {
 
                                                 <input
                                                     placeholder=' Descripción '
-                                                    className='
-                                                    input-form
-                                                    form-control 
-                                                    form-control-sm
-                                                    shadow-sm p-2  
-                                                    rounded
-                                                '
-
+                                                    className=' input-form form-control  form-control-sm shadow-sm p-2   rounded '
+                                                    value={producto?.descripcion}
                                                     onChange={e => {
                                                         setProducto(
                                                             {
@@ -426,13 +401,12 @@ function MantenimientoProducto() {
                                                         )
                                                     }}
                                                 />
-
                                             </td>
 
                                         </tr>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Laboratorio"}
                                             value={producto?.id_laboratorio}
                                             select={true}
@@ -459,7 +433,7 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Tipo"}
                                             value={producto?.tipo}
                                             select={true}
@@ -483,7 +457,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Stock
@@ -493,17 +467,10 @@ function MantenimientoProducto() {
 
                                                 <input
                                                     placeholder='Stock'
-                                                    className='
-                                                input-form
-                                                form-control 
-                                                form-control-sm
-                                                shadow-sm p-2  
-                                                rounded
-                                                '
+                                                    className=' input-form form-control  form-control-sm shadow-sm p-2   rounded '
                                                     disabled
                                                     type={'number'}
                                                     value={'0'}
-
                                                 />
 
                                             </td>
@@ -514,7 +481,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Stock Minimo
@@ -524,14 +491,9 @@ function MantenimientoProducto() {
 
                                                 <input
                                                     placeholder='Stock minimo'
-                                                    className='
-                                                input-form
-                                                form-control 
-                                                form-control-sm
-                                                shadow-sm p-2  
-                                                rounded
-                                                '
+                                                    className=' input-form form-control  form-control-sm shadow-sm p-2   rounded '
                                                     type={'number'}
+                                                    value={producto?.stock_minimo}
                                                     onChange={e => {
                                                         setProducto(
                                                             {
@@ -547,9 +509,10 @@ function MantenimientoProducto() {
                                         </tr>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={'Stock por caja'}
                                             type={'number'}
+                                            value={producto?.stock_caja}
                                             onChange={(e) => {
                                                 setProducto({
                                                     ...producto,
@@ -560,9 +523,10 @@ function MantenimientoProducto() {
                                         />
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={'Stock por tableta'}
                                             type={'number'}
+                                            value={producto?.stock_tableta}
                                             onChange={(e) => {
                                                 console.log(e.target.value);
                                                 setProducto({
@@ -584,9 +548,10 @@ function MantenimientoProducto() {
                                     <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Precio.Compra"}
                                             varios={true}
+                                            value={producto?.precio_compra}
                                             onChange={e => {
                                                 setProducto(
                                                     {
@@ -597,16 +562,9 @@ function MantenimientoProducto() {
                                             }}
                                         >
                                             <input
-                                                className='
-                                                mt-2
-                                                    input-form
-                                                    form-control 
-                                                    px-2
-                                                    form-control-sm
-                                                    shadow-sm p-0  
-                                                    rounded
-                                                '
+                                                className='mt-2 input-form form-control  px-2 form-control-sm shadow-sm p-0  rounded '
                                                 placeholder='Precio de compra por caja'
+                                                value={producto?.precio_compra_caja}
                                                 onChange={(e) => {
                                                     setProducto(
                                                         {
@@ -617,16 +575,8 @@ function MantenimientoProducto() {
                                                 }}
                                             />
                                             <input
-                                                className='
-                                                mt-2
-                                                input-form
-                                                form-control 
-                                                px-2
-                                                form-control-sm
-                                                shadow-sm p-0  
-                                                rounded
-                                            '
-                                                placeholder='Precio de compra por tableta'
+                                                className='   mt-2   input-form   form-control    px-2   form-control-sm   shadow-sm p-0     rounded' placeholder='Precio de compra por tableta'
+                                                value={producto?.precio_compra_tableta}
                                                 onChange={(e) => {
                                                     setProducto(
                                                         {
@@ -640,9 +590,10 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Precio venta"}
                                             varios={true}
+                                            value={producto?.precio_venta}
                                             onChange={e => {
                                                 setProducto(
                                                     {
@@ -655,16 +606,9 @@ function MantenimientoProducto() {
                                         >
 
                                             <input
-                                                className='
-                                                    input-form
-                                                    form-control 
-                                                    px-2
-                                                    form-control-sm
-                                                    shadow-sm p-0  
-                                                    rounded
-                                                    mt-2
-                                                '
+                                                className=' input-form form-control  px-2 form-control-sm shadow-sm p-0   rounded mt-2 '
                                                 placeholder='Precio de venta por caja'
+                                                value={producto?.precio_venta_caja}
                                                 onChange={(e) => {
 
                                                     setProducto(
@@ -677,16 +621,9 @@ function MantenimientoProducto() {
                                                 }}
                                             />
                                             <input
-                                                className='
-                                                input-form
-                                                form-control 
-                                                px-2
-                                                form-control-sm
-                                                shadow-sm p-0  
-                                                rounded
-                                                mt-2
-                                            '
+                                                className=' input-form form-control  px-2 form-control-sm shadow-sm p-0 rounded mt-2 '
                                                 placeholder='Precio de venta por tableta'
+                                                value={producto?.precio_venta_tableta}
                                                 onChange={(e) => {
                                                     setProducto(
                                                         {
@@ -702,7 +639,8 @@ function MantenimientoProducto() {
 
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
+                                            value={producto?.descuento}
                                             text={"Descuento"}
                                             type={'number'}
                                             onChange={e => {
@@ -716,9 +654,10 @@ function MantenimientoProducto() {
                                         />
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Venta sujeta"}
                                             select={true}
+                                            value={producto?.venta_sujeta}
                                             onChange={e => {
                                                 setProducto(
                                                     {
@@ -736,9 +675,10 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Estado"}
                                             select={true}
+                                            value={producto?.estado}
                                             onChange={e => {
                                                 setProducto(
                                                     {
@@ -822,20 +762,8 @@ function MantenimientoProducto() {
                             </button>
 
                             <button
-                                type="submit"
-                                className="
-                                ml-2
-                                bg-indigo-500 
-                                h-10 
-                                rounded-md
-                                text-white 
-                                cursor-pointer
-                                px-3
-                                text-sm
-                                w-px-15
-                                w-30
-                                mr-2
-                            "
+                                type='submit'
+                                className=" ml-2 bg-indigo-500  h-10  rounded-md text-white  cursor-pointer px-3 text-sm w-px-15 w-30 mr-2 flex items-center"
 
                             >
                                 Registrar
@@ -882,7 +810,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Cod.Producto
@@ -910,7 +838,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Descripción
@@ -943,7 +871,7 @@ function MantenimientoProducto() {
 
                                         </tr>
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Laboratorio"}
                                             value={producto?.id_laboratorio}
                                             select={true}
@@ -970,7 +898,7 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Tipo"}
                                             value={producto?.tipo}
                                             select={true}
@@ -992,7 +920,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Stock
@@ -1030,7 +958,7 @@ function MantenimientoProducto() {
                                             <td className='font-sans'>
 
                                                 <span>
-                                                    <i class="fi fi-rr-user"></i>
+                                                    <i class=""></i>
                                                 </span>
 
                                                 Stock Minimo
@@ -1064,7 +992,7 @@ function MantenimientoProducto() {
                                         </tr>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={'Stock por caja'}
                                             type={'number'}
                                             value={producto?.stock_caja}
@@ -1077,7 +1005,7 @@ function MantenimientoProducto() {
                                         />
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={'Stock por tableta'}
                                             type={'number'}
                                             value={producto?.stock_tableta}
@@ -1105,7 +1033,7 @@ function MantenimientoProducto() {
                                     <table className='table mt-3 table-borderless  table-responsive-sm'>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Precio.Compra"}
                                             value={producto?.precio_compra}
                                             varios={true}
@@ -1166,7 +1094,7 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Precio venta"}
                                             type={'number'}
                                             varios={true}
@@ -1229,7 +1157,7 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Descuento"}
 
                                             type={"number"}
@@ -1244,7 +1172,7 @@ function MantenimientoProducto() {
                                             }}
                                         />
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Venta sujeta"}
                                             select={true}
                                             onChange={e => {
@@ -1263,7 +1191,7 @@ function MantenimientoProducto() {
                                         </Label>
 
                                         <Label
-                                            icon={'fi fi-rr-user'}
+                                            icon={''}
                                             text={"Estado"}
                                             select={true}
                                             value={producto?.estado}
